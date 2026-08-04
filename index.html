@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"><title>SMS</title>
+    <style>
+        body { display: flex; margin: 0; font: 11px sans-serif; background: #f8fafc; }
+        .s { width: 100px; background: #1e3a8a; color: white; min-height: 100vh; padding: 5px; }
+        .b { width: 100%; background: none; border: none; color: #cbd5e1; padding: 6px; text-align: left; cursor: pointer; font-weight: bold; }
+        .b.active, .b:hover { background: #0284c7; color: white; border-radius: 3px; }
+        .m { flex: 1; padding: 10px; }
+        .p { display: none; background: white; padding: 8px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .p.active { display: block; }
+        table { width: 100%; border-collapse: collapse; margin-top: 5px; }
+        th, td { padding: 4px; border-bottom: 1px solid #e2e8f0; text-align: left; }
+        th { background: #1e293b; color: white; }
+        .btn { background: #10b981; color: white; border: none; padding: 3px 5px; border-radius: 2px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="s">
+        <h4 style="margin:5px 0; text-align:center;">SYSTEM</h4>
+        <button class="b active" onclick="tab('ardayda')">ARDAY</button>
+        <button class="b" onclick="tab('waalid')">WAALID</button>
+        <button class="b" onclick="tab('macalin')">MACALIN</button>
+        <button class="b" onclick="tab('maaliyad')">MAALIYAD</button>
+    </div>
+
+    <div class="m">
+        <div style="display:flex; justify-content:space-between; margin-bottom:5px; font-weight:bold;">
+            <span id="title">ARDAYDA</span><span>08/08/2026 - 30/05/2027</span>
+        </div>
+
+        <!-- ARDAY -->
+        <div id="ardayda" class="p active">
+            <select id="cls" onchange="runAtt()"></select>
+            <input type="date" id="dt" value="2026-08-08" min="2026-08-08" max="2027-05-30" onchange="runAtt()">
+            <button class="btn" onclick="calcAtt('H')">Joogay</button>
+            <button class="btn" style="background:#ef4444;" onclick="calcAtt('A')">Maqnaa</button>
+            <table>
+                <thead><tr><th>Ardayga</th><th>Contact</th><th>Xaadiris</th><th>Faallo</th></tr></thead>
+                <tbody id="att-body"></tbody>
+            </table>
+        </div>
+
+        <!-- WAALID -->
+        <div id="waalid" class="p">
+            <table>
+                <thead><tr><th>Waalidka</th><th>Contact</th><th>Ardayda</th><th>Laga Rabo</th><th>Bixiyay</th><th>Dhiman</th></tr></thead>
+                <tbody id="parent-body"></tbody>
+            </table>
+        </div>
+
+        <!-- MACALIN -->
+        <div id="macalin" class="p">
+            <table>
+                <thead><tr><th>Macalinka</th><th>Xilka</th><th>Maadooyinka</th></tr></thead>
+                <tbody id="tech-body"></tbody>
+            </table>
+        </div>
+
+        <!-- MAALIYAD -->
+        <div id="maaliyad" class="p">
+            <button class="btn" onclick="subFin('full')">Full ($40)</button>
+            <button class="btn" onclick="subFin('half')">Half ($20)</button>
+            <button class="btn" onclick="subFin('free')">Free</button>
+            <select id="mth" onchange="runFin()"></select>
+            <button class="btn" style="background:#0284c7;" onclick="calcFin()">Total</button>
+            <table id="fin-table"></table>
+            <h5 id="fin-total" style="margin-top:5px; color:#065f46;"></h5>
+        </div>
+    </div>
+
+    <script>
+        const students = [
+            { name: "Maxamed Cali Jaamac", phone: "+252615111111", class: "Form 4", type: "full" },
+            { name: "Aamina Cumar Cilmi", phone: "+252615222222", class: "Form 4", type: "half" }
+        ];
+        const parents = [
+            { name: "Cali Jaamac", phone: "+252615999001", kid: "1 Arday", due: 40, paid: 40 },
+            { name: "Cumar Cilmi", phone: "+252615999002", kid: "1 Arday", due: 40, paid: 20 }
+        ];
+        const teachers = [
+            { name: "Macalim Axmed Biile", role: "Macalin", sub: "Physics & Math" },
+            { name: "Macalim Unknown", role: "Macalin", sub: "Biology & Chem" },
+            { name: "Macalin Faarax Ciise", role: "Macalin", sub: "Tarbiyo & Arabic" },
+            { name: "Macalim Iimaan", role: "Macalin", sub: "English & Geo" },
+            { name: "Macalim Maxamed Suufi", role: "Macalin", sub: "Somali & ICT" },
+            { name: "Macalim Maxamed Cabdi", role: "Maamule Ku-xigeen", sub: "Saynis (Dugsi Hoose)" },
+            { name: "Macalim Maxamed Uurcad", role: "Maamule", sub: "Tarbiyo (Dugsi Hoose)" }
+        ];
+
+        const classes = ["Form 4", "Form 3", "Form 2", "Form 1", "Grade 8", "Grade 7", "Grade 6", "Grade 5"];
+        const months = ["August 2026", "September 2026", "October 2026", "November 2026", "December 2026", "January 2027", "February 2027", "March 2027", "April 2027", "May 2027"];
+        let finTab = 'full';
+
+        function tab(id) {
+            document.querySelectorAll('.p').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.b').forEach(b => b.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            event.currentTarget.classList.add('active');
+            document.getElementById('title').innerText = id.toUpperCase();
+            if(id==='ardayda') runAtt(); if(id==='waalid') runWaalid(); if(id==='macalin') runTech(); if(id==='maaliyad') runFin();
+        }
+
+        function runAtt() {
+            const c = document.getElementById('cls').value, d = document.getElementById('dt').value, tbody = document.getElementById('att-body');
+            tbody.innerHTML = '';
+            students.filter(s => s.class === c).forEach((st, i) => {
+                const k = `att_${c}_${d}_${st.name}`, s = JSON.parse(localStorage.getItem(k)) || {status:'H', com:''};
+                tbody.innerHTML += `<tr><td><b>${st.name}</b></td><td>${st.phone}</td>
+                    <td><input type="radio" name="r_${i}" ${s.status==='H'?'checked':''} onclick="setLS('${k}','status','H')"> J 
+                        <input type="radio" name="r_${i}" ${s.status==='A'?'checked':''} onclick="setLS('${k}','status','A')"> M</td>
+                    <td><input type="text" value="${s.com}" onchange="setLS('${k}','com',this.value)" style="width:50px;"></td></tr>`;
+            });
+        }
+        function setLS(k, f, v) { let s = JSON.parse(localStorage.getItem(k)) || {status:'H', com:''}; s[f] = v; localStorage.setItem(k, JSON.stringify(s)); }
+        
+        function calcAtt(t) {
+            let count = 0, c = document.getElementById('cls').value, d = document.getElementById('dt').value;
+            students.filter(s => s.class === c).forEach(st => { if((JSON.parse(localStorage.getItem(`att_${c}_${d}_${st.name}`)) || {status:'H'}).status === t) count++; });
+            alert(`Tirada: ${count}`);
+        }
+
+        function runWaalid() {
+            const tbody = document.getElementById('parent-body'); tbody.innerHTML = '';
+            parents.forEach(p => tbody.innerHTML += `<tr><td><b>${p.name}</b></td><td>${p.phone}</td><td>${p.kid}</td><td>$${p.due}</td><td>$${p.paid}</td><td style="color:red;font-weight:bold;">$${p.due-p.paid}</td></tr>`);
+        }
+
+        function runTech() {
+            const tbody = document.getElementById('tech-body'); tbody.innerHTML = '';
+            teachers.forEach(t => tbody.innerHTML += `<tr><td><b>${t.name}</b></td><td><span style="color:#d97706">${t.role}</span></td><td>${t.sub}</td></tr>`);
+        }
+
+        function subFin(t) { finTab = t; runFin(); }
+        function runFin() {
+            const table = document.getElementById('fin-table'), m = document.getElementById('mth').value; table.innerHTML = '';
+            const list = students.filter(s => s.type === finTab);
+            if(finTab !== 'free') {
+                table.innerHTML = `<thead><tr><th>Ardayga</th><th>Fasal</th><th>Contact</th><th>Amount</th><th>Tick</th></tr></thead><tbody id="f-box"></tbody>`;
+                list.forEach(st => {
+                    let fee = finTab==='full'?40:20, k = `f_${finTab}_${m}_${st.name}`;
+                    document.getElementById('f-box').innerHTML += `<tr><td><b>${st.name}</b></td><td>${st.class}</td><td>${st.phone}</td><td>$${fee}</td><td><input type="checkbox" ${localStorage.getItem(k)==='true'?'checked':''} onclick="localStorage.setItem('${k}',this.checked)"></td></tr>`;
+                });
+            } else {
+                table.innerHTML = `<thead><tr><th>Ardayga</th><th>Fasal</th><th>Contact</th><th>Sababta</th></tr></thead><tbody id="f-box"></tbody>`;
+                list.forEach(st => document.getElementById('f-box').innerHTML += `<tr><td><b>${st.name}</b></td><td>${st.class}</td><td>${st.phone}</td><td><select><option>Waa Agoon</option><option>Iskuulkaa u daayay</option></select></td></tr>`);
+            }
+        }
+
+        function calcFin() {
+            const m = document.getElementById('mth').value; let total = 0;
+            students.filter(s => s.type === 'full').forEach(s => { if(localStorage.getItem(`f_full_${m}_${s.name}`)==='true') total+=40; });
+            students.filter(s => s.type === 'half').forEach(s => { if(localStorage.getItem(`f_half_${m}_${s.name}`)==='true') total+=20; });
+            document.getElementById('fin-total').innerText = `💵 Total: $${total}`;
+        }
+
+        window.onload = function() {
+            classes.forEach(c => document.getElementById('cls').innerHTML += `<option>${c}</option>`);
+            months.forEach(m => document.getElementById('mth').innerHTML += `<option>${m}</option>`);
+            runAtt();
+        };
+    </script>
+</body>
+</html>
