@@ -1,147 +1,370 @@
-// ==========================================
-// SCHOOL MANAGEMENT SYSTEM (NIDAAMKA MAAMULKA ISKUULKA)
-// Fasalada: Grade 1 ilaa Form 4
-// ==========================================
-
-class SchoolManagementSystem {
-    constructor() {
-        this.students = {}; // Kaydka guud ee ardayda
-        this.attendance = {}; // Kaydka xaadirinta (Taariikh walba iyo fasalkeeda)
-        this.validClasses = this.generateClasses();
-    }
-
-    // 1. Sameynta liiska fasalada (Grade 1-8 iyo Form 1-4)
-    generateClasses() {
-        let classes = [];
-        for (let i = 1; i <= 8; i++) classes.push(`Grade ${i}`);
-        for (let i = 1; i <= 4; i++) classes.push(`Form ${i}`);
-        return classes;
-    }
-
-    // 2. MAAMULKA ARDAYDA (Xog ku daris iyo ka saaris)
-    
-    // Ku dar arday cusub
-    addStudent(id, name, className) {
-        if (!this.validClasses.includes(className)) {
-            console.log(`❌ Cilad: Fasalka '${className}' kama mid aha fasalada iskuulka (Grade 1 - Form 4).`);
-            return;
+<!DOCTYPE html>
+<html lang="so">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIDAAMKA MAAMULKA ISKUULKA YAKA</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #2ecc71;
+            --danger-color: #e74c3c;
+            --bg-color: #ecf0f1;
+            --card-bg: #ffffff;
+            --text-color: #333;
         }
-        if (this.students[id]) {
-            console.log(`❌ Cilad: Arday wata ID-gaan ${id} mar hore ayaa la diwangeliyey.`);
-            return;
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
-        this.students[id] = {
-            id: id,
-            name: name,
-            class: className,
-            feePaid: 0,        // Lacagta uu bixiyey
-            feeRequired: 100   // Lacagta laga rabo (Tusaale: $100)
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            text-align: center;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Habaynta Daaqadaha (Rectangles) */
+        .window-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+            padding: 25px;
+            border-top: 6px solid var(--secondary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .window-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .window-card:nth-child(2) {
+            border-top-color: var(--success-color);
+        }
+
+        .window-title {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Foomamka */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary-color);
+        }
+
+        .btn {
+            background-color: var(--secondary-color);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #2980b9;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+
+        /* Shaxda (Tables) */
+        .table-container {
+            margin-top: 25px;
+            overflow-x: auto;
+            max-height: 300px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            color: var(--primary-color);
+            font-weight: bold;
+            position: sticky;
+            top: 0;
+        }
+
+        /* Badhamada Xaadirinta */
+        .attendance-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-att {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            font-size: 0.8rem;
+        }
+
+        .btn-present { background-color: var(--success-color); }
+        .btn-absent { background-color: var(--danger-color); }
+
+        /* Badajisyada (Badges) */
+        .badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .badge-paid { background-color: var(--success-color); }
+        .badge-unpaid { background-color: var(--danger-color); }
+    </style>
+</head>
+<body>
+
+    <!-- Ciwaanka Sare ee Dashboard-ka -->
+    <header>
+        <h1>NIDAAMKA MAAMULKA ISKUULKA YAKA</h1>
+        <p>Goobta Xakamaynta Isdiiwaangelinta, Feega iyo Xaadirinta Ardayda</p>
+    </header>
+
+    <!-- Weelka Daaqadaha (Dashboard) -->
+    <div class="dashboard-container">
+
+        <!-- DAAQADDA 1: REGISTRATION & FEES -->
+        <div class="window-card">
+            <div class="window-title">
+                <span>1. Isdiiwaangelinta & Maamulka Feega</span>
+                <span style="font-size: 1.2rem;">📝</span>
+            </div>
+            
+            <!-- Foomka Diiwaangelinta -->
+            <form id="registrationForm" onsubmit="registerStudent(event)">
+                <div class="form-group">
+                    <label for="studentName">Magaca Pluxda ah ee Ardayda:</label>
+                    <input type="text" id="studentName" class="form-control" placeholder="Geli magaca ardayga..." required>
+                </div>
+                <div class="form-group">
+                    <label for="feeStatus">Xaaladda Feega:</label>
+                    <select id="feeStatus" class="form-control">
+                        <option value="Bixiyay">Waa Bixiyay (Paid)</option>
+                        <option value="Dhiman">Waa Ka Dhiman yahay (Unpaid)</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Diiwaangeli Ardayga</button>
+            </form>
+
+            <!-- Shaxda Ardayda Isdiiwaangalisay -->
+            <div class="table-container">
+                <h3>Liiska Ardayda & Feega</h3>
+                <table id="studentTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Magaca</th>
+                            <th>Xaaladda Feega</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Xogta halkan ayay ku dhacaysaa iyadoo JS ah -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- DAAQADDA 2: ATTENDANCE MANAGEMENT -->
+        <div class="window-card">
+            <div class="window-title">
+                <span>2. Xaadirinta & Xisaabinta Automatic-ga ah</span>
+                <span style="font-size: 1.2rem;">📊</span>
+            </div>
+
+            <!-- Shaxda Xaadirinta -->
+            <div class="table-container" style="max-height: 450px; margin-top: 0;">
+                <h3>Garaadka Xaadirinta Maalinlahay ah</h3>
+                <table id="attendanceTable">
+                    <thead>
+                        <tr>
+                            <th>Magaca</th>
+                            <th>Joogay (Days)</th>
+                            <th>Maqnaa (Days)</th>
+                            <th>Xaadirinta Maanta</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Xogta halkan ayay ku dhacaysaa iyadoo JS ah -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT SHAQADA WADA -->
+    <script>
+        // Kaydka xogta ardayda (Database-ka kumeel gaadhka ah)
+        let students = [
+            { id: 1, name: "Axmed Maxamed Cali", fee: "Bixiyay", present: 12, absent: 2 },
+            { id: 2, name: "Faadumo Cumar Cabdi", fee: "Dhiman", present: 14, absent: 0 }
+        ];
+
+        // Markay bogga furmo, soo bandhig xogta hore u jirtay
+        window.onload = function() {
+            updateDashboards();
         };
-        console.log(`✅ Arday cusub waa la diwangeliyey: ${name} (${className})`);
-    }
 
-    // Ka saar arday iskuulka
-    removeStudent(id) {
-        if (!this.students[id]) {
-            console.log(`❌ Cilad: Lama helin arday wata ID: ${id}`);
-            return;
-        }
-        const studentName = this.students[id].name;
-        delete this.students[id];
-        console.log(`🗑️ Ardayga ${studentName} (ID: ${id}) waa laga saaray nidaamka.`);
-    }
+        // Shaqada Diiwaangelinta Arday Cusub
+        function registerStudent(event) {
+            event.preventDefault(); // Inaan boggu dib u load-gamin
 
-    // 3. DAAQADDA XAADIRINTA (Attendance Management)
-    
-    // Xaadirinta fasal dhan taariikh gaar ah
-    takeAttendance(date, className, attendanceRecords) {
-        // attendanceRecords waa shay (object) leh { studentId: "Present" ama "Absent" }
-        if (!this.validClasses.includes(className)) {
-            console.log(`❌ Cilad: Fasalka sax ma aha.`);
-            return;
-        }
+            const nameInput = document.getElementById('studentName');
+            const feeInput = document.getElementById('feeStatus');
 
-        if (!this.attendance[date]) {
-            this.attendance[date] = {};
-        }
-        
-        this.attendance[date][className] = attendanceRecords;
-        console.log(`📝 Xaadirintii fasalka ${className} ee taariikhda ${date} waa la kaydiyey.`);
-    }
+            if (nameInput.value.trim() === "") return;
 
-    // Soo bandhig xogta xaadirinta ee fasal gaar ah
-    viewAttendance(date, className) {
-        console.log(`\n--- Xogta Xaadirinta: ${className} | Taariikhda: ${date} ---`);
-        if (!this.attendance[date] || !this.attendance[date][className]) {
-            console.log("ℹ️ Ma jirto xog xaadirin oo laga hayo fasalkaan taariikhdaas.");
-            return;
+            // Samaynta shay cusub oo arday ah
+            const newStudent = {
+                id: students.length + 1,
+                name: nameInput.value,
+                fee: feeInput.value,
+                present: 0, // Wuxuu ku bilaabmayaa zero maalin oo uu joogay
+                absent: 0   // Wuxuu ku bilaabmayaa zero maalin oo uu maqnaa
+            };
+
+            // Ku dar liiska
+            students.push(newStudent);
+
+            // Nadiifi foomka
+            nameInput.value = "";
+            
+            // Cusboonaysii labada daaqadoodba
+            updateDashboards();
         }
 
-        const records = this.attendance[date][className];
-        for (const [id, status] of Object.entries(records)) {
-            const student = this.students[id];
-            const name = student ? student.name : "Arday la tirtiray";
-            console.log(`ID: ${id} | Magaca: ${name} -> Heerka: ${status === "Present" ? "✅ Jooga" : "❌ Ma Joogo"}`);
-        }
-    }
-
-    // 4. DAAQADDA BIXINTA LACAGTA (Fee Management)
-    
-    // Bixinta lacagta iskuulka
-    paySchoolFee(id, amount) {
-        const student = this.students[id];
-        if (!student) {
-            console.log(`❌ Cilad: Lama helin arday wata ID: ${id}`);
-            return;
+        // Shaqada calaamadaynta Joogitaanka (Present)
+        function markPresent(index) {
+            students[index].present += 1; // Automatic ayay u kordhaysaa
+            updateDashboards();
         }
 
-        student.feePaid += amount;
-        console.log(`💰 Lacag bixin: ${student.name} wuxuu bixiyey $${amount}.`);
-        this.checkFeeStatus(id);
-    }
-
-    // Hubi heerka lacag bixinta ardayga
-    checkFeeStatus(id) {
-        const student = this.students[id];
-        if (!student) return;
-
-        const balance = student.feeRequired - student.feePaid;
-        console.log(`--- Cadaynta Lacagta: ${student.name} (${student.class}) ---`);
-        console.log(`Laga rabay: $${student.feeRequired}`);
-        console.log(`Bixiyey: $${student.feePaid}`);
-        
-        if (balance <= 0) {
-            console.log(`Heerka: 🟢 Waa sifeeyey (Paid Fully)`);
-        } else {
-            console.log(`Heerka: 🔴 Waxaa ku haraadasho ah: $${balance}`);
+        // Shaqada calaamadaynta Maqnaanshaha (Absent)
+        function markAbsent(index) {
+            students[index].absent += 1; // Automatic ayay u kordhaysaa
+            updateDashboards();
         }
-    }
-}
+        // Shaqada dib loogu cusboonaysiinayo naqshadda (UI Update)
+        function updateDashboards() {
+            const studentTableBody = document.querySelector('#studentTable tbody');
+            const attendanceTableBody = document.querySelector('#attendanceTable tbody');
 
-// ==========================================
-// TUSAALE REERKA LOO ISTEMAALAYO (TESTING)
-// ==========================================
+            // Nadiifi wixii hore u jiray si aanay u daabacmin laba jeer
+            studentTableBody.innerHTML = "";
+            attendanceTableBody.innerHTML = "";
 
-const sms = new SchoolManagementSystem();
+            // Loop lagu dhex marayo arday kasta si loogu qoro shaxda
+            students.forEach((student, index) => {
+                
+                // 1. Cusboonaysiinta Daaqadda Feega
+                const feeBadge = student.fee === "Bixiyay" ? 'badge-paid' : 'badge-unpaid';
+                const studentRow = `
+                    <tr>
+                        <td>#${student.id}</td>
+                        <td><strong>${student.name}</strong></td>
+                        <td><span class="badge ${feeBadge}">${student.fee}</span></td>
+                    </tr>
+                `;
+                studentTableBody.innerHTML += studentRow;
 
-console.log("--- 1. Diwangelinta Ardayda ---");
-sms.addStudent("S001", "Axmed Cali", "Grade 1");
-sms.addStudent("S002", "Faadumo Cumar", "Form 4");
-sms.addStudent("S003", "Maxamed Xasan", "Grade 5");
+                // 2. Cusboonaysiinta Daaqadda Xaadirinta (Iyadoo xisaabintu automatic tahay)
+                const attendanceRow = `
+                    <tr>
+                        <td><strong>${student.name}</strong></td>
+                        <td style="color: var(--success-color); font-weight: bold;">${student.present} Maalmoo</td>
+                        <td style="color: var(--danger-color); font-weight: bold;">${student.absent} Maalmoo</td>
+                        <td>
+                            <div class="attendance-actions">
+                                <button onclick="markPresent(${index})" class="btn-att btn-present">👍 Joogay</button>
+                                <button onclick="markAbsent(${index})" class="btn-att btn-absent">👎 Maqnaa</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                attendanceTableBody.innerHTML += attendanceRow;
+            });
+        }
 
-console.log("\n--- 2. Daandada Xaadirinta (Attendance) ---");
-// Maanta oo kale (Tusaale: 2026-08-07)
-sms.takeAttendance("2026-08-07", "Grade 1", { "S001": "Present" });
-sms.takeAttendance("2026-08-07", "Form 4", { "S002": "Absent" });
-
-// Eegista Xaadirinta
-sms.viewAttendance("2026-08-07", "Form 4");
-sms.viewAttendance("2026-08-07", "Grade 1");
-
-console.log("\n--- 3. Daandada Bixinta Lacagta (Fees) ---");
-sms.paySchoolFee("S002", 50);  // Faadumo waxay bixisay bar lacagtii laga rabay
-sms.paySchoolFee("S001", 100); // Axmed wuxuu bixiyey dhamaan
-
-console.log("\n--- 4. Ka saarista iyo Wax ka badalka ---");
-sms.removeStudent("S003"); // Maxamed waa laga saaray iskuulka
