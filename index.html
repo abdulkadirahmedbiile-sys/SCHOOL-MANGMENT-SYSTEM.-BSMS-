@@ -57,7 +57,6 @@
             margin: 0 auto;
         }
 
-        /* Habaynta Daaqadaha (Rectangles) */
         .window-card {
             background-color: var(--card-bg);
             border-radius: 12px;
@@ -86,7 +85,6 @@
             justify-content: space-between;
         }
 
-        /* Foomamka */
         .form-group {
             margin-bottom: 15px;
         }
@@ -129,19 +127,10 @@
             background-color: #2980b9;
         }
 
-        .btn-success {
-            background-color: var(--success-color);
-        }
-
-        .btn-success:hover {
-            background-color: #27ae60;
-        }
-
-        /* Shaxda (Tables) */
         .table-container {
             margin-top: 25px;
             overflow-x: auto;
-            max-height: 300px;
+            max-height: 350px;
         }
 
         table {
@@ -164,7 +153,6 @@
             top: 0;
         }
 
-        /* Badhamada Xaadirinta */
         .attendance-actions {
             display: flex;
             gap: 5px;
@@ -182,8 +170,8 @@
 
         .btn-present { background-color: var(--success-color); }
         .btn-absent { background-color: var(--danger-color); }
+        .btn-delete { background-color: var(--danger-color); padding: 4px 8px; border-radius: 4px; color: white; border: none; cursor: pointer; }
 
-        /* Badajisyada (Badges) */
         .badge {
             padding: 4px 8px;
             border-radius: 4px;
@@ -197,13 +185,11 @@
 </head>
 <body>
 
-    <!-- Ciwaanka Sare ee Dashboard-ka -->
     <header>
         <h1>NIDAAMKA MAAMULKA ISKUULKA YAKA</h1>
         <p>Goobta Xakamaynta Isdiiwaangelinta, Feega iyo Xaadirinta Ardayda</p>
     </header>
 
-    <!-- Weelka Daaqadaha (Dashboard) -->
     <div class="dashboard-container">
 
         <!-- DAAQADDA 1: REGISTRATION & FEES -->
@@ -213,14 +199,17 @@
                 <span style="font-size: 1.2rem;">📝</span>
             </div>
             
-            <!-- Foomka Diiwaangelinta -->
             <form id="registrationForm" onsubmit="registerStudent(event)">
                 <div class="form-group">
-                    <label for="studentName">Magaca Pluxda ah ee Ardayda:</label>
-                    <input type="text" id="studentName" class="form-control" placeholder="Geli magaca ardayga..." required>
+                    <label for="studentName">Magaca Buuxa ee Ardayga:</label>
+                    <input type="text" id="studentName" class="form-control" placeholder="Tusaale: Axmed Cali Cilmi" required>
                 </div>
                 <div class="form-group">
-                    <label for="feeStatus">Xaaladda Feega:</label>
+                    <label for="studentPhone">Lambarka Telefoonka (Number):</label>
+                    <input type="tel" id="studentPhone" class="form-control" placeholder="Tusaale: 61xxxxxxx ama 63xxxxxxx" required>
+                </div>
+                <div class="form-group">
+                    <label for="feeStatus">Xaaladda Feega Maanta:</label>
                     <select id="feeStatus" class="form-control">
                         <option value="Bixiyay">Waa Bixiyay (Paid)</option>
                         <option value="Dhiman">Waa Ka Dhiman yahay (Unpaid)</option>
@@ -229,19 +218,20 @@
                 <button type="submit" class="btn">Diiwaangeli Ardayga</button>
             </form>
 
-            <!-- Shaxda Ardayda Isdiiwaangalisay -->
             <div class="table-container">
-                <h3>Liiska Ardayda & Feega</h3>
+                <h3>Liiska Ardayda, Tel iyo Feega</h3>
                 <table id="studentTable">
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Magaca</th>
-                            <th>Xaaladda Feega</th>
+                            <th>Telefoonka</th>
+                            <th>Feega</th>
+                            <th>Camaliyad</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Xogta halkan ayay ku dhacaysaa iyadoo JS ah -->
+                        <!-- Xogta halkan ayay JS ku soo qoraysaa -->
                     </tbody>
                 </table>
             </div>
@@ -254,8 +244,7 @@
                 <span style="font-size: 1.2rem;">📊</span>
             </div>
 
-            <!-- Shaxda Xaadirinta -->
-            <div class="table-container" style="max-height: 450px; margin-top: 0;">
+            <div class="table-container" style="max-height: 550px; margin-top: 0;">
                 <h3>Garaadka Xaadirinta Maalinlahay ah</h3>
                 <table id="attendanceTable">
                     <thead>
@@ -267,7 +256,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Xogta halkan ayay ku dhacaysaa iyadoo JS ah -->
+                        <!-- Xogta halkan ayay JS ku soo qoraysaa -->
                     </tbody>
                 </table>
             </div>
@@ -275,87 +264,102 @@
 
     </div>
 
-    <!-- JAVASCRIPT SHAQADA WADA -->
     <script>
-        // Kaydka xogta ardayda (Database-ka kumeel gaadhka ah)
-        let students = [
-            { id: 1, name: "Axmed Maxamed Cali", fee: "Bixiyay", present: 12, absent: 2 },
-            { id: 2, name: "Faadumo Cumar Cabdi", fee: "Dhiman", present: 14, absent: 0 }
+        // Akhrinta xogta kumbuyuutarka (localStorage)
+        let students = JSON.parse(localStorage.getItem('yaka_students')) || [
+            { id: 1, name: "Axmed Maxamed Cali", phone: "615551122", fee: "Bixiyay", present: 12, absent: 2 },
+            { id: 2, name: "Faadumo Cumar Cabdi", phone: "634443311", fee: "Dhiman", present: 14, absent: 0 }
         ];
 
-        // Markay bogga furmo, soo bandhig xogta hore u jirtay
         window.onload = function() {
             updateDashboards();
         };
 
-        // Shaqada Diiwaangelinta Arday Cusub
+        // SHAQADA GELINTA ARDAYDA CUSUB
         function registerStudent(event) {
-            event.preventDefault(); // Inaan boggu dib u load-gamin
+            event.preventDefault();
 
             const nameInput = document.getElementById('studentName');
+            const phoneInput = document.getElementById('studentPhone');
             const feeInput = document.getElementById('feeStatus');
 
-            if (nameInput.value.trim() === "") return;
+            if (nameInput.value.trim() === "" || phoneInput.value.trim() === "") return;
 
-            // Samaynta shay cusub oo arday ah
             const newStudent = {
-                id: students.length + 1,
+                id: students.length > 0 ? students[students.length - 1].id + 1 : 1,
                 name: nameInput.value,
+                phone: phoneInput.value,
                 fee: feeInput.value,
-                present: 0, // Wuxuu ku bilaabmayaa zero maalin oo uu joogay
-                absent: 0   // Wuxuu ku bilaabmayaa zero maalin oo uu maqnaa
+                present: 0,
+                absent: 0
             };
 
-            // Ku dar liiska
             students.push(newStudent);
+            saveToLocalStorage();
 
-            // Nadiifi foomka
             nameInput.value = "";
+            phoneInput.value = "";
             
-            // Cusboonaysii labada daaqadoodba
             updateDashboards();
         }
 
-        // Shaqada calaamadaynta Joogitaanka (Present)
         function markPresent(index) {
-            students[index].present += 1; // Automatic ayay u kordhaysaa
+            students[index].present += 1;
+            saveToLocalStorage();
             updateDashboards();
         }
 
-        // Shaqada calaamadaynta Maqnaanshaha (Absent)
         function markAbsent(index) {
-            students[index].absent += 1; // Automatic ayay u kordhaysaa
+            students[index].absent += 1;
+            saveToLocalStorage();
             updateDashboards();
         }
-        // Shaqada dib loogu cusboonaysiinayo naqshadda (UI Update)
+
+        function deleteStudent(index) {
+            if(confirm("Ma hubtaa inaad tirtirto ardaygan?")) {
+                students.splice(index, 1);
+                saveToLocalStorage();
+        function deleteStudent(index) {
+            if(confirm("Ma hubtaa inaad tirtirto ardaygan?")) {
+                students.splice(index, 1);
+                saveToLocalStorage();
+                updateDashboards();
+            }
+        }
+
+        function saveToLocalStorage() {
+            localStorage.setItem('yaka_students', JSON.stringify(students));
+        }
+
+        // SHAQADA UI-KA EE LABADA DAAQADOOD KU MUUQATA
         function updateDashboards() {
             const studentTableBody = document.querySelector('#studentTable tbody');
             const attendanceTableBody = document.querySelector('#attendanceTable tbody');
 
-            // Nadiifi wixii hore u jiray si aanay u daabacmin laba jeer
             studentTableBody.innerHTML = "";
             attendanceTableBody.innerHTML = "";
 
-            // Loop lagu dhex marayo arday kasta si loogu qoro shaxda
             students.forEach((student, index) => {
                 
-                // 1. Cusboonaysiinta Daaqadda Feega
+                // DAAQADDA 1: Shaxda Feega & Telefoonka
                 const feeBadge = student.fee === "Bixiyay" ? 'badge-paid' : 'badge-unpaid';
                 const studentRow = `
                     <tr>
                         <td>#${student.id}</td>
                         <td><strong>${student.name}</strong></td>
+                        <td>${student.phone}</td>
                         <td><span class="badge ${feeBadge}">${student.fee}</span></td>
+                        <td><button onclick="deleteStudent(${index})" class="btn-delete">❌</button></td>
                     </tr>
                 `;
                 studentTableBody.innerHTML += studentRow;
 
-                // 2. Cusboonaysiinta Daaqadda Xaadirinta (Iyadoo xisaabintu automatic tahay)
+                // DAAQADDA 2: Shaxda Xaadirinta
                 const attendanceRow = `
                     <tr>
                         <td><strong>${student.name}</strong></td>
-                        <td style="color: var(--success-color); font-weight: bold;">${student.present} Maalmoo</td>
-                        <td style="color: var(--danger-color); font-weight: bold;">${student.absent} Maalmoo</td>
+                        <td style="color: var(--success-color); font-weight: bold;">${student.present} Maalmood</td>
+                        <td style="color: var(--danger-color); font-weight: bold;">${student.absent} Maalmood</td>
                         <td>
                             <div class="attendance-actions">
                                 <button onclick="markPresent(${index})" class="btn-att btn-present">👍 Joogay</button>
@@ -367,4 +371,3 @@
                 attendanceTableBody.innerHTML += attendanceRow;
             });
         }
-
