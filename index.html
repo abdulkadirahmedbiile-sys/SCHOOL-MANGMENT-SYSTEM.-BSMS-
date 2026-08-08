@@ -66,10 +66,6 @@
             transition: transform 0.3s ease;
         }
 
-        .window-card:hover {
-            transform: translateY(-5px);
-        }
-
         .window-card:nth-child(2) {
             border-top-color: var(--success-color);
         }
@@ -85,6 +81,15 @@
             justify-content: space-between;
         }
 
+        .excel-box {
+            background-color: #f8f9fa;
+            border: 2px dashed var(--secondary-color);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
         .form-group {
             margin-bottom: 15px;
         }
@@ -93,7 +98,6 @@
             display: block;
             margin-bottom: 5px;
             font-weight: 600;
-            font-size: 0.9rem;
         }
 
         .form-control {
@@ -103,11 +107,6 @@
             border-radius: 6px;
             font-size: 1rem;
             outline: none;
-            transition: border 0.3s;
-        }
-
-        .form-control:focus {
-            border-color: var(--secondary-color);
         }
 
         .btn {
@@ -120,17 +119,17 @@
             font-size: 1rem;
             font-weight: bold;
             width: 100%;
-            transition: background 0.3s;
         }
 
-        .btn:hover {
-            background-color: #2980b9;
+        .btn-danger {
+            background-color: var(--danger-color);
+            margin-top: 10px;
         }
 
         .table-container {
             margin-top: 25px;
             overflow-x: auto;
-            max-height: 350px;
+            max-height: 400px;
         }
 
         table {
@@ -148,7 +147,6 @@
         th {
             background-color: #f8f9fa;
             color: var(--primary-color);
-            font-weight: bold;
             position: sticky;
             top: 0;
         }
@@ -165,19 +163,17 @@
             cursor: pointer;
             font-weight: bold;
             color: white;
-            font-size: 0.8rem;
         }
 
         .btn-present { background-color: var(--success-color); }
         .btn-absent { background-color: var(--danger-color); }
-        .btn-delete { background-color: var(--danger-color); padding: 4px 8px; border-radius: 4px; color: white; border: none; cursor: pointer; }
-
+        
         .badge {
             padding: 4px 8px;
             border-radius: 4px;
             color: white;
-            font-size: 0.8rem;
             font-weight: bold;
+            cursor: pointer;
         }
         .badge-paid { background-color: var(--success-color); }
         .badge-unpaid { background-color: var(--danger-color); }
@@ -187,61 +183,50 @@
 
     <header>
         <h1>NIDAAMKA MAAMULKA ISKUULKA YAKA</h1>
-        <p>Goobta Xakamaynta Isdiiwaangelinta, Feega iyo Xaadirinta Ardayda</p>
+        <p>Soo Geli Xogta Excel (CSV), Maamul Feega, iyo Xaadirinta Ardayda</p>
     </header>
 
     <div class="dashboard-container">
 
-        <!-- DAAQADDA 1: REGISTRATION & FEES -->
+        <!-- DAAQADDA 1: IS-DIIWAANGELINTA EXCEL & FEEG -->
         <div class="window-card">
             <div class="window-title">
-                <span>1. Isdiiwaangelinta & Maamulka Feega</span>
-                <span style="font-size: 1.2rem;">📝</span>
+                <span>1. Soo Gelinta Excel & Maamulka Feega</span>
+                <span>📊</span>
             </div>
             
-            <form id="registrationForm" onsubmit="registerStudent(event)">
-                <div class="form-group">
-                    <label for="studentName">Magaca Buuxa ee Ardayga:</label>
-                    <input type="text" id="studentName" class="form-control" placeholder="Tusaale: Axmed Cali Cilmi" required>
-                </div>
-                <div class="form-group">
-                    <label for="studentPhone">Lambarka Telefoonka (Number):</label>
-                    <input type="tel" id="studentPhone" class="form-control" placeholder="Tusaale: 61xxxxxxx ama 63xxxxxxx" required>
-                </div>
-                <div class="form-group">
-                    <label for="feeStatus">Xaaladda Feega Maanta:</label>
-                    <select id="feeStatus" class="form-control">
-                        <option value="Bixiyay">Waa Bixiyay (Paid)</option>
-                        <option value="Dhiman">Waa Ka Dhiman yahay (Unpaid)</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn">Diiwaangeli Ardayga</button>
-            </form>
+            <!-- GOOBTA EXCEL-KA LAGA SOO GELINAYO -->
+            <div class="excel-box">
+                <label style="font-weight: bold; display: block; margin-bottom: 8px;">Dooro Feylka Excel ( CSV Qaabkiisa ):</label>
+                <input type="file" id="csvFileInput" accept=".csv" class="form-control" onchange="handleCSVUpload(event)">
+                <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">Feylku waa inuu u qornyahay qaabkan: <strong>Magaca,Telefoonka,Feega</strong> (Bixiyay ama Dhiman)</p>
+            </div>
 
+            <!-- SHAXDA ARDAYDA CUSUB -->
             <div class="table-container">
-                <h3>Liiska Ardayda, Tel iyo Feega</h3>
+                <h3>Liiska Feega (Guji Badhanka Feega si aad u bedesho)</h3>
                 <table id="studentTable">
                     <thead>
                         <tr>
                             <th>ID</th>
                             <th>Magaca</th>
                             <th>Telefoonka</th>
-                            <th>Feega</th>
-                            <th>Camaliyad</th>
+                            <th>Xaaladda Feega</th>
                         </tr>
                     </thead>
                     <tbody>
                         <!-- Xogta halkan ayay JS ku soo qoraysaa -->
                     </tbody>
                 </table>
+                <button onclick="clearSystem()" class="btn btn-danger">Tirtir Xogta oo Dhan (Reset)</button>
             </div>
         </div>
 
-        <!-- DAAQADDA 2: ATTENDANCE MANAGEMENT -->
+        <!-- DAAQADDA 2: XAADIRINTA ARDAYDA -->
         <div class="window-card">
             <div class="window-title">
                 <span>2. Xaadirinta & Xisaabinta Automatic-ga ah</span>
-                <span style="font-size: 1.2rem;">📊</span>
+                <span>📈</span>
             </div>
 
             <div class="table-container" style="max-height: 550px; margin-top: 0;">
@@ -265,44 +250,59 @@
     </div>
 
     <script>
-        // Akhrinta xogta kumbuyuutarka (localStorage)
-        let students = JSON.parse(localStorage.getItem('yaka_students')) || [
-            { id: 1, name: "Axmed Maxamed Cali", phone: "615551122", fee: "Bixiyay", present: 12, absent: 2 },
-            { id: 2, name: "Faadumo Cumar Cabdi", phone: "634443311", fee: "Dhiman", present: 14, absent: 0 }
-        ];
+        // Akhrinta xogta LocalStorage
+        let students = JSON.parse(localStorage.getItem('yaka_excel_students')) || [];
 
         window.onload = function() {
             updateDashboards();
         };
 
-        // SHAQADA GELINTA ARDAYDA CUSUB
-        function registerStudent(event) {
-            event.preventDefault();
+        // SHAQADA AKHRINTA FEYLKA EXCEL (CSV)
+        function handleCSVUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
 
-            const nameInput = document.getElementById('studentName');
-            const phoneInput = document.getElementById('studentPhone');
-            const feeInput = document.getElementById('feeStatus');
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const lines = text.split('\n');
+                
+                // Ka bilaaw line-ka 1aad haddii 0-aad uu yahay Header (Magaca, Tel, Feeg)
+                for (let i = 0; i < lines.length; i++) {
+                    if (lines[i].trim() === "") continue;
+                    
+                    const columns = lines[i].split(',');
+                    if (columns.length >= 2) {
+                        const name = columns[0].trim();
+                        const phone = columns[1].trim();
+                        // Haddii feega aan la qorin, ka dhig "Dhiman" qaab default ah
+                        let fee = columns[2] ? columns[2].trim() : "Dhiman";
+                        
+                        // Haddii eray bixiyay ama paid ku jiro ka dhig "Bixiyay"
+                        if(fee.toLowerCase().includes('bixiyay') || fee.toLowerCase().includes('paid')) fee = "Bixiyay";
+                        else fee = "Dhiman";
 
-            if (nameInput.value.trim() === "" || phoneInput.value.trim() === "") return;
-
-            const newStudent = {
-                id: students.length > 0 ? students[students.length - 1].id + 1 : 1,
-                name: nameInput.value,
-                phone: phoneInput.value,
-                fee: feeInput.value,
-                present: 0,
-                absent: 0
+                        // Ka ilaali in magacyo madhan ama khalkhal ku jiraan kor loogu soo qaado
+                        if (name.toLowerCase() !== "magaca" && name !== "") {
+                            students.push({
+                                id: students.length + 1,
+                                name: name,
+                                phone: phone,
+                                fee: fee,
+                                present: 0,
+                                absent: 0
+                            });
+                        }
+                    }
+                }
+                saveToLocalStorage();
+                updateDashboards();
+                alert("Xogta ardayda waa lagu soo guulaystay in laga soo akhriyo Excel!");
             };
-
-            students.push(newStudent);
-            saveToLocalStorage();
-
-            nameInput.value = "";
-            phoneInput.value = "";
-            
-            updateDashboards();
+            reader.readAsText(file);
         }
 
+        // SHAQADA BUTTON-NADA XAADIRINTA
         function markPresent(index) {
             students[index].present += 1;
             saveToLocalStorage();
@@ -311,27 +311,28 @@
 
         function markAbsent(index) {
             students[index].absent += 1;
+        // SHAQADA GUJINTA FEEGA (Si aad u badasho xaalada feega qofka toos u bixiyay)
+        function toggleFee(index) {
+            students[index].fee = students[index].fee === "Bixiyay" ? "Dhiman" : "Bixiyay";
             saveToLocalStorage();
             updateDashboards();
         }
 
-        function deleteStudent(index) {
-            if(confirm("Ma hubtaa inaad tirtirto ardaygan?")) {
-                students.splice(index, 1);
-                saveToLocalStorage();
-        function deleteStudent(index) {
-            if(confirm("Ma hubtaa inaad tirtirto ardaygan?")) {
-                students.splice(index, 1);
+        // TIRTIRISTA XOGTA SYSTEM-KA
+        function clearSystem() {
+            if(confirm("Ma hubtaa inaad tirtirto dhammaan ardayda nidaamka ku jirta?")) {
+                students = [];
                 saveToLocalStorage();
                 updateDashboards();
+                document.getElementById('csvFileInput').value = "";
             }
         }
 
         function saveToLocalStorage() {
-            localStorage.setItem('yaka_students', JSON.stringify(students));
+            localStorage.setItem('yaka_excel_students', JSON.stringify(students));
         }
 
-        // SHAQADA UI-KA EE LABADA DAAQADOOD KU MUUQATA
+        // DIB U CUSBOONAYSIINTA UI-KA
         function updateDashboards() {
             const studentTableBody = document.querySelector('#studentTable tbody');
             const attendanceTableBody = document.querySelector('#attendanceTable tbody');
@@ -341,20 +342,19 @@
 
             students.forEach((student, index) => {
                 
-                // DAAQADDA 1: Shaxda Feega & Telefoonka
+                // 1. Shaxda Bidix (Excel & Feeg)
                 const feeBadge = student.fee === "Bixiyay" ? 'badge-paid' : 'badge-unpaid';
                 const studentRow = `
                     <tr>
                         <td>#${student.id}</td>
                         <td><strong>${student.name}</strong></td>
                         <td>${student.phone}</td>
-                        <td><span class="badge ${feeBadge}">${student.fee}</span></td>
-                        <td><button onclick="deleteStudent(${index})" class="btn-delete">❌</button></td>
+                        <td><span onclick="toggleFee(${index})" class="badge ${feeBadge}">${student.fee}</span></td>
                     </tr>
                 `;
                 studentTableBody.innerHTML += studentRow;
 
-                // DAAQADDA 2: Shaxda Xaadirinta
+                // 2. Shaxda Midig (Xaadirinta)
                 const attendanceRow = `
                     <tr>
                         <td><strong>${student.name}</strong></td>
