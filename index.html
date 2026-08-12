@@ -3,234 +3,256 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal-ka Xaadirinta Ardayda</title>
-    <!-- Soo rishada SheetJS si aan Excel u akhrino -->
-    <script src="https://jsdelivr.net"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #f4f7f6;
-            color: #333;
-        }
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        h1, h2 {
-            text-align: center;
-            color: #2c3e50;
-        }
-        .file-upload, .controls {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #ecf0f1;
-            border-radius: 5px;
-            text-align: center;
-        }
-        select, button {
-            padding: 10px;
-            font-size: 16px;
-            margin: 5px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-        }
-        button {
-            background-color: #27ae60;
-            color: white;
-            cursor: pointer;
-            border: none;
-        }
-        button:hover {
-            background-color: #219653;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #2980b9;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        .status-btn {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .xaadir { background-color: #2ecc71; color: white; }
-        .maqan { background-color: #e74c3c; color: white; }
-    </style>
+    <title>Maamulka Schoolka - Portal</title>
+    <!-- Tailwind CSS for modern and beautiful styling -->
+    <script src="https://tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cloudflare.com">
 </head>
-<body>
+<body class="bg-slate-100 font-sans antialiased text-slate-800">
 
-<div class="container">
-    <h1>Portal-ka Xaadirinta Ardayda</h1>
+    <!-- ================= BOGGA 1: LOGIN PAGE ================= -->
+    <div id="login-page" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-900 to-slate-900 px-4">
+        <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md transform transition-all hover:scale-[1.01]">
+            <!-- Header -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-100 text-blue-600 mb-3 text-2xl">
+                    <i class="fa-solid fa-school"></i>
+                </div>
+                <h1 class="text-2xl font-bold text-slate-800">Maamulka Schoolka</h1>
+                <p class="text-sm text-slate-500 mt-1">Geli aqoonsigaaga si aad u gasho portal-ka</p>
+            </div>
+
+            <!-- Form -->
+            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Username</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <input type="text" id="username" required
+                            class="w-full pl-10 pr-4 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" 
+                            placeholder="admin">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1">Password</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <input type="password" id="password" required
+                            class="w-full pl-10 pr-10 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all" 
+                            placeholder="••••••••">
+                    </div>
+                </div>
+
+                <!-- Error Message Container -->
+                <div id="login-error" class="hidden text-sm bg-red-50 text-red-600 p-3 rounded-xl border border-red-100 flex items-center gap-2 animate-pulse">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span>Username ama Password waa khalad!</span>
+                </div>
+
+                <button type="submit" 
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-xl transition-colors shadow-lg shadow-blue-600/20 active:scale-[0.98]">
+                    Gasho Portal-ka <i class="fa-solid fa-arrow-right ml-1 text-sm"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ================= BOGGA 2: DASHBOARD PAGE ================= -->
+    <div id="dashboard-page" class="hidden min-h-screen flex flex-col md:flex-row">
+        
+        <!-- Sidebar Navigation -->
+        <aside class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col border-r border-slate-800">
+            <!-- Sidebar Header -->
+            <div class="p-5 border-b border-slate-800 flex items-center gap-3">
+                <i class="fa-solid fa-graduation-cap text-2xl text-blue-400"></i>
+                <div>
+                    <h2 class="font-bold text-white text-sm tracking-wide uppercase">Maamulka Schoolka</h2>
+                    <span class="text-xs text-emerald-400 flex items-center gap-1 mt-0.5">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block animate-ping"></span> Online
+                    </span>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="flex-1 p-4 space-y-6 overflow-y-auto max-h-[85vh]">
+                <!-- Secondary Classes -->
+                <div>
+                    <span class="px-3 text-xs font-bold text-slate-500 uppercase tracking-wider block mb-2">Dugsiga Sare (Secondary)</span>
+                    <div class="space-y-1">
+                        <button onclick="loadClassData('Form 4')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white transition-colors flex items-center justify-between text-sm group">
+                            <span><i class="fa-solid fa-folder mr-2 text-blue-400"></i> Form 4</span>
+                            <span class="bg-slate-800 group-hover:bg-slate-700 px-2 py-0.5 rounded text-xs">A, B, C</span>
+                        </button>
+                        <button onclick="loadClassData('Form 3')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white transition-colors text-sm"><i class="fa-solid fa-folder mr-2 text-slate-500"></i> Form 3</button>
+                        <button onclick="loadClassData('Form 2')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white transition-colors text-sm"><i class="fa-solid fa-folder mr-2 text-slate-500"></i> Form 2</button>
+                        <button onclick="loadClassData('Form 1')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white transition-colors text-sm"><i class="fa-solid fa-folder mr-2 text-slate-500"></i> Form 1</button>
+                    </div>
+                </div>
+
+                <!-- Primary Classes -->
+                <div>
+                    <span class="px-3 text-xs font-bold text-slate-500 uppercase tracking-wider block mb-2">Dugsiga Hoose/Dhexe (Primary)</span>
+                    <div class="space-y-1">
+                        <button onclick="loadClassData('Grade 8')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white transition-colors text-sm"><i class="fa-solid fa-folder mr-2 text-slate-400"></i> Grade 8</button>
+                        <button onclick="loadClassData('Grade 7')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white transition-colors text-sm"><i class="fa-solid fa-folder mr-2 text-slate-400"></i> Grade 7</button>
+                        <button onclick="loadClassData('Grade 6')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white transition-colors text-sm"><i class="fa-solid fa-folder mr-2 text-slate-400"></i> Grade 6</button>
+                        <button onclick="loadClassData('Grade 5')" class="w-full text-left px-3 py-2 rounded-lg hover:bg-slate-800 hover:text-white transition-colors text-sm flex items-center justify-between text-sm group">
+                            <span><i class="fa-solid fa-folder mr-2 text-blue-400"></i> Grade 5</span>
+                            <span class="bg-slate-800 group-hover:bg-slate-700 px-2 py-0.5 rounded text-xs">A</span>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Sidebar Footer -->
+            <div class="p-4 border-t border-slate-800">
+                <button onclick="handleLogout()" class="w-full bg-red-950/40 text-red-400 border border-red-900/50 hover:bg-red-900 hover:text-white py-2 px-4 rounded-xl transition-all flex items-center justify-center gap-2 text-sm font-medium">
+                    <i class="fa-solid fa-power-off"></i> Ka Bax Portal-ka
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 flex flex-col overflow-x-hidden">
+            
+            <!-- Top Navbar Header -->
+            <header class="bg-white border-b border-slate-200 px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-slate-800" id="current-view-title">Dashboard-ka Guud</h2>
+                    <p class="text-xs text-slate-500 mt-0.5" id="current-view-date">Isniin, 12 Agoosto 2026</p>
+                </div>
+                <div class="flex items-center gap-3 bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
+                    <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm">A</div>
+                    <div class="text-left">
+                        <p class="text-sm font-semibold text-slate-800 leading-tight">Admin User</p>
+                        <p class="text-[11px] text-slate-400">Maamule Sare</p>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Analytics Panel -->
+            <div id="analytics-cards" class="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <!-- Card 1 -->
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-slate-400">Ardayda Guud</p>
+                        <h3 class="text-2xl font-bold text-slate-800 mt-1">450</h3>
+                    </div>
+                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl"><i class="fa-solid fa-user-graduate"></i></div>
+// Fake Local Database (Xogta tijaabada ah ee labada fasal ee muunadda ah)
+const schoolDatabase = {
+    "Form 4": {
+        formMaster: { name: "Cabdullaahi Jaamac Cilmi", subject: "Fiisigis (Physics)", phone: "+252 61 7778899", email: "c.jaamac@school.so" },
+        students: [
+            { id: 1041, name: "Axmed Maxamed Yuusuf", gender: "Lab", dob: "2008-04-12", contact: "+252 61 1234561", attendance: true, fees: "Paid" },
+            { id: 1042, name: "Faadumo Cali Xasan", gender: "Dheddig", dob: "2009-09-22", contact: "+252 61 1234562", attendance: true, fees: "Paid" },
+            { id: 1043, name: "Cumar Cusmaan Cabdi", gender: "Lab", dob: "2008-01-05", contact: "+252 61 1234563", attendance: false, fees: "Pending" }
+        ]
+    },
+    "Grade 5": {
+        formMaster: { name: "Aamina Maxamuud Maxamed", subject: "Af-Soomaali", phone: "+252 61 4443322", email: "aamina.m@school.so" },
+        students: [
+            { id: 1051, name: "Mustafe Yaasiin Faarax", gender: "Lab", dob: "2015-11-30", contact: "+252 61 9876541", attendance: true, fees: "Paid" },
+            { id: 1052, name: "Xalimo Axmed Nuur", gender: "Dheddig", dob: "2016-02-14", contact: "+252 61 9876542", attendance: true, fees: "Pending" }
+        ]
+    }
+};
+
+// 1. Handle Secure Portal Login
+function handleLogin(event) {
+    event.preventDefault();
+    const user = document.getElementById('username').value.trim();
+    const pass = document.getElementById('password').value.trim();
+    const errorDiv = document.getElementById('login-error');
     
-    <!-- Qaybta Excel-ka laga soo gelinayo -->
-    <div class="file-upload">
-        <label for="excel-file"><b>Soo geli feylka Excel (Ardayda):</b> </label>
-        <input type="file" id="excel-file" accept=".xlsx, .xls">
-    </div>
+    // Default Testing Credentials: admin / admin
+    if (user === 'admin' && pass === 'admin') {
+        errorDiv.classList.add('hidden');
+        document.getElementById('login-page').classList.add('hidden');
+        document.getElementById('dashboard-page').classList.remove('hidden');
+        
+        // Real-time automatic date updater
+        const maanta = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('current-view-date').innerText = maanta.toLocaleDateString('so-SO', options);
+    } else {
+        errorDiv.classList.remove('hidden');
+    }
+}
 
-    <!-- Qaybta Xulashada Fasalka iyo Taariikhda -->
-    <div class="controls" id="controls-section" style="display: none;">
-        <label for="class-select">Fasalka: </label>
-        <select id="class-select" onchange="muujiArdayda()"></select>
+// 2. Handle Logout
+function handleLogout() {
+    document.getElementById('dashboard-page').classList.add('hidden');
+    document.getElementById('login-page').classList.remove('hidden');
+    document.getElementById('login-form').reset();
+    document.getElementById('login-error').classList.add('hidden');
+}
 
-        <label for="date-input">Taariikhda: </label>
-        <input type="date" id="date-input" style="padding: 8px;">
-
-        <button onclick="sooDagsoExcel()">La soo deg Xaadirinta (Excel)</button>
-    </div>
-
-    <!-- Shaxda Ardayda -->
-    <table id="attendance-table" style="display: none;">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Magaca Ardayda</th>
-                <th>Fasalka</th>
-                <th>Xaaladda (Xaadir/Maqan)</th>
-            </tr>
-        </thead>
-        <tbody id="student-list">
-            <!-- Xogta ardayda halkan ayaa ku dhex rimi doonta -->
-        </tbody>
-    </table>
-</div>
-
-<script>
-    let xogtaHore = []; // Halkan waxaa ku kejdismaya xogta excel-ka
-    let fasalada = [];
-
-    // Akhrinta feylka Excel markii la soo geliyo
-    document.getElementById('excel-file').addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-            const data = evt.target.result;
-            const workbook = XLSX.read(data, { type: 'binary' });
+// 3. Dynamic Database View Loader
+function loadClassData(className) {
+    // Update UI view titles
+    document.getElementById('current-view-title').innerText = `Maamulka Kaydka Xogta — ${className}`;
+    document.getElementById('welcome-view').classList.add('hidden');
+    document.getElementById('database-view').classList.remove('hidden');
+    
+    const classData = schoolDatabase[className];
+    const tbody = document.getElementById('students-table-body');
+    
+    // Check if we have mock data for this specific class
+    if (!classData) {
+        document.getElementById('fm-name').innerText = "Lama meeleyn";
+        document.getElementById('fm-subject').innerText = "—";
+        document.getElementById('fm-phone').innerText = "—";
+        document.getElementById('fm-email').innerText = "—";
+        document.getElementById('student-count').innerText = "Ardayda: 0";
+        tbody.innerHTML = `
+            <tr> 
+                <td colspan="7" class="py-8 text-center text-slate-400 font-medium"> 
+                    <i class="fa-solid fa-database block text-2xl mb-2 text-slate-300"></i> 
+                    Fasalkan hadda xogtiisu kuma jirto Database-ka dhabta ah. (Waa loo diyaariyay qaabdhismeedka). 
+                </td> 
+            </tr>`;
+        return;
+    }
+    
+    // Populate Form Master data fields
+    document.getElementById('fm-name').innerText = classData.formMaster.name;
+    document.getElementById('fm-subject').innerText = classData.formMaster.subject;
+    document.getElementById('fm-phone').innerText = classData.formMaster.phone;
+    document.getElementById('fm-email').innerText = classData.formMaster.email;
+    document.getElementById('student-count').innerText = `Ardayda: ${classData.students.length}`;
+    
+    // Populate Student database records row by row
+    tbody.innerHTML = '';
+    classData.students.forEach(student => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50/80 transition-colors border-b border-slate-100";
+        
+        // Attendance styling
+        const attendBadge = student.attendance
+            ? `<span class="bg-emerald-50 text-emerald-700 text-xs px-2 py-1 rounded-md font-semibold"><i class="fa-solid fa-check text-[10px]"></i> Jooga</span>`
+            : `<span class="bg-rose-50 text-rose-700 text-xs px-2 py-1 rounded-md font-semibold"><i class="fa-solid fa-xmark text-[10px]"></i> Maqan</span>`;
             
-            // Waxaan u qaadanaynaa in xogtu ku jirto Sheet-ka ugu horeeya
-            const sheetName = workbook.SheetNames[0];
-            const sheet = workbook.Sheets[sheetName];
+        // Fees payment styling
+        const feeBadge = student.fees === 'Paid'
+            ? `<span class="text-emerald-600 bg-emerald-100/50 text-[11px] px-2 py-0.5 rounded-full"><i class="fa-solid fa-circle-check"></i> Bixiyay</span>`
+            : `<span class="text-amber-600 bg-amber-100/50 text-[11px] px-2 py-0.5 rounded-full"><i class="fa-solid fa-clock"></i> Sugan</span>`;
             
-            // U bedel xogta Excel qaab JSON ah
-            xogtaHore = XLSX.utils.sheet_to_json(sheet);
-            
-            if(xogtaHore.length > 0) {
-                hagaajiFasalada();
-                document.getElementById('controls-section').style.display = 'block';
-                document.getElementById('attendance-table').style.display = 'table';
-            } else {
-                alert("Feylku waa madhan yahay ama qaabku waa khaldan yahay!");
-            }
-        };
-        reader.readAsBinaryString(file);
+        tr.innerHTML = `
+            <td class="py-3 px-5 font-mono text-slate-400 text-xs">#${student.id}</td> 
+            <td class="py-3 px-5 text-slate-900">${student.name}</td> 
+            <td class="py-3 px-5 text-center text-slate-500 text-xs">${student.gender}</td> 
+            <td class="py-3 px-5 text-center text-slate-500 font-mono text-xs">${student.dob}</td> 
+            <td class="py-3 px-5 text-slate-600 text-xs">${student.contact}</td> 
+            <td class="py-3 px-5 text-center">${attendBadge}</td> 
+            <td class="py-3 px-5 text-center">${feeBadge}</td>`;
+        tbody.appendChild(tr);
     });
-
-    // Soo saarista fasalada kala duwan ee feylka ku jira
-    function hagaajiFasalada() {
-        const classSelect = document.getElementById('class-select');
-        classSelect.innerHTML = '';
-        
-        // Hel fasalada u gaarka ah (Unique classes)
-        const uniqueClasses = [...new Set(xogtaHore.map(item => item.Fasalka || item.fasalka))];
-        
-        uniqueClasses.forEach(fasal => {
-            if(fasal) {
-                let option = document.createElement('option');
-                option.value = fasal;
-                option.textContent = fasal;
-                classSelect.appendChild(option);
-            }
-        });
-        
-        // Deji taariikhda maanta si toos ah
-        document.getElementById('date-input').valueAsDate = new Date();
-        
-        muujiArdayda();
-    }
-
-    // Muujinta ardayda marka fasal la doorto
-    function muujiArdayda() {
-        const selectedClass = document.getElementById('class-select').value;
-        const studentList = document.getElementById('student-list');
-        studentList.innerHTML = '';
-
-        // Sifee ardayda ku jirta fasalka la doorto
-        const ardaydaFasalka = xogtaHore.filter(item => (item.Fasalka || item.fasalka) == selectedClass);
-
-        ardaydaFasalka.forEach((arday, index) => {
-            // Haddii aanay xaalad hore u lahaan, u deji 'Xaadir'
-            if (!arday.Xaaladda) arday.Xaaladda = "Xaadir";
-
-            let tr = document.createElement('tr');
-            tr.innerHTML = `
-                <td>${arday.ID || arday.id || (index + 1)}</td>
-                <td>${arday.Magaca || arday.magaca || arday.Name}</td>
-                <td>${selectedClass}</td>
-                <td>
-                    <button class="status-btn ${arday.Xaaladda == 'Xaadir' ? 'xaadir' : 'maqan'}" 
-                            onclick="bedelXaaladda(this, ${xogtaHore.indexOf(arday)})">
-                        ${arday.Xaaladda}
-                    </button>
-                </td>
-            `;
-            studentList.appendChild(tr);
-        });
-    }
-
-    // Badalka badanka Xaadir/Maqan
-    function bedelXaaladda(btn, globalIndex) {
-        if (xogtaHore[globalIndex].Xaaladda === "Xaadir") {
-            xogtaHore[globalIndex].Xaaladda = "Maqan";
-            btn.textContent = "Maqan";
-            btn.className = "status-btn maqan";
-        } else {
-            xogtaHore[globalIndex].Xaaladda = "Xaadir";
-            btn.textContent = "Xaadir";
-            btn.className = "status-btn xaadir";
-        }
-    }
-
-    // Dib u dhoofinta xogta xaadirinta oo Excel ah
-    function sooDagsoExcel() {
-        const taariikhda = document.getElementById('date-input').value || 'maanta';
-        const fasalka = document.getElementById('class-select').value;
-        
-        // Ku dar taariikhda xogta la soo dejisanayo
-        const xogtaLaDhoofinayo = xogtaHore.map(item => {
-            let niyan = {...item};
-            niyan.Taariikhda = taariikhda;
-            return niyan;
-        });
-
-        const worksheet = XLSX.utils.json_to_sheet(xogtaLaDhoofinayo);
-        const workbook = XLSX.utils.book_new();
-        XLSX.book_append_sheet(workbook, worksheet, "Xaadirinta");
-
-        // Magaca feylka la soo degayo
-        XLSX.writeFile(workbook, `Xaadirinta_${fasalka}_${taariikhda}.xlsx`);
-    }
-</script>
-
-</body>
-</html>
+}
