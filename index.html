@@ -3,494 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NIDAAMKA MAAMULKA ISKUULKA YAKA</title>
+    <title>Portal-ka Xaadirinta Ardayda</title>
+    <!-- Soo rishada SheetJS si aan Excel u akhrino -->
+    <script src="https://jsdelivr.net"></script>
     <style>
-        :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --success: #2ecc71;
-            --danger: #e74c3c;
-            --bg: #f5f6fa;
-            --card: #ffffff;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         body {
-            background-color: var(--bg);
-            padding: 20px;
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f7f6;
             color: #333;
         }
-
-        header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            text-align: center;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-
-        header h1 {
-            font-size: 2.3rem;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-        }
-
-        /* Qaybta Excel iyo Maamulka Guud */
-        .excel-actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            background: var(--card);
-            padding: 20px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            align-items: center;
-        }
-
-        .excel-box {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Naqshadda Dashboard-ka (Labada Daaqadood oo Waaweyn) */
-        .main-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 25px;
-            max-width: 1500px;
+        .container {
+            max-width: 900px;
             margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
         }
-
-        .box-card {
-            background: var(--card);
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.05);
-            border-top: 6px solid var(--secondary);
+        h1, h2 {
+            text-align: center;
+            color: #2c3e50;
         }
-
-        .box-card:nth-child(2) {
-            border-top-color: var(--success);
-        }
-
-        h2 {
+        .file-upload, .controls {
             margin-bottom: 20px;
-            font-size: 1.4rem;
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
-            color: var(--primary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            padding: 15px;
+            background: #ecf0f1;
+            border-radius: 5px;
+            text-align: center;
         }
-
-        /* Foomamka iyo Meelaha Wax laga Qoro */
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 15px;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            font-size: 0.85rem;
-        }
-
-        .form-control {
-            width: 100%;
+        select, button {
             padding: 10px;
+            font-size: 16px;
+            margin: 5px;
+            border-radius: 4px;
             border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 0.9rem;
-            outline: none;
         }
-
-        .form-control:focus {
-            border-color: var(--secondary);
-        }
-
-        /* Badhamada (Buttons) */
-        .btn {
-            background: var(--secondary);
+        button {
+            background-color: #27ae60;
             color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 6px;
             cursor: pointer;
-            font-weight: bold;
-            font-size: 0.95rem;
-            transition: background 0.3s;
+            border: none;
         }
-
-        .btn:hover { background: #2980b9; }
-        .btn-success { background: var(--success); }
-        .btn-success:hover { background: #27ae60; }
-        .btn-danger { background: var(--danger); }
-        .btn-danger:hover { background: #c0392b; }
-        .btn-sm { padding: 6px 12px; font-size: 0.8rem; }
-
-        /* Shaxda (Tables) */
-        .table-container {
-            overflow-x: auto;
-            margin-top: 20px;
-            max-height: 400px;
-            border: 1px solid #eee;
-            border-radius: 6px;
+        button:hover {
+            background-color: #219653;
         }
-
         table {
             width: 100%;
             border-collapse: collapse;
-            text-align: left;
-            font-size: 0.85rem;
+            margin-top: 20px;
         }
-
         th, td {
+            border: 1px solid #ddd;
             padding: 12px;
-            border-bottom: 1px solid #eee;
-            vertical-align: middle;
+            text-align: left;
         }
-
         th {
-            background: #f8f9fa;
-            color: var(--primary);
-            font-weight: bold;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-
-        /* Calaamadaha Feega iyo Maamulka */
-        .badge {
-            padding: 5px 10px;
-            border-radius: 4px;
+            background-color: #2980b9;
             color: white;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 0.75rem;
-            display: inline-block;
         }
-        .badge-paid { background: var(--success); }
-        .badge-unpaid { background: var(--danger); }
-
-        .flex-actions {
-            display: flex;
-            gap: 6px;
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
         }
-
-        .action-icon {
-            background: none;
+        .status-btn {
+            padding: 6px 12px;
             border: none;
+            border-radius: 4px;
             cursor: pointer;
-            font-size: 1rem;
+            font-weight: bold;
         }
+        .xaadir { background-color: #2ecc71; color: white; }
+        .maqan { background-color: #e74c3c; color: white; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>NIDAAMKA MAAMULKA ISKUULKA YAKA</h1>
-        <p>Maamulka Isdiiwaangelinta, Feega, Darajooyinka, iyo Xaadirinta Automatic-ga ah</p>
-    </header>
-
-    <!-- QAYBTA EXCEL IMPORT & EXPORT -->
-    <div class="excel-actions">
-        <div class="excel-box">
-            <label style="font-weight: bold;">Soo Geli Excel (CSV):</label>
-            <input type="file" id="csvFileInput" accept=".csv" class="form-control" style="width: auto;" onchange="importFromCSV(event)">
-        </div>
-        <button onclick="exportToCSV()" class="btn btn-success" style="margin-left: auto;">La soo deg Excel (Export Report) 📤</button>
-        <button onclick="resetSystem()" class="btn btn-danger">Tirtir System-ka (Reset)</button>
+<div class="container">
+    <h1>Portal-ka Xaadirinta Ardayda</h1>
+    
+    <!-- Qaybta Excel-ka laga soo gelinayo -->
+    <div class="file-upload">
+        <label for="excel-file"><b>Soo geli feylka Excel (Ardayda):</b> </label>
+        <input type="file" id="excel-file" accept=".xlsx, .xls">
     </div>
 
-    <div class="main-container">
+    <!-- Qaybta Xulashada Fasalka iyo Taariikhda -->
+    <div class="controls" id="controls-section" style="display: none;">
+        <label for="class-select">Fasalka: </label>
+        <select id="class-select" onchange="muujiArdayda()"></select>
 
-        <!-- DAAQADDA 1: REGISTRATION, FEES & GRADES -->
-        <div class="box-card">
-            <h2>
-                <span>1. Isdiiwaangelinta, Feega & Imtixaanada</span>
-                <span>📝</span>
-            </h2>
-            
-            <!-- Foomka Arday Diwaangelinta -->
-            <form id="studentForm" onsubmit="addStudent(event)">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Magaca Ardayga:</label>
-                        <input type="text" id="stuName" class="form-control" required placeholder="Tusaale: Cali Maxamed">
-                    </div>
-                    <div class="form-group">
-                        <label>Telefoonka (Number):</label>
-                        <input type="text" id="stuPhone" class="form-control" required placeholder="61xxxxxxx">
-                    </div>
-                </div>
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Fasalka:</label>
-                        <input type="text" id="stuClass" class="form-control" required placeholder="Tusaale: Form 1">
-                    </div>
-                    <div class="form-group">
-                        <label>Xaaladda Feega Maanta:</label>
-                        <select id="stuFee" class="form-control">
-                            <option value="Bixiyay">Bixiyay (Paid)</option>
-                            <option value="Dhiman">Dhiman (Unpaid)</option>
-                        </select>
-                    </div>
-                </div>
-                <button type="submit" class="btn" style="width: 100%;">Ku Dar Ardayga Cusub</button>
-            </form>
+        <label for="date-input">Taariikhda: </label>
+        <input type="date" id="date-input" style="padding: 8px;">
 
-            <!-- Shaxda Isdiiwaangelinta -->
-            <div class="table-container">
-                <table id="feesTable">
-                    <thead>
-                        <tr>
-                            <th>Magaca</th>
-                            <th>Fasalka</th>
-                            <th>Telefoonka</th>
-                            <th>Feega</th>
-                            <th>Natiijada (100)</th>
-                            <th>Camaliyad</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- JS ayaa soo qoraya -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- DAAQADDA 2: XAADIRINTA AUTOMATIC-GA AH -->
-        <div class="box-card">
-            <h2>
-                <span>2. Xaadirinta & Xisaabinta Maalmaha</span>
-                <span>📊</span>
-            </h2>
-            
-            <!-- Shaxda Xaadirinta -->
-            <div class="table-container" style="max-height: 580px; margin-top: 0;">
-                <table id="attendanceTable">
-                    <thead>
-                        <tr>
-                            <th>Magaca Ardayga</th>
-                            <th>Fasalka</th>
-                            <th>Joogay (Days)</th>
-                            <th>Maqnaa (Days)</th>
-                            <th>Xaadirinta Maanta</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- JS ayaa soo qoraya -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
+        <button onclick="sooDagsoExcel()">La soo deg Xaadirinta (Excel)</button>
     </div>
 
-    <script>
-        // Xogta Tusaalaha ah (Mock Data) haddii nidaamku maranyahay markii ugu horraysay
-        const defaultStudents = [
-            { id: 1, name: "Axmed Maxamed Cali", phone: "615551122", className: "Form 1", feeStatus: "Bixiyay", score: 85, present: 12, absent: 2 },
-            { id: 2, name: "Faadumo Cumar Cabdi", phone: "634443311", className: "Form 1", feeStatus: "Dhiman", score: 92, present: 14, absent: 0 },
-        ]; // Dhamaadka defaultStudents
+    <!-- Shaxda Ardayda -->
+    <table id="attendance-table" style="display: none;">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Magaca Ardayda</th>
+                <th>Fasalka</th>
+                <th>Xaaladda (Xaadir/Maqan)</th>
+            </tr>
+        </thead>
+        <tbody id="student-list">
+            <!-- Xogta ardayda halkan ayaa ku dhex rimi doonta -->
+        </tbody>
+    </table>
+</div>
 
-        // Soo akhrinta xogta LocalStorage ama isticmaal xogta tusaalaha ah
-        let students = JSON.parse(localStorage.getItem('yaka_github_system')) || defaultStudents;
+<script>
+    let xogtaHore = []; // Halkan waxaa ku kejdismaya xogta excel-ka
+    let fasalada = [];
 
-        window.onload = function() {
-            updateDashboards();
+    // Akhrinta feylka Excel markii la soo geliyo
+    document.getElementById('excel-file').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+            const data = evt.target.result;
+            const workbook = XLSX.read(data, { type: 'binary' });
+            
+            // Waxaan u qaadanaynaa in xogtu ku jirto Sheet-ka ugu horeeya
+            const sheetName = workbook.SheetNames[0];
+            const sheet = workbook.Sheets[sheetName];
+            
+            // U bedel xogta Excel qaab JSON ah
+            xogtaHore = XLSX.utils.sheet_to_json(sheet);
+            
+            if(xogtaHore.length > 0) {
+                hagaajiFasalada();
+                document.getElementById('controls-section').style.display = 'block';
+                document.getElementById('attendance-table').style.display = 'table';
+            } else {
+                alert("Feylku waa madhan yahay ama qaabku waa khaldan yahay!");
+            }
         };
+        reader.readAsBinaryString(file);
+    });
 
-        // 1. SHAQADA CUSUB: KUDARISTA ARDAYGA
-        function addStudent(event) {
-            event.preventDefault();
-
-            const name = document.getElementById('stuName').value.trim();
-            const phone = document.getElementById('stuPhone').value.trim();
-            const className = document.getElementById('stuClass').value.trim();
-            const feeStatus = document.getElementById('stuFee').value;
-
-            const newStudent = {
-                id: students.length > 0 ? students[students.length - 1].id + 1 : 1,
-                name: name,
-                phone: phone,
-                className: className,
-                feeStatus: feeStatus,
-                score: 0,
-                present: 0,
-                absent: 0
-            };
-
-            students.push(newStudent);
-            saveAndRender();
-
-            // Nadiifi foomka mar kale
-            document.getElementById('studentForm').reset();
-        }
-
-        // 2. SHAQADA XAADIRINTA AUTOMATIC-GA AH
-        function markPresent(index) {
-            students[index].present += 1;
-            saveAndRender();
-        }
-
-        function markAbsent(index) {
-            students[index].absent += 1;
-            saveAndRender();
-        }
-
-        // 3. SHAQADA BEDDELISTA FEEG-GA (TOGGLE)
-        function toggleFee(index) {
-            students[index].feeStatus = students[index].feeStatus === "Bixiyay" ? "Dhiman" : "Bixiyay";
-            saveAndRender();
-        }
-
-        // 4. SHAQADA HORUMARINTA NTIJOOYINKA (EXAMS)
-        function updateScore(index, value) {
-            students[index].score = parseInt(value) || 0;
-            localStorage.setItem('yaka_github_system', JSON.stringify(students));
-        }
-
-        // 5. SHAQADA TIRTIRISTA ARDAYGA GAARKA AH
-        function deleteStudent(index) {
-            if (confirm("Ma hubtaa inaad tirtirto ardaygan?")) {
-                students.splice(index, 1);
-                saveAndRender();
+    // Soo saarista fasalada kala duwan ee feylka ku jira
+    function hagaajiFasalada() {
+        const classSelect = document.getElementById('class-select');
+        classSelect.innerHTML = '';
+        
+        // Hel fasalada u gaarka ah (Unique classes)
+        const uniqueClasses = [...new Set(xogtaHore.map(item => item.Fasalka || item.fasalka))];
+        
+        uniqueClasses.forEach(fasal => {
+            if(fasal) {
+                let option = document.createElement('option');
+                option.value = fasal;
+                option.textContent = fasal;
+                classSelect.appendChild(option);
             }
+        });
+        
+        // Deji taariikhda maanta si toos ah
+        document.getElementById('date-input').valueAsDate = new Date();
+        
+        muujiArdayda();
+    }
+
+    // Muujinta ardayda marka fasal la doorto
+    function muujiArdayda() {
+        const selectedClass = document.getElementById('class-select').value;
+        const studentList = document.getElementById('student-list');
+        studentList.innerHTML = '';
+
+        // Sifee ardayda ku jirta fasalka la doorto
+        const ardaydaFasalka = xogtaHore.filter(item => (item.Fasalka || item.fasalka) == selectedClass);
+
+        ardaydaFasalka.forEach((arday, index) => {
+            // Haddii aanay xaalad hore u lahaan, u deji 'Xaadir'
+            if (!arday.Xaaladda) arday.Xaaladda = "Xaadir";
+
+            let tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${arday.ID || arday.id || (index + 1)}</td>
+                <td>${arday.Magaca || arday.magaca || arday.Name}</td>
+                <td>${selectedClass}</td>
+                <td>
+                    <button class="status-btn ${arday.Xaaladda == 'Xaadir' ? 'xaadir' : 'maqan'}" 
+                            onclick="bedelXaaladda(this, ${xogtaHore.indexOf(arday)})">
+                        ${arday.Xaaladda}
+                    </button>
+                </td>
+            `;
+            studentList.appendChild(tr);
+        });
+    }
+
+    // Badalka badanka Xaadir/Maqan
+    function bedelXaaladda(btn, globalIndex) {
+        if (xogtaHore[globalIndex].Xaaladda === "Xaadir") {
+            xogtaHore[globalIndex].Xaaladda = "Maqan";
+            btn.textContent = "Maqan";
+            btn.className = "status-btn maqan";
+        } else {
+            xogtaHore[globalIndex].Xaaladda = "Xaadir";
+            btn.textContent = "Xaadir";
+            btn.className = "status-btn xaadir";
         }
+    }
 
-        // 6. SOO DEGSASHADA EXCEL (EXPORT TO CSV)
-        function exportToCSV() {
-            let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "ID,Magaca Ardayga,Telefoonka,Fasalka,Feega,Imtixaan,Maalmood Joogay,Maalmood Maqnaa\n";
+    // Dib u dhoofinta xogta xaadirinta oo Excel ah
+    function sooDagsoExcel() {
+        const taariikhda = document.getElementById('date-input').value || 'maanta';
+        const fasalka = document.getElementById('class-select').value;
+        
+        // Ku dar taariikhda xogta la soo dejisanayo
+        const xogtaLaDhoofinayo = xogtaHore.map(item => {
+            let niyan = {...item};
+            niyan.Taariikhda = taariikhda;
+            return niyan;
+        });
 
-            students.forEach(s => {
-                let row = `${s.id},"${s.name}",${s.phone},"${s.className}",${s.feeStatus},${s.score},${s.present},${s.absent}`;
-                csvContent += row + "\n";
-            });
+        const worksheet = XLSX.utils.json_to_sheet(xogtaLaDhoofinayo);
+        const workbook = XLSX.utils.book_new();
+        XLSX.book_append_sheet(workbook, worksheet, "Xaadirinta");
 
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "Warbixinta_Iskuulka_Yaka.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
+        // Magaca feylka la soo degayo
+        XLSX.writeFile(workbook, `Xaadirinta_${fasalka}_${taariikhda}.xlsx`);
+    }
+</script>
 
-        // 7. SOO GELINTA EXCEL (IMPORT FROM CSV)
-        function importFromCSV(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const text = e.target.result;
-                const lines = text.split('\n');
-                
-                // Ka bilow line-ka 1aad si looga gudbo Header-ka
-                for (let i = 1; i < lines.length; i++) {
-                    if (lines[i].trim() === "") continue;
-                    const cols = lines[i].split(',');
-                    if (cols.length >= 4) {
-                        const name = cols[1].replace(/"/g, '').trim();
-                        const phone = cols[2].trim();
-                        const className = cols[3].replace(/"/g, '').trim();
-                        const feeStatus = cols[4].trim();
-
-                        students.push({
-                            id: students.length > 0 ? students[students.length - 1].id + 1 : 1,
-                            name: name,
-                            phone: phone,
-                            className: className,
-                            feeStatus: feeStatus.includes("Bixiyay") || feeStatus.toLowerCase().includes("paid") ? "Bixiyay" : "Dhiman",
-                            score: parseInt(cols[5]) || 0,
-                            present: parseInt(cols[6]) || 0,
-                            absent: parseInt(cols[7]) || 0
-                        });
-                    }
-                }
-                saveAndRender();
-                alert("Xogta Excel waa lagu soo shubay nidaamka guul!");
-                document.getElementById('csvFileInput').value = "";
-            };
-            reader.readAsText(file);
-        }
-
-        // RESET GARAYNTA SYSTEM-KA COOKIES-KA
-        function resetSystem() {
-            if (confirm("Ma hubtaa inaad tirtirto dhammaan xogta si aad xogtaada rasmiga ah u geliso?")) {
-                students = [];
-                saveAndRender();
-            }
-        }
-
-        // SEEF GARAYNTA IYO DIB-U-DHISKA UI-KA
-        function saveAndRender() {
-            localStorage.setItem('yaka_github_system', JSON.stringify(students));
-            updateDashboards();
-        }
-
-        // SHAQADA UI-KA EE SHAXAHA LAGU MUUJINAYO
-        function updateDashboards() {
-            const feesBody = document.querySelector('#feesTable tbody');
-            const attBody = document.querySelector('#attendanceTable tbody');
-
-            feesBody.innerHTML = "";
-            attBody.innerHTML = "";
-
-            students.forEach((student, index) => {
-                // Daaqadda 1: Feega iyo Darajooyinka
-                const feeBadge = student.feeStatus === "Bixiyay" ? 'badge-paid' : 'badge-unpaid';
-                const feeRow = `
-                    <tr>
-                        <td><strong>${student.name}</strong></td>
-                        <td><span style="color:#555;">${student.className}</span></td>
-                        <td>${student.phone}</td>
-                        <td><span onclick="toggleFee(${index})" class="badge ${feeBadge}">${student.feeStatus}</span></td>
-                        <td>
-                            <input type="number" value="${student.score}" class="form-control" style="width:60px; padding:4px; text-align:center;" min="0" max="100" onchange="updateScore(${index}, this.value)">
-                        </td>
-                        <td>
-                            <button onclick="deleteStudent(${index})" class="action-icon">❌</button>
-                        </td>
-                    </tr>
-                `;
-                feesBody.innerHTML += feeRow;
-
-                // Daaqadda 2: Xaadirinta Automatic-ga ah
-                const attRow = `
-                    <tr>
-                        <td><strong>${student.name}</strong></td>
-                        <td><span style="color:#555;">${student.className}</span></td>
-                        <td style="color: var(--success); font-weight: bold;">${student.present} Maalmood</td>
-                        <td style="color: var(--danger); font-weight: bold;">${student.absent} Maalmood</td>
-                        <td>
-                            <div class="flex-actions">
-                                <button onclick="markPresent(${index})" class="btn btn-sm btn-success">👍 Joogay</button>
-                                <button onclick="markAbsent(${index})" class="btn btn-sm btn-danger">👎 Maqnaa</button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
-                attBody.innerHTML += attRow;
-            });
-        }
+</body>
+</html>
