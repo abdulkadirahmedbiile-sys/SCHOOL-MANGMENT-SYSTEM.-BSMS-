@@ -9,6 +9,7 @@
             --primary-color: #2c3e50;
             --secondary-color: #3498db;
             --success-color: #2ecc71;
+            --danger-color: #e74c3c;
             --bg-color: #f5f6fa;
         }
 
@@ -33,10 +34,29 @@
             margin-bottom: 30px;
         }
 
-        h2, h3 {
+        h2 {
             color: var(--primary-color);
             text-align: center;
             margin-bottom: 25px;
+            cursor: pointer; /* Waxay tusaysaa in la gujin karo */
+            user-select: none;
+        }
+
+        h3 {
+            color: var(--primary-color);
+            text-align: center;
+        }
+
+        .time-banner {
+            background-color: #e8f4fd;
+            border-left: 4px solid var(--secondary-color);
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: var(--primary-color);
+            text-align: center;
+            font-weight: bold;
         }
 
         .form-group {
@@ -82,6 +102,11 @@
             background-color: #2980b9;
         }
 
+        .btn-submit:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+
         .message {
             margin-top: 15px;
             padding: 10px;
@@ -97,7 +122,13 @@
             display: block;
         }
 
-        /* Shaxda Xogta */
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        /* Qaybta Admin-ka (Marka hore waa qosoon tahay) */
         .table-container {
             background-color: #ffffff;
             padding: 20px;
@@ -106,6 +137,7 @@
             width: 100%;
             max-width: 700px;
             overflow-x: auto;
+            display: none; /* Qari shaxda */
         }
 
         table {
@@ -140,23 +172,18 @@
         .badge-jooga { background-color: #2ecc71; }
         .badge-majoogo { background-color: #e74c3c; }
         .badge-soodaahay { background-color: #f39c12; }
-
-        .btn-clear {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            float: right;
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>Xaadiriska Macalimiinta</h2>
+    <!-- Halkan riix si aad u gasho Password-ka Admin-ka -->
+    <h2 onclick="openAdminPanel()">Xaadiriska Macalimiinta</h2>
+    
+    <div class="time-banner">
+        🕒 Waqtiga Xaadiriska: 07:00 AM ilaa 07:30 AM
+    </div>
+
     <form id="attendanceForm">
         <div class="form-group">
             <label for="teacherName">Magaca Macalinka</label>
@@ -171,7 +198,7 @@
 
         <div class="form-group">
             <label for="attDate">Taariikhda</label>
-            <input type="date" id="attDate" required>
+            <input type="date" id="attDate" required readonly>
         </div>
 
         <div class="form-group">
@@ -183,15 +210,15 @@
             </select>
         </div>
 
-        <button type="submit" class="btn-submit">Geli Xaadiriska</button>
+        <button type="submit" id="submitBtn" class="btn-submit">Geli Xaadiriska</button>
     </form>
 
     <div id="responseMessage" class="message"></div>
 </div>
 
-<div class="table-container">
-    <button class="btn-clear" onclick="clearAttendance()">Nadiifi Xogta</button>
-    <h3>Liiska Macalimiinta Isxaadiriyey</h3>
+<!-- Shaxda Xogta ee Admin-ka Kaliya -->
+<div class="table-container" id="adminPanel">
+    <h3>Liiska Xogta Xaadiriska (Admin Only)</h3>
     <table>
         <thead>
             <tr>
@@ -202,7 +229,7 @@
             </tr>
         </thead>
         <tbody id="attendanceTableBody">
-            <!-- Xogta halkaan ayay ku dhex darsami doontaa -->
+            <!-- Xogta halkan ayay ku dhex darsami doontaa -->
         </tbody>
     </table>
 </div>
@@ -211,11 +238,40 @@
     // Toos u geli taariikhda maanta foomka
     document.getElementById('attDate').valueAsDate = new Date();
 
-    // Marka bogga la furo, soo bandhig xogta horey u kaydsan
-    document.addEventListener('DOMContentLoaded', displayAttendance);
+    // Hubi waqtiga marka bogga la furo
+    document.addEventListener('DOMContentLoaded', () => {
+        checkTimeRestrictions();
+        displayAttendance();
+    });
+
+    // Shaqada xaddidaysa waqtiga (07:00 AM ilaa 07:30 AM)
+    function checkTimeRestrictions() {
+        const now = new Date();
+        const currentHour = now.getHours();
+        const currentMinute = now.getMinutes();
+        const submitBtn = document.getElementById('submitBtn');
+        const msgDiv = document.getElementById('responseMessage');
+
+        // Beddel waqtiga guud ahaan daqiiqado si loo xisaabiyo (7:00 = 420 daqiiqo, 7:30 = 450 daqiiqo)
+        const totalMinutes = (currentHour * 60) + currentMinute;
+        const startLimit = (7 * 60) + 0;   // 07:00
+        const endLimit = (7 * 60) + 30;   // 07:30
+
+        if (totalMinutes < startLimit || totalMinutes > endLimit) {
+            submitBtn.disabled = true;
+            msgDiv.textContent = "Waqtiga xaadiriska waa la xidhay! (Wuxuu furanyahay 07:00 AM ilaa 07:30 AM oo kaliya)";
+            msgDiv.className = "message error";
+            return false;
+        }
+        
+        submitBtn.disabled = false;
+        return true;
+    }
 
     document.getElementById('attendanceForm').addEventListener('submit', function(e) {
         e.preventDefault();
+
+        if (!checkTimeRestrictions()) return;
 
         const name = document.getElementById('teacherName').value;
         const date = document.getElementById('attDate').value;
@@ -229,32 +285,25 @@
             time: timeNow
         };
 
-        // Ka soo qaado xogta horey u jirtay LocalStorage ama abuur liis cusub [2]
         let attendanceList = localStorage.getItem('schoolAttendance') ? JSON.parse(localStorage.getItem('schoolAttendance')) : [];
-        
-        // Ku dar xogta cusub
         attendanceList.push(newAttendance);
-        
-        // Dib ugu kaydi LocalStorage [2]
         localStorage.setItem('schoolAttendance', JSON.stringify(attendanceList));
 
-        // Muujinta fariinta guusha
         const msgDiv = document.getElementById('responseMessage');
-        msgDiv.textContent = `Waa laguu diwangeliyey ${name}!`;
+        msgDiv.textContent = `Waad ku mahadsantahay isxaadirinta, ${name}!`;
         msgDiv.className = "message success";
 
-        // Cusboonaysii shaxda
         displayAttendance();
 
-        // Dib u bixi foomka
         document.getElementById('attendanceForm').reset();
         document.getElementById('attDate').valueAsDate = new Date();
 
-        // Qari fariinta guusha 3 seko ka dib
-        setTimeout(() => { msgDiv.style.display = 'none'; }, 3000);
+        setTimeout(() => { 
+            msgDiv.style.display = 'none';
+            checkTimeRestrictions(); 
+        }, 3000);
     });
 
-    // Shaqada soo bandhigaysa xogta shaxda dhexdeeda
     function displayAttendance() {
         const tableBody = document.getElementById('attendanceTableBody');
         tableBody.innerHTML = '';
@@ -275,17 +324,17 @@
                 <td>${item.time}</td>
             `;
             tableBody.appendChild(row);
-        });
-    }
+// Shaqada fureysa qaybta Admin-ka marka cinwaanka la gujiyo
+function openAdminPanel() {
+    const password = prompt("Fadlan geli ereyga sirta ah ee Admin-ka:");
+    const adminPanel = document.getElementById('adminPanel');
 
-    // Shaqada masaxaysa xogta oo dhan
-    function clearAttendance() {
-        if(confirm("Ma hubtaa inaad rabto inaad tirtirto dhamaan xogta xaadiriska?")) {
-            localStorage.removeItem('schoolAttendance');
-            displayAttendance();
-        }
+    if (password === "Admin123") {
+        adminPanel.style.display = "block";
+        alert("Waad ku guulaysatay! Xogta hadda waa kuu furan tahay.");
+        // Toos u geey hoos meesha shaxdu ku taato
+        adminPanel.scrollIntoView({ behavior: 'smooth' });
+    } else if (password !== null) {
+        alert("Ereyga sirta ah waa khaldan yahay!");
     }
-</script>
-
-</body>
-</html>
+}
