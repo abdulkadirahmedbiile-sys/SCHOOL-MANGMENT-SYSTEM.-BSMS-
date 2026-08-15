@@ -1,340 +1,107 @@
 <!DOCTYPE html>
 <html lang="so">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xaadirinta Macalimiinta - GitHub Pages</title>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xaadirinta Macalimiinta</title>
     <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --success-color: #2ecc71;
-            --danger-color: #e74c3c;
-            --bg-color: #f5f6fa;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 450px;
-            margin-bottom: 30px;
-        }
-
-        h2 {
-            color: var(--primary-color);
-            text-align: center;
-            margin-bottom: 25px;
-            cursor: pointer; /* Waxay tusaysaa in la gujin karo */
-            user-select: none;
-        }
-
-        h3 {
-            color: var(--primary-color);
-            text-align: center;
-        }
-
-        .time-banner {
-            background-color: #e8f4fd;
-            border-left: 4px solid var(--secondary-color);
-            padding: 10px;
-            margin-bottom: 20px;
-            border-radius: 4px;
-            font-size: 14px;
-            color: var(--primary-color);
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #555;
-            font-weight: 600;
-        }
-
-        select, input[type="date"] {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
-
-        select:focus, input[type="date"]:focus {
-            border-color: var(--secondary-color);
-            outline: none;
-        }
-
-        .btn-submit {
-            width: 100%;
-            background-color: var(--secondary-color);
-            color: white;
-            padding: 14px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .btn-submit:hover {
-            background-color: #2980b9;
-        }
-
-        .btn-submit:disabled {
-            background-color: #bdc3c7;
-            cursor: not-allowed;
-        }
-
-        .message {
-            margin-top: 15px;
-            padding: 10px;
-            border-radius: 6px;
-            text-align: center;
-            display: none;
-            font-weight: bold;
-        }
-
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-            display: block;
-        }
-
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-            display: block;
-        }
-
-        /* Qaybta Admin-ka (Marka hore waa qosoon tahay) */
-        .table-container {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-            width: 100%;
-            max-width: 700px;
-            overflow-x: auto;
-            display: none; /* Qari shaxda */
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        .badge {
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: bold;
-            color: white;
-        }
-
-        .badge-jooga { background-color: #2ecc71; }
-        .badge-majoogo { background-color: #e74c3c; }
-        .badge-soodaahay { background-color: #f39c12; }
+        body { font-family: sans-serif; background: #f5f6fa; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .box { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2, h3 { text-align: center; color: #2c3e50; margin-top: 0; }
+        .group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; }
+        select, input { width: 100%; padding: 10px; border: 2px solid #eee; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-blue { background: #3498db; color: white; }
+        .btn-dark { background: #2c3e50; color: white; }
+        .msg { margin-top: 15px; padding: 10px; border-radius: 6px; text-align: center; display: none; font-weight: bold; }
+        .success { background: #d4edda; color: #155724; display: block; }
+        .error { background: #f8d7da; color: #721c24; display: block; }
+        .view { background: white; padding: 20px; border-radius: 12px; width: 100%; max-width: 600px; display: none; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }
+        th { background: #2c3e50; color: white; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- Halkan riix si aad u gasho Password-ka Admin-ka -->
-    <h2 onclick="openAdminPanel()">Xaadiriska Macalimiinta</h2>
-    
-    <div class="time-banner">
-        🕒 Waqtiga Xaadiriska: 07:00 AM ilaa 07:30 AM
-    </div>
-
-    <form id="attendanceForm">
-        <div class="form-group">
-            <label for="teacherName">Magaca Macalinka</label>
-            <select id="teacherName" required>
-                <option value="">Dooro Magacaaga...</option>
+<div class="box">
+    <h2>Xaadiriska Macalimiinta</h2>
+    <form id="f">
+        <div class="group">
+            <label>Magaca Macalinka</label>
+            <select id="n" required>
+                <option value="">Dooro...</option>
                 <option value="Aways Cali">Aways Cali</option>
                 <option value="Faadumo Axmed">Faadumo Axmed</option>
                 <option value="Maxamed Cumar">Maxamed Cumar</option>
-                <option value="Saciid Xasan">Saciid Xasan</option>
             </select>
         </div>
-
-        <div class="form-group">
-            <label for="attDate">Taariikhda</label>
-            <input type="date" id="attDate" required readonly>
-        </div>
-
-        <div class="form-group">
-            <label for="status">Xaalada Xaadirista</label>
-            <select id="status" required>
-                <option value="Jooga">Jooga (Present)</option>
-                <option value="Ma Joogo">Ma Joogo (Absent)</option>
-                <option value="Soo Daahay">Soo Daahay (Late)</option>
+        <div class="group"><label>Taariikhda</label><input type="date" id="d" required readonly></div>
+        <div class="group">
+            <label>Xaalada</label>
+            <select id="s" required>
+                <option value="Jooga">Jooga</option>
+                <option value="Ma Joogo">Ma Joogo</option>
+                <option value="Soo Daahay">Soo Daahay</option>
             </select>
         </div>
-
-        <button type="submit" id="submitBtn" class="btn-submit">Geli Xaadiriska</button>
+        <button type="submit" class="btn-blue">Geli Xaadiriska</button>
     </form>
-
-    <div id="responseMessage" class="message"></div>
+    <div id="m" class="msg"></div>
+    <button class="btn-dark" onclick="goAdmin()">🔒 Gasho Qaybta Admin-ka</button>
 </div>
 
-<!-- Shaxda Xogta ee Admin-ka Kaliya -->
-<div class="table-container" id="adminPanel">
-    <h3>Liiska Xogta Xaadiriska (Admin Only)</h3>
+<div class="view" id="a">
+    <h3>Xogta Xaadiriska (Admin)</h3>
     <table>
-        <thead>
-            <tr>
-                <th>Macalinka</th>
-                <th>Taariikhda</th>
-                <th>Xaalada</th>
-                <th>Wakhtiga la isxaadiriyey</th>
-            </tr>
-        </thead>
-        <tbody id="attendanceTableBody">
-            <!-- Xogta halkan ayay ku dhex darsami doontaa -->
-        </tbody>
+        <thead><tr><th>Macalinka</th><th>Taariikhda</th><th>Xaalada</th><th>Wakhtiga</th></tr></thead>
+        <tbody id="b"></tbody>
     </table>
 </div>
 
 <script>
-    // Toos u geli taariikhda maanta foomka
-    document.getElementById('attDate').valueAsDate = new Date();
+    document.getElementById('d').valueAsDate = new Date();
+    show();
 
-    // Hubi waqtiga marka bogga la furo
-    document.addEventListener('DOMContentLoaded', () => {
-        checkTimeRestrictions();
-        displayAttendance();
-    });
-
-    // Shaqada xaddidaysa waqtiga (07:00 AM ilaa 07:30 AM)
-    function checkTimeRestrictions() {
-        const now = new Date();
-        const currentHour = now.getHours();
-        const currentMinute = now.getMinutes();
-        const submitBtn = document.getElementById('submitBtn');
-        const msgDiv = document.getElementById('responseMessage');
-
-        // Beddel waqtiga guud ahaan daqiiqado si loo xisaabiyo (7:00 = 420 daqiiqo, 7:30 = 450 daqiiqo)
-        const totalMinutes = (currentHour * 60) + currentMinute;
-        const startLimit = (7 * 60) + 0;   // 07:00
-        const endLimit = (7 * 60) + 30;   // 07:30
-
-        if (totalMinutes < startLimit || totalMinutes > endLimit) {
-            submitBtn.disabled = true;
-            msgDiv.textContent = "Waqtiga xaadiriska waa la xidhay! (Wuxuu furanyahay 07:00 AM ilaa 07:30 AM oo kaliya)";
-            msgDiv.className = "message error";
-            return false;
-        }
-        
-        submitBtn.disabled = false;
-        return true;
+    // Hubinta Waqtiga (07:00 AM ilaa 07:30 AM)
+    const now = new Date(), min = (now.getHours() * 60) + now.getMinutes();
+    if (min < 420 || min > 450) {
+        const m = document.getElementById('m');
+        m.textContent = "Waqtiga diiwaangelintu waa 07:00 ilaa 07:30 subaxnimo.";
+        m.className = "msg error";
     }
 
-    document.getElementById('attendanceForm').addEventListener('submit', function(e) {
+    document.getElementById('f').addEventListener('submit', (e) => {
         e.preventDefault();
-
-        if (!checkTimeRestrictions()) return;
-
-        const name = document.getElementById('teacherName').value;
-        const date = document.getElementById('attDate').value;
-        const status = document.getElementById('status').value;
-        const timeNow = new Date().toLocaleTimeString();
-
-        const newAttendance = {
-            teacherName: name,
-            date: date,
-            status: status,
-            time: timeNow
-        };
-
-        let attendanceList = localStorage.getItem('schoolAttendance') ? JSON.parse(localStorage.getItem('schoolAttendance')) : [];
-        attendanceList.push(newAttendance);
-        localStorage.setItem('schoolAttendance', JSON.stringify(attendanceList));
-
-        const msgDiv = document.getElementById('responseMessage');
-        msgDiv.textContent = `Waad ku mahadsantahay isxaadirinta, ${name}!`;
-        msgDiv.className = "message success";
-
-        displayAttendance();
-
-        document.getElementById('attendanceForm').reset();
-        document.getElementById('attDate').valueAsDate = new Date();
-
-        setTimeout(() => { 
-            msgDiv.style.display = 'none';
-            checkTimeRestrictions(); 
-        }, 3000);
+        const item = { name: document.getElementById('n').value, date: document.getElementById('d').value, status: document.getElementById('s').value, time: new Date().toLocaleTimeString() };
+        let list = localStorage.getItem('att') ? JSON.parse(localStorage.getItem('att')) : [];
+        list.push(item);
+        localStorage.setItem('att', JSON.stringify(list));
+        
+        const m = document.getElementById('m');
+        m.textContent = `Waa la kaydiyey xogta ${item.name}!`;
+        m.className = "msg success";
+        show();
+        document.getElementById('f').reset();
+        document.getElementById('d').valueAsDate = new Date();
+        setTimeout(() => m.style.display = 'none', 3000);
     });
 
-    function displayAttendance() {
-        const tableBody = document.getElementById('attendanceTableBody');
-        tableBody.innerHTML = '';
-
-        let attendanceList = localStorage.getItem('schoolAttendance') ? JSON.parse(localStorage.getItem('schoolAttendance')) : [];
-
-        attendanceList.forEach(item => {
-            const row = document.createElement('tr');
-            
-            let badgeClass = 'badge-jooga';
-            if(item.status === 'Ma Joogo') badgeClass = 'badge-majoogo';
-            if(item.status === 'Soo Daahay') badgeClass = 'badge-soodaahay';
-
-            row.innerHTML = `
-                <td>${item.teacherName}</td>
-                <td>${item.date}</td>
-                <td><span class="badge ${badgeClass}">${item.status}</span></td>
-                <td>${item.time}</td>
-            `;
-            tableBody.appendChild(row);
-// Shaqada fureysa qaybta Admin-ka marka cinwaanka la gujiyo
-function openAdminPanel() {
-    const password = prompt("Fadlan geli ereyga sirta ah ee Admin-ka:");
-    const adminPanel = document.getElementById('adminPanel');
-
-    if (password === "Admin123") {
-        adminPanel.style.display = "block";
-        alert("Waad ku guulaysatay! Xogta hadda waa kuu furan tahay.");
-        // Toos u geey hoos meesha shaxdu ku taato
-        adminPanel.scrollIntoView({ behavior: 'smooth' });
-    } else if (password !== null) {
-        alert("Ereyga sirta ah waa khaldan yahay!");
+    function show() {
+        const b = document.getElementById('b'); b.innerHTML = '';
+        let list = localStorage.getItem('att') ? JSON.parse(localStorage.getItem('att')) : [];
+        list.forEach(i => {
+            b.innerHTML += `<tr><td>${i.name}</td><td>${i.date}</td><td>${i.status}</td><td>${i.time}</td></tr>`;
+        });
     }
-}
+
+    function goAdmin() {
+        if (prompt("Geli Password-ka Admin-ka:") === "Admin123") {
+            document.getElementById('a').style.display = "block";
+            document.getElementById('a').scrollIntoView({ behavior: 'smooth' });
+        } else { alert("Password-ku waa khaldan yahay!"); }
+    }
+</script>
+
+</body>
+</html>
