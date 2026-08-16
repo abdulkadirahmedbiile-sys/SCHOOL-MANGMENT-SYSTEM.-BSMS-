@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portal-ka Isku-xirka Waxbarashada</title>
+    <title>School Management System</title>
     <style>
-        /* Moodada Guud iyo Midabada */
+        /* Midabada iyo Naqshadda Casriga ah */
         :root {
-            --primary-color: #2563eb;
+            --primary: #2563eb;
             --student-color: #10b981;
             --teacher-color: #f59e0b;
             --parent-color: #ec4899;
-            --text-dark: #1e293b;
-            --bg-light: #f8fafc;
-            --white: #ffffff;
+            --bg: #f8fafc;
+            --text: #1e293b;
+            --card-bg: #ffffff;
         }
 
         * {
@@ -24,195 +24,336 @@
         }
 
         body {
-            background-color: var(--bg-light);
-            color: var(--text-dark);
+            background-color: var(--bg);
+            color: var(--text);
             line-height: 1.6;
+            padding-bottom: 60px;
         }
 
-        /* Header-ka Sare */
+        /* Header */
         header {
-            background: linear-gradient(135deg, #1e3a8a, var(--primary-color));
-            color: var(--white);
-            padding: 2rem 1rem;
+            background: linear-gradient(135deg, #1e3a8a, var(--primary));
+            color: white;
             text-align: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 2.5rem 1rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
         }
 
-        header h1 {
-            font-size: 2.2rem;
-            margin-bottom: 0.5rem;
-        }
+        header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        header p { font-size: 1rem; opacity: 0.9; }
 
-        header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        /* Weelka Guud (Container) */
+        /* Container */
         .container {
             max-width: 1200px;
-            margin: 3rem auto;
-            padding: 0 1.5rem;
+            margin: 2rem auto;
+            padding: 0 1rem;
         }
 
-        /* Unugyada Portal-ka (Grid System) */
-        .portal-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-        }
-
-        /* Kaadhadhka Dashboard-ka */
-        .card {
-            background: var(--white);
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        /* Menu-ha weyn ee u kala baxa qaybaha (Tabs) */
+        .tabs {
             display: flex;
-            flex-direction: column;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        /* Qaybaha Sare ee Kaadhadhka (Headers) */
-        .card-header {
-            padding: 1.5rem;
-            color: var(--white);
-            font-size: 1.4rem;
-            font-weight: bold;
-            text-align: center;
-        }
-
-        .student-header { background-color: var(--student-color); }
-        .teacher-header { background-color: var(--teacher-color); }
-        .parent-header { background-color: var(--parent-color); }
-
-        /* Qaybta Dhexe ee Kaadhadhka (Body) */
-        .card-body {
-            padding: 2rem;
-            flex-grow: 1;
-        }
-
-        .feature-list {
-            list-style: none;
+            justify-content: center;
+            gap: 10px;
             margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
 
-        .feature-list li {
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #e2e8f0;
-            display: flex;
-            align-items: center;
-        }
-
-        .feature-list li::before {
-            content: "✓";
-            margin-right: 10px;
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 30px;
             font-weight: bold;
-        }
-
-        .student-list li::before { color: var(--student-color); }
-        .teacher-list li::before { color: var(--teacher-color); }
-        .parent-list li::before { color: var(--parent-color); }
-
-        /* Badhamada (Buttons) */
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            background: #e2e8f0;
+            color: #475569;
+            flex: 1;
+            min-width: 120px;
             text-align: center;
-            color: var(--white);
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: background-color 0.2s ease;
         }
 
-        .btn-student { background-color: var(--student-color); }
-        .btn-student:hover { background-color: #059669; }
+        .tab-btn.active[data-tab="macalin"] { background: var(--teacher-color); color: white; }
+        .tab-btn.active[data-tab="arday"] { background: var(--student-color); color: white; }
+        .tab-btn.active[data-tab="waalid"] { background: var(--parent-color); color: white; }
 
-        .btn-teacher { background-color: var(--teacher-color); }
-        .btn-teacher:hover { background-color: #d97706; }
+        /* Qaybaha Xogta (Content Panels) */
+        .panel {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
 
-        .btn-parent { background-color: var(--parent-color); }
-        .btn-parent:hover { background-color: #db2777; }
+        .panel.active { display: block; }
 
-        /* Footer-ka hoose */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Kaadhadhka iyo Foomamka */
+        .card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            max-width: 600px;
+            margin: 0 auto 2rem auto;
+        }
+
+        .card h2 { margin-bottom: 1.5rem; font-size: 1.4rem; color: #1e3a8a; text-align: center;}
+
+        .form-group { margin-bottom: 1.25rem; }
+        label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border 0.2s;
+        }
+        input:focus { border-color: var(--primary); }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            background: var(--primary);
+        }
+        .btn-teacher { background: var(--teacher-color); }
+
+        /* Shaxda Xogta (Data Table) */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            overflow-x: auto;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 1rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 14px 16px;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 0.95rem;
+        }
+
+        th { background: #f1f5f9; color: #475569; font-weight: 600; }
+        tr:hover { background: #f8fafc; }
+
+        /* Badhanka masaxidda */
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+
+        /* Footer */
         footer {
             text-align: center;
-            padding: 2rem;
-            margin-top: 4rem;
-            background-color: #0f172a;
+            padding: 1.5rem;
+            background: #0f172a;
             color: #94a3b8;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
         }
     </style>
 </head>
 <body>
 
-    <!-- Header-ka Sare ee Bogga -->
     <header>
-        <h1>Portal-ka Midaysan ee Dugsiga</h1>
-        <p>Meel ay ku kulmaan Xogta Ardayda, Macalimiinta, iyo Waalidiinta</p>
+        <h1>School Management System</h1>
+        <p>Dashboard-ka Midaysan ee Hubinta Xogta Dugsiga</p>
     </header>
 
-    <!-- Weelka Dashboard-ka -->
     <div class="container">
-        <div class="portal-grid">
-
-            <!-- Portal-ka Ardayga -->
-            <div class="card">
-                <div class="card-header student-header">Portal-ka Ardayda</div>
-                <div class="card-body">
-                    <ul class="feature-list student-list">
-                        <li>Eegista casharada iyo nidaamka (LMS)</li>
-                        <li>La socodka dhibcaha Imtixaanka</li>
-                        <li>Jadwalka maalinlinga ah iyo imtixaanada</li>
-                        <li>Gubidda shaqo-guriyeedka (Homework)</li>
-                    </ul>
-                    <a href="#" class="btn btn-student">Gali Portal-ka Ardayda →</a>
-                </div>
-            </div>
-
-            <!-- Portal-ka Macalinka -->
-            <div class="card">
-                <div class="card-header teacher-header">Portal-ka Macalimiinta</div>
-                <div class="card-body">
-                    <ul class="feature-list teacher-list">
-                        <li>Geli dhibcaha iyo imtixaanada</li>
-                        <li>Diiwaangeli imaanshiyaha maalinlaha ah</li>
-                        <li>U dir ogeysiis toos ah waalidiinta</li>
-                        <li>Maaree agabka iyo qorshaha casharada</li>
-                    </ul>
-                    <a href="#" class="btn btn-teacher">Gali Portal-ka Macalimiinta →</a>
-                </div>
-            </div>
-
-            <!-- Portal-ka Waalidka -->
-            <div class="card">
-                <div class="card-header parent-header">Portal-ka Waalidiinta</div>
-                <div class="card-body">
-                    <ul class="feature-list parent-list">
-                        <li>La soco natiijada carruurtaada ubadka</li>
-                        <li>Hubi imaanshiyaha dugsiga ee ardayga</li>
-                        <li>Wadahadal toos ah la yeelo macalimiinta</li>
-                        <li>Bixi khidmadaha iyo fiisooyinka dugsiga</li>
-                    </ul>
-                    <a href="#" class="btn btn-parent">Gali Portal-ka Waalidiinta →</a>
-                </div>
-            </div>
-
+        
+        <!-- badhamada lagu kala beddelayo shaashadda (Tabs) -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="macalin">Portal-ka Macalinka</button>
+            <button class="tab-btn" data-tab="arday">Portal-ka Ardayga</button>
+            <button class="tab-btn" data-tab="waalid">Portal-ka Waalidka</button>
         </div>
+
+        <!-- 1. PANEL-KA MACALINKA (GELINTA XOGTA) -->
+        <div id="macalin" class="panel active">
+            <div class="card">
+                <h2>Geli Xogta Natiijada Ardayga</h2>
+                <form id="studentForm">
+                    <div class="form-group">
+                        <label>Magaca Ardayga:</label>
+                        <input type="text" id="studentName" placeholder="Tusaale: Maxamed Cali" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Fasalka:</label>
+                        <input type="text" id="studentClass" placeholder="Tusaale: Class 8A" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Maaddada:</label>
+                        <input type="text" id="subject" placeholder="Tusaale: Math" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Dhibcaha Imtixaanka:</label>
+                        <input type="number" id="marks" placeholder="0 - 100" min="0" max="100" required>
+                    </div>
+                    <button type="submit" class="btn btn-teacher">Badbaadi Xogta (Save)</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 2. PANEL-KA ARDAYGA (EHGISTA XOGTA) -->
+        <div id="arday" class="panel">
+            <div class="card" style="max-width: 100%;">
+                <h2 style="color: var(--student-color);">Natiijada Casharada iyo Imtixaanada</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Magaca Ardayga</th>
+                                <th>Fasalka</th>
+                                <th>Maaddada</th>
+                                <th>Dhibcaha</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentTableBody">
+                            <!-- Xogta halkan ayay ku dhex dhalan doontaa -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. PANEL-KA WAALIDKA (LA SOCODKA) -->
+        <div id="waalid" class="panel">
+            <div class="card" style="max-width: 100%;">
+                <h2 style="color: var(--parent-color);">Warbixinta Waalidiinta (Maareynta)</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Magaca Ardayga</th>
+                                <th>Fasalka</th>
+                                <th>Dhibcaha</th>
+                                <th>Xaaladda</th>
+                                <th>Awoodda</th>
+                            </tr>
+                        </thead>
+                        <tbody id="parentTableBody">
+                            <!-- Xogta halkan ayay ku dhex dhalan doontaa -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
     </div>
 
-    <!-- Footer -->
     <footer>
-        <p>&copy; 2026 Dashboard-ka Casriga ah ee Dugsiga. Xuquuqda oo dhan waa dhowran tahay.</p>
+        <p>&copy; 2026 School Management System | Lagu dhisay GitHub.io</p>
     </footer>
 
-</body>
-</html>
+    <script>
+        // --- 1. MAAREYNTA TABS-KA (KALA BEDDELIDDA BOGAGGA) ---
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const panels = document.querySelectorAll('.panel');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                panels.forEach(p => p.classList.remove('active'));
+
+                button.classList.add('active');
+                const targetPanel = button.getAttribute('data-tab');
+                document.getElementById(targetPanel).classList.add('active');
+            });
+        });
+
+        // --- 2. MAAREYNTA XOGTA (LOCALSTORAGE) ---
+        const form = document.getElementById('studentForm');
+        
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('studentName').value;
+            const sClass = document.getElementById('studentClass').value;
+            const subject = document.getElementById('subject').value;
+const marks = parseInt(document.getElementById('marks').value);
+const newStudent = {
+    id: Date.now(),
+    name,
+    sClass,
+    subject,
+    marks
+};
+
+let students = localStorage.getItem('localData') ? JSON.parse(localStorage.getItem('localData')) : [];
+students.push(newStudent);
+localStorage.setItem('localData', JSON.stringify(students));
+
+form.reset();
+loadData();
+alert("Xogta si guul leh ayaa loogu kaydiyay browser-kaaga!");
+});
+
+function loadData() {
+    let students = localStorage.getItem('localData') ? JSON.parse(localStorage.getItem('localData')) : [];
+    const studentTable = document.getElementById('studentTableBody');
+    const parentTable = document.getElementById('parentTableBody');
+    
+    studentTable.innerHTML = '';
+    parentTable.innerHTML = '';
+    
+    if(students.length === 0) {
+        const emptyRow = `<tr><td colspan="5" style="text-align:center; color:#94a3b8;">Wax xog ah ma jirto. Fadlan xog geli qaybta Macalinka.</td></tr>`;
+        studentTable.innerHTML = emptyRow;
+        parentTable.innerHTML = emptyRow;
+        return;
+    }
+    
+    students.forEach(st => {
+        const status = st.marks >= 50 ? '<span style="color:green; font-weight:bold;">Gudbay</span>' : '<span style="color:red; font-weight:bold;">Dhacay</span>';
+        
+        studentTable.innerHTML += `<tr> 
+            <td>${st.name}</td> 
+            <td>${st.sClass}</td> 
+            <td>${st.subject}</td> 
+            <td><b>${st.marks}%</b></td> 
+        </tr>`;
+        
+        parentTable.innerHTML += `<tr> 
+            <td>${st.name}</td> 
+            <td>${st.sClass}</td> 
+            <td><b>${st.marks}%</b></td> 
+            <td>${status}</td> 
+            <td><button class="delete-btn" onclick="deleteStudent(${st.id})">Masax</button></td> 
+        </tr>`;
+    });
+}
+
+function deleteStudent(id) {
+    if(confirm("Ma hubtaa inaad tirtirto xogtan?")) {
+        let students = JSON.parse(localStorage.getItem('localData'));
+        students = students.filter(st => st.id !== id);
+        localStorage.setItem('localData', JSON.stringify(students));
+        loadData();
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadData);
