@@ -3,357 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Management System</title>
-    <style>
-        /* Midabada iyo Naqshadda Casriga ah */
-        :root {
-            --primary: #2563eb;
-            --student-color: #10b981;
-            --teacher-color: #f59e0b;
-            --parent-color: #ec4899;
-            --bg: #f8fafc;
-            --text: #1e293b;
-            --card-bg: #ffffff;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            padding-bottom: 60px;
-        }
-
-        /* Header */
-        header {
-            background: linear-gradient(135deg, #1e3a8a, var(--primary));
-            color: white;
-            text-align: center;
-            padding: 2.5rem 1rem;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-        }
-
-        header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
-        header p { font-size: 1rem; opacity: 0.9; }
-
-        /* Container */
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        /* Menu-ha weyn ee u kala baxa qaybaha (Tabs) */
-        .tabs {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .tab-btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 30px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.95rem;
-            background: #e2e8f0;
-            color: #475569;
-            flex: 1;
-            min-width: 120px;
-            text-align: center;
-        }
-
-        .tab-btn.active[data-tab="macalin"] { background: var(--teacher-color); color: white; }
-        .tab-btn.active[data-tab="arday"] { background: var(--student-color); color: white; }
-        .tab-btn.active[data-tab="waalid"] { background: var(--parent-color); color: white; }
-
-        /* Qaybaha Xogta (Content Panels) */
-        .panel {
-            display: none;
-            animation: fadeIn 0.4s ease;
-        }
-
-        .panel.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Kaadhadhka iyo Foomamka */
-        .card {
-            background: var(--card-bg);
-            padding: 2rem;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            max-width: 600px;
-            margin: 0 auto 2rem auto;
-        }
-
-        .card h2 { margin-bottom: 1.5rem; font-size: 1.4rem; color: #1e3a8a; text-align: center;}
-
-        .form-group { margin-bottom: 1.25rem; }
-        label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; }
-        input, select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            font-size: 1rem;
-            outline: none;
-            transition: border 0.2s;
-        }
-        input:focus { border-color: var(--primary); }
-
-        .btn {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            background: var(--primary);
-        }
-        .btn-teacher { background: var(--teacher-color); }
-
-        /* Shaxda Xogta (Data Table) */
-        .table-container {
-            background: white;
-            border-radius: 12px;
-            overflow-x: auto;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            margin-top: 1rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-
-        th, td {
-            padding: 14px 16px;
-            border-bottom: 1px solid #e2e8f0;
-            font-size: 0.95rem;
-        }
-
-        th { background: #f1f5f9; color: #475569; font-weight: 600; }
-        tr:hover { background: #f8fafc; }
-
-        /* Badhanka masaxidda */
-        .delete-btn {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.8rem;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 1.5rem;
-            background: #0f172a;
-            color: #94a3b8;
-            font-size: 0.85rem;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-    </style>
+    <title>Xog Ururin Fudud</title>
+    <script src="https://tailwindcss.com"></script>
 </head>
-<body>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
 
-    <header>
-        <h1>School Management System</h1>
-        <p>Dashboard-ka Midaysan ee Hubinta Xogta Dugsiga</p>
-    </header>
-
-    <div class="container">
+    <div class="max-w-md w-full bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-bold text-gray-800 text-center mb-4">Foomka Ururinta Xogta</h2>
         
-        <!-- badhamada lagu kala beddelayo shaashadda (Tabs) -->
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="macalin">Portal-ka Macalinka</button>
-            <button class="tab-btn" data-tab="arday">Portal-ka Ardayga</button>
-            <button class="tab-btn" data-tab="waalid">Portal-ka Waalidka</button>
-        </div>
-
-        <!-- 1. PANEL-KA MACALINKA (GELINTA XOGTA) -->
-        <div id="macalin" class="panel active">
-            <div class="card">
-                <h2>Geli Xogta Natiijada Ardayga</h2>
-                <form id="studentForm">
-                    <div class="form-group">
-                        <label>Magaca Ardayga:</label>
-                        <input type="text" id="studentName" placeholder="Tusaale: Maxamed Cali" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Fasalka:</label>
-                        <input type="text" id="studentClass" placeholder="Tusaale: Class 8A" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Maaddada:</label>
-                        <input type="text" id="subject" placeholder="Tusaale: Math" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Dhibcaha Imtixaanka:</label>
-                        <input type="number" id="marks" placeholder="0 - 100" min="0" max="100" required>
-                    </div>
-                    <button type="submit" class="btn btn-teacher">Badbaadi Xogta (Save)</button>
-                </form>
+        <!-- Foomka wuxuu toos xogta ugu dirayaa Formspree (Ku beddel emailkaaga hoos) -->
+        <form id="surveyForm" action="https://formspree.io" method="POST" class="space-y-4">
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Magacaaga:</label>
+                <input type="text" name="Magaca" required class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none">
             </div>
-        </div>
 
-        <!-- 2. PANEL-KA ARDAYGA (EHGISTA XOGTA) -->
-        <div id="arday" class="panel">
-            <div class="card" style="max-width: 100%;">
-                <h2 style="color: var(--student-color);">Natiijada Casharada iyo Imtixaanada</h2>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Magaca Ardayga</th>
-                                <th>Fasalka</th>
-                                <th>Maaddada</th>
-                                <th>Dhibcaha</th>
-                            </tr>
-                        </thead>
-                        <tbody id="studentTableBody">
-                            <!-- Xogta halkan ayay ku dhex dhalan doontaa -->
-                        </tbody>
-                    </table>
-                </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Telefankaaga:</label>
+                <input type="tel" name="Telefanka" required class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none">
             </div>
-        </div>
 
-        <!-- 3. PANEL-KA WAALIDKA (LA SOCODKA) -->
-        <div id="waalid" class="panel">
-            <div class="card" style="max-width: 100%;">
-                <h2 style="color: var(--parent-color);">Warbixinta Waalidiinta (Maareynta)</h2>
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Magaca Ardayga</th>
-                                <th>Fasalka</th>
-                                <th>Dhibcaha</th>
-                                <th>Xaaladda</th>
-                                <th>Awoodda</th>
-                            </tr>
-                        </thead>
-                        <tbody id="parentTableBody">
-                            <!-- Xogta halkan ayay ku dhex dhalan doontaa -->
-                        </tbody>
-                    </table>
-                </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Fikirkaaga ku saabsan adeegga:</label>
+                <textarea name="Fikirka" rows="3" required class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Halkan ku qor..."></textarea>
             </div>
-        </div>
 
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md transition">Gudbi Jawaabta</button>
+        </form>
+
+        <!-- Farriinta guusha -->
+        <div id="status" class="hidden text-center text-green-600 font-medium pt-4">Jawaabtaada si guul leh ayaa loo diray!</div>
     </div>
 
-    <footer>
-        <p>&copy; 2026 School Management System | Lagu dhisay GitHub.io</p>
-    </footer>
-
     <script>
-        // --- 1. MAAREYNTA TABS-KA (KALA BEDDELIDDA BOGAGGA) ---
-        const tabButtons = document.querySelectorAll('.tab-btn');
-        const panels = document.querySelectorAll('.panel');
+        const form = document.getElementById("surveyForm");
+        const status = document.getElementById("status");
 
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                panels.forEach(p => p.classList.remove('active'));
-
-                button.classList.add('active');
-                const targetPanel = button.getAttribute('data-tab');
-                document.getElementById(targetPanel).classList.add('active');
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const data = new FormData(form);
+            
+            // Xogta waxaa loo dirayaa endpoint-ka si toos ah
+            const response = await fetch(form.action, {
+                method: form.method,
+                body: data,
+                headers: { 'Accept': 'application/json' }
             });
+
+            if (response.ok) {
+                form.reset();
+                form.classList.add("hidden");
+                status.classList.remove("hidden");
+            } else {
+                alert("Waa uu guuldarraystay gudbinta foomku. Fadlan dib u tijaabi.");
+            }
         });
-
-        // --- 2. MAAREYNTA XOGTA (LOCALSTORAGE) ---
-        const form = document.getElementById('studentForm');
-        
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            const name = document.getElementById('studentName').value;
-            const sClass = document.getElementById('studentClass').value;
-            const subject = document.getElementById('subject').value;
-const marks = parseInt(document.getElementById('marks').value);
-const newStudent = {
-    id: Date.now(),
-    name,
-    sClass,
-    subject,
-    marks
-};
-
-let students = localStorage.getItem('localData') ? JSON.parse(localStorage.getItem('localData')) : [];
-students.push(newStudent);
-localStorage.setItem('localData', JSON.stringify(students));
-
-form.reset();
-loadData();
-alert("Xogta si guul leh ayaa loogu kaydiyay browser-kaaga!");
-});
-
-function loadData() {
-    let students = localStorage.getItem('localData') ? JSON.parse(localStorage.getItem('localData')) : [];
-    const studentTable = document.getElementById('studentTableBody');
-    const parentTable = document.getElementById('parentTableBody');
-    
-    studentTable.innerHTML = '';
-    parentTable.innerHTML = '';
-    
-    if(students.length === 0) {
-        const emptyRow = `<tr><td colspan="5" style="text-align:center; color:#94a3b8;">Wax xog ah ma jirto. Fadlan xog geli qaybta Macalinka.</td></tr>`;
-        studentTable.innerHTML = emptyRow;
-        parentTable.innerHTML = emptyRow;
-        return;
-    }
-    
-    students.forEach(st => {
-        const status = st.marks >= 50 ? '<span style="color:green; font-weight:bold;">Gudbay</span>' : '<span style="color:red; font-weight:bold;">Dhacay</span>';
-        
-        studentTable.innerHTML += `<tr> 
-            <td>${st.name}</td> 
-            <td>${st.sClass}</td> 
-            <td>${st.subject}</td> 
-            <td><b>${st.marks}%</b></td> 
-        </tr>`;
-        
-        parentTable.innerHTML += `<tr> 
-            <td>${st.name}</td> 
-            <td>${st.sClass}</td> 
-            <td><b>${st.marks}%</b></td> 
-            <td>${status}</td> 
-            <td><button class="delete-btn" onclick="deleteStudent(${st.id})">Masax</button></td> 
-        </tr>`;
-    });
-}
-
-function deleteStudent(id) {
-    if(confirm("Ma hubtaa inaad tirtirto xogtan?")) {
-        let students = JSON.parse(localStorage.getItem('localData'));
-        students = students.filter(st => st.id !== id);
-        localStorage.setItem('localData', JSON.stringify(students));
-        loadData();
-    }
-}
-
-document.addEventListener('DOMContentLoaded', loadData);
+    </script>
+</body>
+</html>
