@@ -1,64 +1,111 @@
 <!DOCTYPE html>
 <html lang="so">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Xog Ururin Fudud</title>
-    <script src="https://tailwindcss.com"></script>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xaadirinta Iskuulka</title>
+    <script src="https://jsdelivr.net"></script>
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+<body class="bg-gray-100 p-4 min-h-screen flex flex-col items-center justify-center">
 
-    <div class="max-w-md w-full bg-white p-6 rounded-lg shadow-md">
-        <h2 class="text-xl font-bold text-gray-800 text-center mb-4">Foomka Ururinta Xogta</h2>
-        
-        <!-- Foomka wuxuu toos xogta ugu dirayaa Formspree (Ku beddel emailkaaga hoos) -->
-        <form id="surveyForm" action="https://formspree.io" method="POST" class="space-y-4">
-            
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Magacaaga:</label>
-                <input type="text" name="Magaca" required class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none">
-            </div>
+    <!-- 1. LOGIN SCREEN -->
+    <div id="box-login" class="bg-white p-6 rounded-lg shadow w-full max-w-sm">
+        <h2 class="text-xl font-bold text-blue-600 mb-4 text-center">Gali Portal-ka</h2>
+        <input type="text" id="user" placeholder="Username" class="w-full p-2 border rounded mb-3">
+        <input type="password" id="pass" placeholder="Password" class="w-full p-2 border rounded mb-4">
+        <button onclick="login()" class="w-full bg-blue-600 text-white p-2 rounded font-bold hover:bg-blue-700">Gali</button>
+        <p class="text-xs text-center text-gray-400 mt-2">Admin: admin/admin123 | Macalin: macalin1/123 ama macalin2/123</p>
+    </div>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Telefankaaga:</label>
-                <input type="tel" name="Telefanka" required class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none">
-            </div>
+    <!-- 2. MAIN APP INTERFACE -->
+    <div id="box-app" class="hidden w-full max-w-2xl bg-white p-6 rounded-lg shadow">
+        <div class="flex justify-between border-b pb-3 mb-4">
+            <h2 id="user-title" class="font-bold text-gray-700"></h2>
+            <button onclick="logout()" class="text-red-500 text-sm font-bold">Ka Bax</button>
+        </div>
 
-            <div>
-                <label class="block text-sm font-medium text-gray-700">Fikirkaaga ku saabsan adeegga:</label>
-                <textarea name="Fikirka" rows="3" required class="w-full mt-1 p-2 border rounded-md focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Halkan ku qor..."></textarea>
-            </div>
+        <!-- TEACHER AREA -->
+        <div id="view-teacher" class="hidden">
+            <input type="date" id="att-date" class="border p-1.5 rounded mb-4">
+            <table class="w-full text-left border">
+                <thead><tr class="bg-gray-100 border-b"><th class="p-2">Ardayga</th><th class="p-2 text-center">Xaalada</th></tr></thead>
+                <tbody id="tbl-students"></tbody>
+            </table>
+            <button onclick="saveAttendance()" class="mt-4 bg-green-600 text-white px-4 py-2 rounded font-bold hover:bg-green-700">Kaydi Xaadirada</button>
+        </div>
 
-            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md transition">Gudbi Jawaabta</button>
-        </form>
-
-        <!-- Farriinta guusha -->
-        <div id="status" class="hidden text-center text-green-600 font-medium pt-4">Jawaabtaada si guul leh ayaa loo diray!</div>
+        <!-- ADMIN AREA -->
+        <div id="view-admin" class="hidden">
+            <h3 class="font-bold text-gray-700 mb-3">📊 Warbixinta Guud ee Maamulaha</h3>
+            <table class="w-full text-left border">
+                <thead><tr class="bg-gray-100 border-b"><th class="p-2">Taariikh</th><th class="p-2">Fasal</th><th class="p-2">Macalin</th><th class="p-2">Jooga</th><th class="p-2">Ma Joogo</th></tr></thead>
+                <tbody id="tbl-reports"></tbody>
+            </table>
+        </div>
     </div>
 
     <script>
-        const form = document.getElementById("surveyForm");
-        const status = document.getElementById("status");
+        const USERS = {
+            "admin": { pass: "admin123", role: "admin", name: "Maamule Maxamed" },
+            "macalin1": { pass: "123", role: "teacher", class: "Form 1", name: "Macalin Axmed" },
+            "macalin2": { pass: "123", role: "teacher", class: "Form 2", name: "Macalin Caasho" }
+        };
+        const STUDENTS = [
+            { id: 1, name: "Khadar Cilmi", class: "Form 1" }, { id: 2, name: "Hinda Cumar", class: "Form 1" },
+            { id: 3, name: "Bilal Xasan", class: "Form 2" }, { id: 4, name: "Muna Abdi", class: "Form 2" }
+        ];
+        let currUser = null;
+        document.getElementById("att-date").value = new Date().toISOString().split('T')[0];
 
-        form.addEventListener("submit", async function(event) {
-            event.preventDefault();
-            const data = new FormData(form);
-            
-            // Xogta waxaa loo dirayaa endpoint-ka si toos ah
-            const response = await fetch(form.action, {
-                method: form.method,
-                body: data,
-                headers: { 'Accept': 'application/json' }
+        function login() {
+            let u = document.getElementById("user").value, p = document.getElementById("pass").value;
+            if (USERS[u] && USERS[u].pass === p) {
+                currUser = USERS[u];
+                document.getElementById("box-login").classList.add("hidden");
+                document.getElementById("box-app").classList.remove("hidden");
+                document.getElementById("user-title").innerText = `${currUser.name} (${currUser.role.toUpperCase()})`;
+                currUser.role === "teacher" ? showTeacher() : showAdmin();
+            } else alert("Username ama Password waa khalad!");
+        }
+
+        function showTeacher() {
+            document.getElementById("view-admin").classList.add("hidden");
+            let vt = document.getElementById("view-teacher"); vt.classList.remove("hidden");
+            let tbody = document.getElementById("tbl-students"); tbody.innerHTML = "";
+            STUDENTS.filter(s => s.class === currUser.class).forEach(s => {
+                tbody.innerHTML += `<tr class="border-b"><td class="p-2">${s.name}</td><td class="p-2 flex justify-center gap-4">
+                    <label><input type="radio" name="s-${s.id}" value="Jooga" checked> <span class="text-green-600">Jooga</span></label>
+                    <label><input type="radio" name="s-${s.id}" value="Ma Joogo"> <span class="text-red-600">Ma Joogo</span></label>
+                </td></tr>`;
             });
+        }
 
-            if (response.ok) {
-                form.reset();
-                form.classList.add("hidden");
-                status.classList.remove("hidden");
-            } else {
-                alert("Waa uu guuldarraystay gudbinta foomku. Fadlan dib u tijaabi.");
-            }
-        });
+        function saveAttendance() {
+            let dt = document.getElementById("att-date").value, j = 0, m = 0;
+            STUDENTS.filter(s => s.class === currUser.class).forEach(s => {
+                document.querySelector(`input[name="s-${s.id}"]:checked`).value === "Jooga" ? j++ : m++;
+            });
+            let recs = JSON.parse(localStorage.getItem("att_recs")) || [];
+            recs = recs.filter(r => !(r.date === dt && r.class === currUser.class)); // Delete duplicate
+            recs.push({ date: dt, class: currUser.class, name: currUser.name, present: j, absent: m });
+            localStorage.setItem("att_recs", JSON.stringify(recs));
+            alert("Xaadirada waa la kaydiyay!");
+        }
+
+        function showAdmin() {
+            document.getElementById("view-teacher").classList.add("hidden");
+            document.getElementById("view-admin").classList.remove("hidden");
+            let tbody = document.getElementById("tbl-reports"); tbody.innerHTML = "";
+            let recs = JSON.parse(localStorage.getItem("att_recs")) || [];
+            if (!recs.length) return tbody.innerHTML = `<tr><td colspan="5" class="p-3 text-center text-gray-400">Weli wax shaqo ah lama soo gudbin.</td></tr>`;
+            recs.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(r => {
+                tbody.innerHTML += `<tr class="border-b text-sm"><td class="p-2 font-semibold">${r.date}</td><td class="p-2">${r.class}</td><td class="p-2">${r.name}</td><td class="p-2 text-green-600 font-bold">${r.present}</td><td class="p-2 text-red-600 font-bold">${r.absent}</td></tr>`;
+            });
+        }
+
+        function logout() {
+            currUser = null; document.getElementById("user").value = ""; document.getElementById("pass").value = "";
+            document.getElementById("box-app").classList.add("hidden"); document.getElementById("box-login").classList.remove("hidden");
+        }
     </script>
 </body>
 </html>
