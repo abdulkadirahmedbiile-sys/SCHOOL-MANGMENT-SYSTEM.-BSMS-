@@ -1,155 +1,528 @@
 <!DOCTYPE html>
 <html lang="so">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏫 Portal-ka Xaadirinta Iskuulka</title>
-    <script src="https://jsdelivr.net"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAKA School Attendance Portal</title>
+    <!-- Font-ka casriga ah ee Google Fonts -->
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        /* CSS-TA PORTAL-KA (HAL FILE OO DHAMMAYSAN) */
+        :root {
+            --primary: #1e3a8a;
+            --primary-light: #3b82f6;
+            --secondary: #10b981;
+            --dark: #0f172a;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --white: #ffffff;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: var(--white);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .logo-icon {
+            background: var(--white);
+            color: var(--primary);
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.3rem;
+            box-shadow: var(--shadow);
+        }
+
+        .logo-text h1 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo-text p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        nav button {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--white);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        nav button:hover {
+            background: var(--white);
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Bogagga (Pages) */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* HOME PAGE STYLES */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: var(--white);
+            border-radius: var(--radius);
+            padding: 4rem 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            opacity: 0.9;
+        }
+
+        .btn-start {
+            background: var(--secondary);
+            color: var(--white);
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+            transition: 0.3s;
+        }
+
+        .btn-start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .school-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .info-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border-top: 4px solid var(--primary-light);
+        }
+
+        .info-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        /* DASHBOARD PAGE (CLASSES) */
+        .dashboard-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-title h2 {
+            color: var(--primary);
+            font-size: 2rem;
+        }
+
+        .class-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .class-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid #e2e8f0;
+            transition: 0.3s;
+        }
+
+        .class-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+        }
+
+        .class-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-master {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-master span {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .btn-attendance {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 0.7rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .btn-attendance:hover {
+            background: var(--primary-light);
+        }
+
+        /* ATTENDANCE PAGE */
+        .attendance-header {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .attendance-table-container {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Custom Radio Buttons for Attendance */
+        .status-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .status-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .status-present { color: #10b981; }
+        .status-absent { color: #ef4444; }
+
+        .btn-save {
+            background: var(--secondary);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            float: right;
+            box-shadow: var(--shadow);
+        }
+
+        .btn-save:hover {
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 4rem;
+            border-top: 1px solid #e2e8f0;
+        }
+    </style>
 </head>
-<body class="bg-gray-100 min-h-screen p-4 md:p-8 flex flex-col items-center justify-center font-sans">
+<body>
 
-    <!-- 1. LOGIN SCREEN -->
-    <div id="box-login" class="bg-white p-8 rounded-xl shadow-lg w-full max-w-md border border-gray-200">
-        <div class="text-center mb-6">
-            <span class="text-4xl">🎓</span>
-            <h2 class="text-2xl font-black text-blue-600 mt-2">Portal-ka Iskuulka</h2>
-            <p class="text-gray-500 text-sm">Gali macluumaadkaaga si aad u gudubto</p>
-        </div>
-        <div class="space-y-4">
-            <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Username</label>
-                <input type="text" id="user" placeholder="Tusaale: admin ama macalin1" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none transition">
+    <!-- HEADER / NAVIGATION -->
+    <header>
+        <div class="logo-area" onclick="showPage('home')">
+            <div class="logo-icon">Y</div>
+            <div class="logo-text">
+                <h1>DUGSIGA YAKA</h1>
+                <p>Primary & Secondary Portal</p>
             </div>
-            <div>
-                <label class="block text-xs font-bold text-gray-600 uppercase mb-1">Password</label>
-                <input type="password" id="pass" placeholder="••••••••" class="w-full p-3 border-2 border-gray-200 rounded-lg focus:border-blue-500 focus:outline-none transition">
-            </div>
-            <button onclick="login()" class="w-full bg-blue-600 text-white p-3 rounded-lg font-bold text-lg hover:bg-blue-700 shadow-md transition cursor-pointer">Gali System-ka</button>
         </div>
-        <div class="mt-6 bg-blue-50 p-3 rounded-lg border border-blue-100 text-xs text-gray-600 space-y-1">
-            <p class="font-bold text-blue-800">🔑 Xogta Loginka ee Isticmaal:</p>
-            <p>• <b>Maamulaha:</b> Username: <span class="bg-white px-1 py-0.5 rounded border">admin</span> | Password: <span class="bg-white px-1 py-0.5 rounded border">admin123</span></p>
-            <p>• <b>Macalinka 1:</b> Username: <span class="bg-white px-1 py-0.5 rounded border">macalin1</span> | Password: <span class="bg-white px-1 py-0.5 rounded border">123</span></p>
-        </div>
-    </div>
+        <nav>
+            <button id="nav-btn" onclick="showPage('dashboard')">Fasallada ☰</button>
+        </nav>
+    </header>
 
-    <!-- 2. MAIN APP INTERFACE -->
-    <div id="box-app" class="hidden w-full max-w-3xl bg-white rounded-xl shadow-xl border border-gray-200 overflow-hidden">
-        <!-- Header -->
-        <div class="bg-blue-600 p-4 flex justify-between items-center text-white">
-            <div class="flex items-center gap-2">
-                <span class="text-2xl">🏫</span>
-                <h2 id="user-title" class="font-black tracking-wide text-lg"></h2>
-            </div>
-            <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-lg text-sm font-bold transition cursor-pointer">Ka Bax</button>
-        </div>
+    <div class="container">
 
-        <div class="p-6">
-            <!-- TEACHER AREA -->
-            <div id="view-teacher" class="hidden space-y-4">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 bg-gray-50 p-4 rounded-lg border">
-                    <span class="font-bold text-gray-700 text-lg">📝 Xaadirinta Fasalka</span>
-                    <input type="date" id="att-date" class="border-2 p-1.5 rounded-lg font-medium focus:outline-none focus:border-blue-500">
+        <!-- BOGGA 1-AAD: HOME PAGE (SCHOOL INFORMATION) -->
+        <div id="home" class="page active">
+            <div class="hero">
+                <h2>Ku soo Dhawaada Dugsiga YAKA</h2>
+                <p>Xarunta Horumarinta, Tacliinta Sare iyo Tarbiyada Toosan. Waxaan dhisaynaa mustaqbalka ubadkaaga annagoo adeegsanayna tignoolajiyada ugu casrisan.</p>
+                <button class="btn-start" onclick="showPage('dashboard')">Gat galka Xaadirinta</button>
+            </div>
+
+            <div class="school-info">
+                <div class="info-card">
+                    <h3>Sifada & Guudmarka</h3>
+                    <p>Dugsiga Hoose, Dhexe iyo Sare ee YAKA waa mid ka mid ah xarumaha waxbarasho ee ugu horreeya dalka. Iskuulku wuxuu caan ku yahay soo saarista arday tayo sare leh, aqoon durugsan u leh culuumta casriga ah iyo akhlaaq wanaagsan.</p>
                 </div>
-                <div class="border rounded-lg overflow-hidden">
-                    <table class="w-full text-left border-collapse">
-                        <thead><tr class="bg-gray-100 border-b text-gray-700 font-bold text-sm"><th class="p-3">Magaca Ardayga</th><th class="p-3 text-center">Xaalada (Status)</th></tr></thead>
-                        <tbody id="tbl-students" class="divide-y text-gray-800"></tbody>
-                    </table>
+                <div class="info-card">
+                    <h3>Hiigsiga (Vision)</h3>
+                    <p>Inaan noqonno dugsi hormuud u ah waxbarashada casriga ah ee dalka, iyo inaan soo saarno jiil aqoon iyo hibo leh oo wax ka badali kara mustaqbalka bulshada.</p>
                 </div>
-                <button onclick="saveAttendance()" class="w-full sm:w-auto bg-green-600 text-white px-6 py-3 rounded-lg font-bold hover:bg-green-700 shadow transition cursor-pointer">💾 Kaydi Xaadirada Fasalka</button>
-            </div>
-
-            <!-- ADMIN AREA -->
-            <div id="view-admin" class="hidden space-y-4">
-                <div class="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                    <h3 class="font-black text-blue-900 text-lg flex items-center gap-2">📊 Dashboard-ka Maamulaha</h3>
-                    <p class="text-xs text-blue-700">Halkan waxaad ku daalacan kartaa dhammaan shaqada ay qabteen macallimiinta.</p>
-                </div>
-                <div class="border rounded-lg overflow-hidden">
-                    <table class="w-full text-left border-collapse">
-                        <thead><tr class="bg-gray-100 border-b text-gray-700 font-bold text-sm"><th class="p-3">Taariikhda</th><th class="p-3">Fasalka</th><th class="p-3">Macallinka</th><th class="p-3 text-center">Jooga</th><th class="p-3 text-center">Ma Joogo</th></tr></thead>
-                        <tbody id="tbl-reports" class="divide-y text-gray-800"></tbody>
-                    </table>
+                <div class="info-card">
+                    <h3>Hadafka (Mission)</h3>
+                    <p>Inaan siino ardayda waxbarasho tayo leh oo ku dhisan tignoolajiyad, anshax iyo waddaniyad, si aan u diyaarinno hoggaamiyeyaashii berrito.</p>
                 </div>
             </div>
         </div>
-    </div>
 
+        <!-- BOGGA 2-AAD: DASHBOARD (FASALLADA) -->
+        <div id="dashboard" class="page">
+            <div class="dashboard-title">
+                <h2>Xariirka Xaadirinta Fasallada</h2>
+                <p>Dooro fasalka aad rabto inaad xaadiriso maanta</p>
+            </div>
+            <div class="class-grid" id="class-container"></div>
+        </div>
+
+        <!-- BOGGA 3-AAD: XAADIRISTA (ATTENDANCE) -->
+        <div id="attendance" class="page">
+            <div class="attendance-header">
+                <div>
+                    <h2 id="active-class-title" style="color: var(--primary);">Fasalka: Form 4</h2>
+                    <p id="active-form-master">Form Master: Macalin ...</p>
+                </div>
+                <button onclick="showPage('dashboard')" style="background:#64748b; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer;">← Ku noqo Fasallada</button>
+            </div>
+
+            <div class="attendance-table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 120px;">ID</th>
+                            <th>Magaca Ardayga</th>
+                            <th style="width: 250px; text-align: center;">Xaaladda Xaadirista</th>
+                        </tr>
+                    </thead>
+                    <tbody id="students-list"></tbody>
+                </table>
+            </div>
+            <button class="btn-save" onclick="saveAttendance()">Kaydi Xaadirista ✓</button>
+        </div>
+
+    </div> <!-- Container End -->
+
+    <footer>
+        <p>&copy; 2026 Dugsiga Hoose Dhexe iyo Sare ee YAKA. All Rights Reserved.</p>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
     <script>
-        const USERS = {
-            "admin": { pass: "admin123", role: "admin", name: "Maamule Maxamed" },
-            "macalin1": { pass: "123", role: "teacher", class: "Form 1", name: "Macalin Axmed" },
-            "macalin2": { pass: "123", role: "teacher", class: "Form 2", name: "Macalin Caasho" }
-        };
-        const STUDENTS = [
-            { id: 1, name: "Khadar Cilmi", class: "Form 1" }, { id: 2, name: "Hinda Cumar", class: "Form 1" },
-            { id: 3, name: "Jaamac Cali", class: "Form 1" }, { id: 4, name: "Bilal Xasan", class: "Form 2" }, 
-            { id: 5, name: "Muna Abdi", class: "Form 2" }, { id: 6, name: "Fadumo Siciid", class: "Form 2" }
+        // 1. DATA-DA FASALLADA IYO 35-TA ARDAY EE FASAL KASTA (Qaybta CONST)
+        const classesData = [
+            { id: "f4", name: "Form 4", master: "Maxamed Cali Jaamac" },
+            { id: "f3", name: "Form 3", master: "Faadumo Axmed Cilmi" },
+            { id: "f2", name: "Form 2", master: "Cumar Xasan Cabdi" },
+            { id: "f1", name: "Form 1", master: "Khadar Ciise Maxamuud" },
+            { id: "g8", name: "Grade 8", master: "Siciid Cusmaan Yuusuf" },
+            { id: "g7", name: "Grade 7", master: "Aamina Maxamed Nuur" },
+            { id: "g6", name: "Grade 6", master: "Cabdiweli Cali Daahir" },
+            { id: "g5", name: "Grade 5", master: "Nawaal Cabdillahi Xasan" }
         ];
 
-        // DUMMY DATA: Waxaan halkan ku dhex daray xog diyaar ah si uusan system-ku madhan ugu muuqan maamulaha
-        const DEFAULT_RECORDS = [
-            { date: "2026-09-09", class: "Form 1", name: "Macalin Axmed", present: 3, absent: 0 },
-            { date: "2026-09-09", class: "Form 2", name: "Macalin Caasho", present: 2, absent: 1 }
-        ];
+        // Function si otomaatig ah ugu dhalinaya 35 arday fasal kasta
+        const studentsDb = {};
+        classesData.forEach(cls => {
+            studentsDb[cls.id] = [];
+            for (let i = 1; i <= 35; i++) {
+                studentsDb[cls.id].push({
+                    id: `${cls.id.toUpperCase()}-${i.toString().padStart(3, '0')}`,
+                    name: `Ardayga ${i}aad ee ${cls.name}`
+                });
+            }
+        });
 
-        if (!localStorage.getItem("att_recs")) {
-            localStorage.setItem("att_recs", JSON.stringify(DEFAULT_RECORDS));
+        let currentClassId = null;
+
+        // 2. FUNCTION-KA BEDELIDDA BOGAGGA (NAVIGATION)
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+            
+            const navBtn = document.getElementById('nav-btn');
+            if (pageId === 'home') {
+                navBtn.textContent = "Fasallada ☰";
+                navBtn.setAttribute('onclick', "showPage('dashboard')");
+            } else {
+                navBtn.textContent = "Bogga Hore ⌂";
+                navBtn.setAttribute('onclick', "showPage('home')");
+            }
         }
 
-        let currUser = null;
-        document.getElementById("att-date").value = new Date().toISOString().split('T')[0];
-
-        function login() {
-            let u = document.getElementById("user").value.trim(), p = document.getElementById("pass").value;
-            if (USERS[u] && USERS[u].pass === p) {
-                currUser = USERS[u];
-                document.getElementById("box-login").classList.add("hidden");
-                document.getElementById("box-app").classList.remove("hidden");
-                document.getElementById("user-title").innerText = `${currUser.name} (${currUser.class || 'Maamule'})`;
-                currUser.role === "teacher" ? showTeacher() : showAdmin();
-            } else alert("Username ama Password waa khalad!");
-        }
-
-        function showTeacher() {
-            document.getElementById("view-admin").classList.add("hidden");
-            document.getElementById("view-teacher").classList.remove("hidden");
-            let tbody = document.getElementById("tbl-students"); tbody.innerHTML = "";
-            STUDENTS.filter(s => s.class === currUser.class).forEach(s => {
-                tbody.innerHTML += `<tr class="hover:bg-gray-50"><td class="p-3 font-medium">${s.name}</td><td class="p-3 flex justify-center gap-6">
-                    <label class="flex items-center gap-1.5 cursor-pointer font-bold text-green-600"><input type="radio" name="s-${s.id}" value="Jooga" checked class="w-4 h-4"> Jooga</label>
-                    <label class="flex items-center gap-1.5 cursor-pointer font-bold text-red-600"><input type="radio" name="s-${s.id}" value="Ma Joogo" class="w-4 h-4"> Ma Joogo</label>
-                </td></tr>`;
+        // 3. DHISIDDA BUTTON-ADA FASALLADA (DASHBOARD)
+        function initDashboard() {
+            const container = document.getElementById('class-container');
+            container.innerHTML = '';
+            
+            classesData.forEach(cls => {
+                const card = document.createElement('div');
+                card.className = 'class-card';
+                card.innerHTML = `
+                    <div>
+                        <div class="class-name">${cls.name}</div>
+                        <div class="form-master">Form Master: <span>${cls.master}</span></div>
+                    </div>
+                    <button class="btn-attendance" onclick="openAttendance('${cls.id}')">Xaandiri Fasalka</button>
+                `;
+                container.appendChild(card);
             });
         }
 
+        // 4. FURIDDA BOGGA XAADIRISTA EE FASAL GAAR AH
+        function openAttendance(classId) {
+            currentClassId = classId;
+            const selectedClass = classesData.find(cls => cls.id === classId);
+            
+            document.getElementById('active-class-title').textContent = `Fasalka: ${selectedClass.name}`;
+            document.getElementById('active-form-master').textContent = `Form Master: ${selectedClass.master}`;
+            
+            const listContainer = document.getElementById('students-list');
+            listContainer.innerHTML = '';
+            
+            studentsDb[classId].forEach(student => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="font-weight:600; color:var(--gray);">${student.id}</td>
+                    <td style="font-weight:600; color:var(--dark);">${student.name}</td>
+                    <td>
+                        <div class="status-group" style="justify-content: center;">
+                            <label class="status-label status-present">
+                                <input type="radio" name="status-${student.id}" value="Present" checked> Jooga
+                            </label>
+                            <label class="status-label status-absent">
+                                <input type="radio" name="status-${student.id}" value="Absent"> Ma Joogo
+                            </label>
+                        </div>
+                    </td>
+                `;
+                listContainer.appendChild(row);
+            });
+            
+            showPage('attendance');
+        }
+
+        // 5. KAYDINTA XOGTA XAADIRISTA
         function saveAttendance() {
-            let dt = document.getElementById("att-date").value, j = 0, m = 0;
-            if(!dt) return alert("Fadlan dooro taariikhda!");
-            STUDENTS.filter(s => s.class === currUser.class).forEach(s => {
-                document.querySelector(`input[name="s-${s.id}"]:checked`).value === "Jooga" ? j++ : m++;
-            });
-            let recs = JSON.parse(localStorage.getItem("att_recs")) || [];
-            recs = recs.filter(r => !(r.date === dt && r.class === currUser.class)); 
-            recs.push({ date: dt, class: currUser.class, name: currUser.name, present: j, absent: m });
-            localStorage.setItem("att_recs", JSON.stringify(recs));
-            alert("Xaadirada si guul leh ayaa loo kaydiyay!");
+            const selectedClass = classesData.find(cls => cls.id === currentClassId);
+            alert(`Xaadirista fasalka ${selectedClass.name} waa la kaydiyay si guul leh! (Form Master: ${selectedClass.master})`);
+            showPage('dashboard');
         }
 
-        function showAdmin() {
-            document.getElementById("view-teacher").classList.add("hidden");
-            document.getElementById("view-admin").classList.remove("hidden");
-            let tbody = document.getElementById("tbl-reports"); tbody.innerHTML = "";
-            let recs = JSON.parse(localStorage.getItem("att_recs")) || [];
-            if (!recs.length) return tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-gray-400">Weli wax shaqo ah lama soo gudbin.</td></tr>`;
-            recs.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach(r => {
-                tbody.innerHTML += `<tr class="hover:bg-gray-50 text-sm"><td class="p-3 font-bold text-gray-600">${r.date}</td><td class="p-3 font-bold text-blue-600">${r.class}</td><td class="p-3 font-medium">${r.name}</td><td class="p-3 text-center"><span class="bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded-full text-xs">${r.present} Jooga</span></td><td class="p-3 text-center"><span class="bg-red-100 text-red-800 font-bold px-2 py-0.5 rounded-full text-xs">${r.absent} Ma Joogo</span></td></tr>`;
-            });
-        }
-function logout() {
-    currUser = null; 
-    document.getElementById("user").value = ""; 
-    document.getElementById("pass").value = "";
-    document.getElementById("box-app").classList.add("hidden"); 
-    document.getElementById("box-login").classList.remove("hidden");
-}
+        // Shididda marka hore ee portal-ka
+        document.addEventListener('DOMContentLoaded', () => {
+            initDashboard();
+        });
+    </script>
+</body>
+</html>
