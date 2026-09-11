@@ -238,7 +238,6 @@
                     <p>Inaan siino ardayda waxbarasho tayo leh oo ku dhisan tignoolajiyad, anshax iyo waddaniyad, si aan u diyaarinno hoggaamiyeyaashii berrito.</p>
                 </div>
             </div>
-
             <div class="secretary-gate">
                 <button class="btn-secretary" onclick="checkSecretaryPassword()">💼 Gid galka Qaybta Xoghayaha</button>
             </div>
@@ -445,7 +444,8 @@
                 reportBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--gray); padding: 2rem;">Wali wax xaadiris ah lama kaydin!</td></tr>';
                 return;
             }
-                        const savedHistory = JSON.parse(localStorage.getItem('yaka_history_reports_v2')) || [];
+
+                const savedHistory = JSON.parse(localStorage.getItem('yaka_history_reports_v2')) || [];
             const reportBody = document.getElementById('secretary-report-body');
             reportBody.innerHTML = '';
             
@@ -485,3 +485,4 @@
     </script>
 </body>
 </html>
+
