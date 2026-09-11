@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YAKA School Attendance Portal</title>
-    <!-- Font-ka casriga ah ee Google Fonts -->
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        /* CSS-TA PORTAL-KA (HAL FILE OO DHAMMAYSAN) */
         :root {
             --primary: #1e3a8a;
             --primary-light: #3b82f6;
@@ -16,6 +14,7 @@
             --light: #f8fafc;
             --gray: #64748b;
             --white: #ffffff;
+            --danger: #ef4444;
             --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             --radius: 12px;
         }
@@ -78,6 +77,11 @@
             opacity: 0.8;
         }
 
+        nav {
+            display: flex;
+            gap: 10px;
+        }
+
         nav button {
             background: rgba(255, 255, 255, 0.1);
             color: var(--white);
@@ -100,7 +104,6 @@
             padding: 0 1rem;
         }
 
-        /* Bogagga (Pages) */
         .page {
             display: none;
             animation: fadeIn 0.5s ease-in-out forwards;
@@ -115,7 +118,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* HOME PAGE STYLES */
         .hero {
             background: linear-gradient(135deg, var(--primary), var(--primary-light));
             color: var(--white);
@@ -126,17 +128,8 @@
             box-shadow: var(--shadow);
         }
 
-        .hero h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .hero p {
-            font-size: 1.1rem;
-            max-width: 800px;
-            margin: 0 auto 2rem;
-            opacity: 0.9;
-        }
+        .hero h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .hero p { font-size: 1.1rem; max-width: 800px; margin: 0 auto 2rem; opacity: 0.9; }
 
         .btn-start {
             background: var(--secondary);
@@ -151,10 +144,7 @@
             transition: 0.3s;
         }
 
-        .btn-start:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
-        }
+        .btn-start:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
 
         .school-info {
             display: grid;
@@ -171,22 +161,28 @@
             border-top: 4px solid var(--primary-light);
         }
 
-        .info-card h3 {
+        .info-card h3 { color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem; }
+
+        /* SECRETARY ADMIN SECTION */
+        .admin-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            margin-top: 3rem;
+            border-left: 5px solid var(--primary);
+        }
+
+        .admin-section h3 {
             color: var(--primary);
             margin-bottom: 1rem;
-            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
-        /* DASHBOARD PAGE (CLASSES) */
-        .dashboard-title {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .dashboard-title h2 {
-            color: var(--primary);
-            font-size: 2rem;
-        }
+        .dashboard-title { text-align: center; margin-bottom: 2rem; }
+        .dashboard-title h2 { color: var(--primary); font-size: 2rem; }
 
         .class-grid {
             display: grid;
@@ -206,28 +202,10 @@
             transition: 0.3s;
         }
 
-        .class-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-        }
-
-        .class-name {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .form-master {
-            font-size: 0.9rem;
-            color: var(--gray);
-            margin-bottom: 1.5rem;
-        }
-
-        .form-master span {
-            font-weight: 600;
-            color: var(--dark);
-        }
+        .class-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); }
+        .class-name { font-size: 1.4rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
+        .form-master { font-size: 0.9rem; color: var(--gray); margin-bottom: 1.5rem; }
+        .form-master span { font-weight: 600; color: var(--dark); }
 
         .btn-attendance {
             background: var(--primary);
@@ -240,10 +218,7 @@
             text-align: center;
             transition: 0.3s;
         }
-
-        .btn-attendance:hover {
-            background: var(--primary-light);
-        }
+        .btn-attendance:hover { background: var(--primary-light); }
 
         /* ATTENDANCE PAGE */
         .attendance-header {
@@ -259,49 +234,30 @@
             gap: 1rem;
         }
 
+        .date-badge {
+            background: #f1f5f9;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
         .attendance-table-container {
             background: var(--white);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             overflow: hidden;
+            margin-bottom: 1.5rem;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
+        table { width: 100%; border-collapse: collapse; text-align: left; }
+        th, td { padding: 1rem; border-bottom: 1px solid #e2e8f0; }
+        th { background-color: #f1f5f9; color: var(--primary); font-weight: 600; }
+        tr:hover { background-color: #f8fafc; }
 
-        th, td {
-            padding: 1rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        th {
-            background-color: #f1f5f9;
-            color: var(--primary);
-            font-weight: 600;
-        }
-
-        tr:hover {
-            background-color: #f8fafc;
-        }
-
-        /* Custom Radio Buttons for Attendance */
-        .status-group {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .status-label {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
+        .status-group { display: flex; gap: 1rem; }
+        .status-label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
         .status-present { color: #10b981; }
         .status-absent { color: #ef4444; }
 
@@ -313,29 +269,18 @@
             border-radius: 8px;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 1.5rem;
             float: right;
             box-shadow: var(--shadow);
+            transition: 0.3s;
         }
+        .btn-save:hover { opacity: 0.9; transform: translateY(-1px); }
 
-        .btn-save:hover {
-            opacity: 0.9;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--gray);
-            font-size: 0.9rem;
-            margin-top: 4rem;
-            border-top: 1px solid #e2e8f0;
-        }
+        footer { text-align: center; padding: 2rem; color: var(--gray); font-size: 0.9rem; margin-top: 4rem; border-top: 1px solid #e2e8f0; clear: both; }
     </style>
 </head>
 <body>
 
-    <!-- HEADER / NAVIGATION -->
+    <!-- HEADER -->
     <header>
         <div class="logo-area" onclick="showPage('home')">
             <div class="logo-icon">Y</div>
@@ -351,7 +296,7 @@
 
     <div class="container">
 
-        <!-- BOGGA 1-AAD: HOME PAGE (SCHOOL INFORMATION) -->
+        <!-- BOGGA HORE: HOME PAGE -->
         <div id="home" class="page active">
             <div class="hero">
                 <h2>Ku soo Dhawaada Dugsiga YAKA</h2>
@@ -362,20 +307,33 @@
             <div class="school-info">
                 <div class="info-card">
                     <h3>Sifada & Guudmarka</h3>
-                    <p>Dugsiga Hoose, Dhexe iyo Sare ee YAKA waa mid ka mid ah xarumaha waxbarasho ee ugu horreeya dalka. Iskuulku wuxuu caan ku yahay soo saarista arday tayo sare leh, aqoon durugsan u leh culuumta casriga ah iyo akhlaaq wanaagsan.</p>
+                    <p>Dugsiga Hoose, Dhexe iyo Sare ee YAKA waa mid ka mid ah xarumaha waxbarasho ee ugu horreeya dalka. Iskuulku wuxuu caan ku yahay soo saarista arday tayo sare leh iyo anshax wanaagsan.</p>
                 </div>
                 <div class="info-card">
                     <h3>Hiigsiga (Vision)</h3>
                     <p>Inaan noqonno dugsi hormuud u ah waxbarashada casriga ah ee dalka, iyo inaan soo saarno jiil aqoon iyo hibo leh oo wax ka badali kara mustaqbalka bulshada.</p>
-                </div>
                 <div class="info-card">
                     <h3>Hadafka (Mission)</h3>
                     <p>Inaan siino ardayda waxbarasho tayo leh oo ku dhisan tignoolajiyad, anshax iyo waddaniyad, si aan u diyaarinno hoggaamiyeyaashii berrito.</p>
                 </div>
             </div>
+
+            <div class="admin-section">
+                <h3>💼 Qaybta Xoghayaha (Eng. Ahmed Biile)</h3>
+                <p style="color: var(--gray); margin-bottom: 1rem;">Halkan waxaad ka helaysaa xogta guud ee xaadirista fasal kasta iyo taariikhda la qaaday.</p>
+                <div class="attendance-table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fasalka</th><th>Form Master</th><th>Taariikhdii Ugu Dambaysay</th><th style="text-align: center;">Jooga</th><th style="text-align: center;">Ma Joogo</th>
+                            </tr>
+                        </thead>
+                        <tbody id="secretary-report-body"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 
-        <!-- BOGGA 2-AAD: DASHBOARD (FASALLADA) -->
         <div id="dashboard" class="page">
             <div class="dashboard-title">
                 <h2>Xariirka Xaadirinta Fasallada</h2>
@@ -384,40 +342,32 @@
             <div class="class-grid" id="class-container"></div>
         </div>
 
-        <!-- BOGGA 3-AAD: XAADIRISTA (ATTENDANCE) -->
         <div id="attendance" class="page">
             <div class="attendance-header">
                 <div>
                     <h2 id="active-class-title" style="color: var(--primary);">Fasalka: Form 4</h2>
                     <p id="active-form-master">Form Master: Macalin ...</p>
                 </div>
-                <button onclick="showPage('dashboard')" style="background:#64748b; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer;">← Ku noqo Fasallada</button>
+                <div>
+                    <span class="date-badge" id="current-date-badge">Taariikhda: --/--/----</span>
+                    <button onclick="showPage('dashboard')" style="background:#64748b; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; margin-left: 10px;">← Dib u noqo</button>
+                </div>
             </div>
-
             <div class="attendance-table-container">
                 <table>
                     <thead>
-                        <tr>
-                            <th style="width: 120px;">ID</th>
-                            <th>Magaca Ardayga</th>
-                            <th style="width: 250px; text-align: center;">Xaaladda Xaadirista</th>
-                        </tr>
+                        <tr><th style="width: 120px;">ID</th><th>Magaca Ardayga</th><th style="width: 250px; text-align: center;">Xaaladda Xaadirista</th></tr>
                     </thead>
                     <tbody id="students-list"></tbody>
                 </table>
             </div>
             <button class="btn-save" onclick="saveAttendance()">Kaydi Xaadirista ✓</button>
         </div>
+    </div>
 
-    </div> <!-- Container End -->
+    <footer><p>&copy; 2026 Dugsiga Hoose Dhexe iyo Sare ee YAKA. All Rights Reserved.</p></footer>
 
-    <footer>
-        <p>&copy; 2026 Dugsiga Hoose Dhexe iyo Sare ee YAKA. All Rights Reserved.</p>
-    </footer>
-
-    <!-- JAVASCRIPT LOGIC -->
     <script>
-        // 1. DATA-DA FASALLADA IYO 35-TA ARDAY EE FASAL KASTA (Qaybta CONST)
         const classesData = [
             { id: "f4", name: "Form 4", master: "Maxamed Cali Jaamac" },
             { id: "f3", name: "Form 3", master: "Faadumo Axmed Cilmi" },
@@ -429,100 +379,80 @@
             { id: "g5", name: "Grade 5", master: "Nawaal Cabdillahi Xasan" }
         ];
 
-        // Function si otomaatig ah ugu dhalinaya 35 arday fasal kasta
         const studentsDb = {};
-        classesData.forEach(cls => {
-            studentsDb[cls.id] = [];
-            for (let i = 1; i <= 35; i++) {
-                studentsDb[cls.id].push({
-                    id: `${cls.id.toUpperCase()}-${i.toString().padStart(3, '0')}`,
-                    name: `Ardayga ${i}aad ee ${cls.name}`
-                });
-            }
+        classesData.forEach(c => {
+            studentsDb[c.id] = Array.from({length: 35}, (_, i) => ({
+                id: `${c.id.toUpperCase()}-${(i+1).toString().padStart(3, '0')}`,
+                name: `Ardayga ${i+1}aad ee ${c.name}`
+            }));
         });
 
         let currentClassId = null;
+        const getFormattedDate = () => new Date().toLocaleDateString('en-GB');
+        const isFriday = () => new Date().getDay() === 5;
 
-        // 2. FUNCTION-KA BEDELIDDA BOGAGGA (NAVIGATION)
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.remove('active');
-            });
-            document.getElementById(pageId).classList.add('active');
-            
-            const navBtn = document.getElementById('nav-btn');
-            if (pageId === 'home') {
-                navBtn.textContent = "Fasallada ☰";
-                navBtn.setAttribute('onclick', "showPage('dashboard')");
-            } else {
-                navBtn.textContent = "Bogga Hore ⌂";
-                navBtn.setAttribute('onclick', "showPage('home')");
-            }
+        function showPage(pId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pId).classList.add('active');
+            document.getElementById('nav-btn').textContent = pId === 'home' ? "Fasallada ☰" : "Bogga Hore ⌂";
+            document.getElementById('nav-btn').setAttribute('onclick', `showPage('${pId === 'home' ? 'dashboard' : 'home'}')`);
+            if(pId === 'home') loadSecretaryReport();
         }
 
-        // 3. DHISIDDA BUTTON-ADA FASALLADA (DASHBOARD)
         function initDashboard() {
-            const container = document.getElementById('class-container');
-            container.innerHTML = '';
-            
-            classesData.forEach(cls => {
-                const card = document.createElement('div');
-                card.className = 'class-card';
-                card.innerHTML = `
-                    <div>
-                        <div class="class-name">${cls.name}</div>
-                        <div class="form-master">Form Master: <span>${cls.master}</span></div>
-                    </div>
-                    <button class="btn-attendance" onclick="openAttendance('${cls.id}')">Xaandiri Fasalka</button>
-                `;
-                container.appendChild(card);
-            });
+            document.getElementById('class-container').innerHTML = classesData.map(c => `
+                <div class="class-card">
+                    <div><div class="class-name">${c.name}</div><div class="form-master">Form Master: <span>${c.master}</span></div></div>
+                    <button class="btn-attendance" onclick="openAttendance('${c.id}')">Xaandiri Fasalka</button>
+                </div>
+            `).join('');
         }
 
-        // 4. FURIDDA BOGGA XAADIRISTA EE FASAL GAAR AH
-        function openAttendance(classId) {
-            currentClassId = classId;
-            const selectedClass = classesData.find(cls => cls.id === classId);
+        function openAttendance(cId) {
+            if (isFriday()) return alert("Maanta waa maalin Jimco ah. Waa fasax iskuulku, lama xaadiri karo ubadka!");
+            currentClassId = cId;
+            const c = classesData.find(x => x.id === cId);
+            document.getElementById('active-class-title').textContent = `Fasalka: ${c.name}`;
+            document.getElementById('active-form-master').textContent = `Form Master: ${c.master}`;
+            document.getElementById('current-date-badge').textContent = `Taariikhda: ${getFormattedDate()}`;
             
-            document.getElementById('active-class-title').textContent = `Fasalka: ${selectedClass.name}`;
-            document.getElementById('active-form-master').textContent = `Form Master: ${selectedClass.master}`;
-            
-            const listContainer = document.getElementById('students-list');
-            listContainer.innerHTML = '';
-            
-            studentsDb[classId].forEach(student => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td style="font-weight:600; color:var(--gray);">${student.id}</td>
-                    <td style="font-weight:600; color:var(--dark);">${student.name}</td>
-                    <td>
-                        <div class="status-group" style="justify-content: center;">
-                            <label class="status-label status-present">
-                                <input type="radio" name="status-${student.id}" value="Present" checked> Jooga
-                            </label>
-                            <label class="status-label status-absent">
-                                <input type="radio" name="status-${student.id}" value="Absent"> Ma Joogo
-                            </label>
-                        </div>
-                    </td>
-                `;
-                listContainer.appendChild(row);
-            });
-            
+            document.getElementById('students-list').innerHTML = studentsDb[cId].map(s => `
+                <tr>
+                    <td style="font-weight:600; color:var(--gray);">${s.id}</td><td style="font-weight:600; color:var(--dark);">${s.name}</td>
+                    <td><div class="status-group" style="justify-content: center;">
+                        <label class="status-label status-present"><input type="radio" name="status-${s.id}" value="Present" checked> Jooga</label>
+                        <label class="status-label status-absent"><input type="radio" name="status-${s.id}" value="Absent"> Ma Joogo</label>
+                    </div></td>
+                </tr>
+            `).join('');
             showPage('attendance');
         }
 
-        // 5. KAYDINTA XOGTA XAADIRISTA
         function saveAttendance() {
-            const selectedClass = classesData.find(cls => cls.id === currentClassId);
-            alert(`Xaadirista fasalka ${selectedClass.name} waa la kaydiyay si guul leh! (Form Master: ${selectedClass.master})`);
-            showPage('dashboard');
+            let pCount = 0, aCount = 0;
+            studentsDb[currentClassId].forEach(s => {
+                const r = document.querySelector(`input[name="status-${s.id}"]:checked`);
+                r && r.value === "Present" ? pCount++ : aCount++;
+            });
+            const rData = JSON.parse(localStorage.getItem('yaka_reports')) || {};
+            rData[currentClassId] = { date: getFormattedDate(), present: pCount, absent: aCount };
+            localStorage.setItem('yaka_reports', JSON.stringify(rData));
+            alert(`Macalin waad mahadsantahay shaqada aad qabatay. Xaadirka waxaa loo gudbiyay xoghayaha dugsiga Eng.Ahmed Biile.`);
+            showPage('home');
         }
 
-        // Shididda marka hore ee portal-ka
-        document.addEventListener('DOMContentLoaded', () => {
-            initDashboard();
-        });
+        function loadSecretaryReport() {
+            const saved = JSON.parse(localStorage.getItem('yaka_reports')) || {};
+            document.getElementById('secretary-report-body').innerHTML = classesData.map(c => {
+                const info = saved[c.id] || { date: 'Lama xaadirin', present: 0, absent: 0 };
+                return `<tr>
+                    <td style="font-weight:700; color:var(--primary);">${c.name}</td><td>${c.master}</td><td style="font-weight:600; color:var(--gray);">${info.date}</td>
+                    <td style="text-align:center; color:#10b981; font-weight:700;">${info.present}</td><td style="text-align:center; color:#ef4444; font-weight:700;">${info.absent}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => { initDashboard(); loadSecretaryReport(); });
     </script>
 </body>
 </html>
