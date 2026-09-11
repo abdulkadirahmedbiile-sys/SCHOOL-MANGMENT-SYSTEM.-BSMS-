@@ -14,6 +14,7 @@
             --light: #f8fafc;
             --gray: #64748b;
             --white: #ffffff;
+            --danger: #ef4444;
             --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             --radius: 12px;
         }
@@ -80,7 +81,7 @@
         }
         nav button:hover { background: var(--white); color: var(--primary); }
 
-        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
+        .container { max-width: 1250px; margin: 2rem auto; padding: 0 1rem; }
 
         .page { display: none; animation: fadeIn 0.5s ease-in-out forwards; }
         .page.active { display: block; }
@@ -132,38 +133,16 @@
         }
         .info-card h3 { color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem; }
 
-        /* SECRETARY AREA */
-        .secretary-gate {
-            text-align: center;
-            margin-top: 3rem;
-            padding: 2rem;
-            background: #f1f5f9;
-            border-radius: var(--radius);
-        }
-
+        .secretary-gate { text-align: center; margin-top: 3rem; padding: 2rem; background: #e2e8f0; border-radius: var(--radius); }
         .btn-secretary {
-            background: var(--primary);
-            color: var(--white);
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: 0.3s;
-            box-shadow: var(--shadow);
+            background: var(--primary); color: var(--white); border: none; padding: 0.8rem 2rem;
+            border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.3s; box-shadow: var(--shadow);
         }
         .btn-secretary:hover { background: var(--primary-light); }
 
         .admin-section {
-            display: none;
-            background: var(--white);
-            border-radius: var(--radius);
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            margin-top: 2rem;
-            border-left: 5px solid var(--primary);
-            animation: fadeIn 0.4s ease;
+            display: none; background: var(--white); border-radius: var(--radius); padding: 2rem;
+            box-shadow: var(--shadow); margin-top: 2rem; border-left: 5px solid var(--primary); animation: fadeIn 0.4s ease;
         }
 
         .dashboard-title { text-align: center; margin-bottom: 2rem; }
@@ -172,15 +151,8 @@
         .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
 
         .class-card {
-            background: var(--white);
-            border-radius: var(--radius);
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            border: 1px solid #e2e8f0;
-            transition: 0.3s;
+            background: var(--white); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow);
+            display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #e2e8f0; transition: 0.3s;
         }
         .class-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); }
         .class-name { font-size: 1.4rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
@@ -188,47 +160,19 @@
         .form-master span { font-weight: 600; color: var(--dark); }
 
         .btn-attendance {
-            background: var(--primary);
-            color: var(--white);
-            border: none;
-            padding: 0.7rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            text-align: center;
-            transition: 0.3s;
+            background: var(--primary); color: var(--white); border: none; padding: 0.7rem;
+            border-radius: 8px; font-weight: 600; cursor: pointer; text-align: center; transition: 0.3s;
         }
         .btn-attendance:hover { background: var(--primary-light); }
 
         .attendance-header {
-            background: var(--white);
-            padding: 1.5rem;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            margin-bottom: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
+            background: var(--white); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);
+            margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
         }
 
-        .date-badge {
-            background: #f1f5f9;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-weight: 600;
-            color: var(--primary);
-            font-size: 0.9rem;
-        }
+        .date-badge { background: #f1f5f9; padding: 6px 12px; border-radius: 20px; font-weight: 600; color: var(--primary); font-size: 0.9rem; }
 
-        .attendance-table-container {
-            background: var(--white);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            margin-bottom: 1.5rem;
-        }
+        .attendance-table-container { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 1.5rem; }
 
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th, td { padding: 1rem; border-bottom: 1px solid #e2e8f0; }
@@ -240,17 +184,14 @@
         .status-present { color: #10b981; }
         .status-absent { color: #ef4444; }
 
+        .badge-absent-id {
+            background: #ffeede; color: #d97706; padding: 3px 8px; border-radius: 4px;
+            font-size: 0.8rem; font-weight: 600; display: inline-block; margin: 2px;
+        }
+
         .btn-save {
-            background: var(--secondary);
-            color: var(--white);
-            border: none;
-            padding: 0.8rem 2rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            float: right;
-            box-shadow: var(--shadow);
-            transition: 0.3s;
+            background: var(--secondary); color: var(--white); border: none; padding: 0.8rem 2rem;
+            border-radius: 8px; font-weight: 600; cursor: pointer; float: right; box-shadow: var(--shadow); transition: 0.3s;
         }
         .btn-save:hover { opacity: 0.9; transform: translateY(-1px); }
 
@@ -262,7 +203,7 @@
     <!-- HEADER / NAVIGATION -->
     <header>
         <div class="logo-area" onclick="showPage('home')">
-            <div class="logo-icon">logo.jpeg</div>
+            <div class="logo-icon">Y</div>
             <div class="logo-text">
                 <h1>DUGSIGA YAKA</h1>
                 <p>Primary & Secondary Portal</p>
@@ -288,7 +229,7 @@
                     <h3>Sifada & Guudmarka</h3>
                     <p>Dugsiga Hoose, Dhexe iyo Sare ee YAKA waa mid ka mid ah xarumaha waxbarasho ee ugu horreeya dalka. Iskuulku wuxuu caan ku yahay soo saarista arday tayo sare leh iyo anshax wanaagsan.</p>
                 </div>
-                            <div class="info-card">
+                <div class="info-card">
                     <h3>Hiigsiga (Vision)</h3>
                     <p>Inaan noqonno dugsi hormuud u ah waxbarashada casriga ah ee dalka, iyo inaan soo saarno jiil aqoon iyo hibo leh oo wax ka badali kara mustaqbalka bulshada.</p>
                 </div>
@@ -298,20 +239,24 @@
                 </div>
             </div>
 
-            <!-- BUTTON-KA PASSWORD-KA LEH EE XOGHAYE AHMED BIILE -->
             <div class="secretary-gate">
-                <button class="btn-secretary" onclick="checkSecretaryPassword()">💼  galka Qaybta Xoghayaha</button>
+                <button class="btn-secretary" onclick="checkSecretaryPassword()">💼 Gid galka Qaybta Xoghayaha</button>
             </div>
 
             <!-- BOGGA XOGTA XOGHAYEHA (WUU QARSOON YAHAY ILAA PASSWORD LA GELIYO) -->
             <div class="admin-section" id="secretary-panel">
                 <h3 style="color: var(--primary); margin-bottom: 0.5rem;">💼 Qaybta Xoghayaha (Eng. Ahmed Biile)</h3>
-                <p style="color: var(--gray); margin-bottom: 1rem;">Halkan waxaad ka helaysaa xogta guud ee xaadirista fasal kasta iyo taariikhda la qaaday.</p>
+                <p style="color: var(--gray); margin-bottom: 1rem;">Halkan waxaad ka helaysaa xogta dhabta ah ee maalin walba la kaydiyo iyo ID-yada ardayda maqan.</p>
                 <div class="attendance-table-container">
                     <table>
                         <thead>
                             <tr>
-                                <th>Fasalka</th><th>Form Master</th><th>Taariikhdii Ugu Dambaysay</th><th style="text-align: center;">Jooga</th><th style="text-align: center;">Ma Joogo</th>
+                                <th>Maalinta / Taariikhda</th>
+                                <th>Fasalka</th>
+                                <th>Form Master</th>
+                                <th style="text-align: center; color:#10b981;">Joogay</th>
+                                <th style="text-align: center; color:#ef4444;">Ma Joogto</th>
+                                <th>ID-yada Ardayda Maqan</th>
                             </tr>
                         </thead>
                         <tbody id="secretary-report-body"></tbody>
@@ -380,7 +325,13 @@
         });
 
         let currentClassId = null;
+
         const getFormattedDate = () => new Date().toLocaleDateString('en-GB');
+        const getDayName = () => {
+            const days = ["Axad", "Isniin", "Talaado", "Arbaco", "Khamiis", "Jimco", "Sabti"];
+            return days[new Date().getDay()];
+        };
+        const isFriday = () => new Date().getDay() === 5;
 
         function showPage(pId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -400,7 +351,6 @@
             }
         }
 
-        // MAAMULKA PASSWORD-KA XOGHAYE AHMED BIILE (PASSWORD: yaka2026)
         function checkSecretaryPassword() {
             const password = prompt("Fadlan geli Furaha Sirta ah (Password) ee Xoghayaha:");
             if (password === "yaka2026") {
@@ -424,11 +374,16 @@
         }
 
         function openAttendance(cId) {
+            if (isFriday()) {
+                alert("Maanta waa maalin Jimco ah. Waa fasax iskuulku, lama xaadiri karo ubadka!");
+                return;
+            }
+
             currentClassId = cId;
             const c = classesData.find(x => x.id === cId);
             document.getElementById('active-class-title').textContent = "Fasalka: " + c.name;
             document.getElementById('active-form-master').textContent = "Form Master: " + c.master;
-            document.getElementById('current-date-badge').textContent = "Taariikhda: " + getFormattedDate();
+            document.getElementById('current-date-badge').textContent = "Maanta: " + getDayName() + " (" + getFormattedDate() + ")";
             
             let html = "";
             studentsDb[cId].forEach(s => {
@@ -446,28 +401,82 @@
 
         function saveAttendance() {
             let pCount = 0, aCount = 0;
+            let absentStudentsIds = [];
+
             studentsDb[currentClassId].forEach(s => {
                 const r = document.querySelector('input[name="status-' + s.id + '"]:checked');
-                r && r.value === "Present" ? pCount++ : aCount++;
+                if (r && r.value === "Present") {
+                    pCount++;
+                } else {
+                    aCount++;
+                    absentStudentsIds.push(s.id);
+                }
             });
-            const rData = JSON.parse(localStorage.getItem('yaka_reports')) || {};
-            rData[currentClassId] = { date: getFormattedDate(), present: pCount, absent: aCount };
-            localStorage.setItem('yaka_reports', JSON.stringify(rData));
+
+            const selectedClass = classesData.find(x => x.id === currentClassId);
+            const fullDateStr = getDayName() + " - " + getFormattedDate();
+
+            let allHistory = JSON.parse(localStorage.getItem('yaka_history_reports_v2')) || [];
+            allHistory = allHistory.filter(item => !(item.classId === currentClassId && item.date === fullDateStr));
+
+            allHistory.push({
+                classId: currentClassId,
+                className: selectedClass.name,
+                master: selectedClass.master,
+                date: fullDateStr,
+                present: pCount,
+                absent: aCount,
+                absentIds: absentStudentsIds,
+                timestamp: new Date().getTime()
+            });
+
+            localStorage.setItem('yaka_history_reports_v2', JSON.stringify(allHistory));
+
             alert("Macalin waad mahadsantahay shaqada aad qabatay. Xaadirka waxaa loo gudbiyay xoghayaha dugsiga Eng.Ahmed Biile.");
             showPage('home');
         }
 
         function loadSecretaryReport() {
-            const saved = JSON.parse(localStorage.getItem('yaka_reports')) || {};
-            let realHtml = "";
-            classesData.forEach(c => {
-                const info = saved[c.id] || { date: 'Lama xaadirin', present: 0, absent: 0 };
-                realHtml += '<tr>' +
-                        '<td style="font-weight:700; color:var(--primary);">' + c.name + '</td><td>' + c.master + '</td><td style="font-weight:600; color:var(--gray);">' + info.date + '</td>' +
-                        '<td style="text-align:center; color:#10b981; font-weight:700;">' + info.present + '</td><td style="text-align:center; color:#ef4444; font-weight:700;">' + info.absent + '</td>' +
+            const savedHistory = JSON.parse(localStorage.getItem('yaka_history_reports_v2')) || [];
+            const reportBody = document.getElementById('secretary-report-body');
+            reportBody.innerHTML = '';
+            
+            if (savedHistory.length === 0) {
+                reportBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--gray); padding: 2rem;">Wali wax xaadiris ah lama kaydin!</td></tr>';
+                return;
+            }
+                        const savedHistory = JSON.parse(localStorage.getItem('yaka_history_reports_v2')) || [];
+            const reportBody = document.getElementById('secretary-report-body');
+            reportBody.innerHTML = '';
+            
+            if (savedHistory.length === 0) {
+                reportBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--gray); padding: 2rem;">Wali wax xaadiris ah lama kaydin!</td></tr>';
+                return;
+            }
+
+            savedHistory.sort((a, b) => b.timestamp - a.timestamp);
+
+            let html = "";
+            savedHistory.forEach(item => {
+                let absentBadges = "";
+                if (item.absentIds.length === 0) {
+                    absentBadges = "<span style='color:var(--secondary); font-weight:600;'>Dhamaan waa joogaan ✓</span>";
+                } else {
+                    item.absentIds.forEach(id => {
+                        absentBadges += '<span class="badge-absent-id">' + id + '</span>';
+                    });
+                }
+
+                html += '<tr>' +
+                        '<td style="font-weight:600; color:var(--dark);">' + item.date + '</td>' +
+                        '<td style="font-weight:700; color:var(--primary);">' + item.className + '</td>' +
+                        '<td>' + item.master + '</td>' +
+                        '<td style="text-align:center; color:#10b981; font-weight:700;">' + item.present + '</td>' +
+                        '<td style="text-align:center; color:#ef4444; font-weight:700;">' + item.absent + '</td>' +
+                        '<td style="max-width: 300px; word-wrap: break-word;">' + absentBadges + '</td>' +
                         '</tr>';
             });
-            document.getElementById('secretary-report-body').innerHTML = realHtml;
+            reportBody.innerHTML = html;
         }
 
         document.addEventListener('DOMContentLoaded', () => { 
@@ -476,5 +485,3 @@
     </script>
 </body>
 </html>
-
-                    
