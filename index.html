@@ -1,488 +1,163 @@
 <!DOCTYPE html>
 <html lang="so">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YAKA School Attendance Portal</title>
     <link href="https://googleapis.com" rel="stylesheet">
     <style>
-        :root {
-            --primary: #1e3a8a;
-            --primary-light: #3b82f6;
-            --secondary: #10b981;
-            --dark: #0f172a;
-            --light: #f8fafc;
-            --gray: #64748b;
-            --white: #ffffff;
-            --danger: #ef4444;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --radius: 12px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-        }
-
-        body {
-            background-color: var(--light);
-            color: var(--dark);
-            line-height: 1.6;
-        }
-
-        header {
-            background-color: var(--primary);
-            color: var(--white);
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-        }
-
-        .logo-icon {
-            background: var(--white);
-            color: var(--primary);
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 1.3rem;
-            box-shadow: var(--shadow);
-        }
-
-        .logo-text h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: 1px; }
-        .logo-text p { font-size: 0.8rem; opacity: 0.8; }
-
-        nav button {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--white);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-        nav button:hover { background: var(--white); color: var(--primary); }
-
+        :root { --primary: #1e3a8a; --primary-light: #3b82f6; --secondary: #10b981; --dark: #0f172a; --light: #f8fafc; --gray: #64748b; --white: #ffffff; --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); --radius: 12px; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--light); color: var(--dark); line-height: 1.6; }
+        header { background-color: var(--primary); color: var(--white); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; }
+        .logo-area { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+        .logo-icon { background: var(--white); color: var(--primary); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.3rem; }
+        .logo-text h1 { font-size: 1.2rem; font-weight: 700; } .logo-text p { font-size: 0.8rem; opacity: 0.8; }
+        nav button { background: rgba(255, 255, 255, 0.1); color: var(--white); border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
         .container { max-width: 1250px; margin: 2rem auto; padding: 0 1rem; }
-
-        .page { display: none; animation: fadeIn 0.5s ease-in-out forwards; }
-        .page.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hero {
-            background: linear-gradient(135deg, var(--primary), var(--primary-light));
-            color: var(--white);
-            border-radius: var(--radius);
-            padding: 4rem 2rem;
-            text-align: center;
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow);
-        }
-        .hero h2 { font-size: 2.5rem; margin-bottom: 1rem; }
-        .hero p { font-size: 1.1rem; max-width: 800px; margin: 0 auto 2rem; opacity: 0.9; }
-
-        .btn-start {
-            background: var(--secondary);
-            color: var(--white);
-            padding: 0.8rem 2rem;
-            border: none;
-            border-radius: 30px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            box-shadow: var(--shadow);
-            transition: 0.3s;
-        }
-        .btn-start:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
-
-        .school-info {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .info-card {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border-top: 4px solid var(--primary-light);
-        }
-        .info-card h3 { color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem; }
-
+        .page { display: none; animation: fadeIn 0.5s ease-in-out forwards; } .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .hero { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: var(--white); border-radius: var(--radius); padding: 4rem 2rem; text-align: center; margin-bottom: 2rem; }
+        .hero h2 { font-size: 2.5rem; margin-bottom: 1rem; } .hero p { font-size: 1.1rem; max-width: 800px; margin: 0 auto 2rem; opacity: 0.9; }
+        .btn-start { background: var(--secondary); color: var(--white); padding: 0.8rem 2rem; border: none; border-radius: 30px; font-size: 1.1rem; font-weight: 600; cursor: pointer; }
+        .school-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
+        .info-card { background: var(--white); padding: 2rem; border-radius: var(--radius); box-shadow: var(--shadow); border-top: 4px solid var(--primary-light); }
+        .info-card h3 { color: var(--primary); margin-bottom: 1rem; }
         .secretary-gate { text-align: center; margin-top: 3rem; padding: 2rem; background: #e2e8f0; border-radius: var(--radius); }
-        .btn-secretary {
-            background: var(--primary); color: var(--white); border: none; padding: 0.8rem 2rem;
-            border-radius: 8px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: 0.3s; box-shadow: var(--shadow);
-        }
-        .btn-secretary:hover { background: var(--primary-light); }
-
-        .admin-section {
-            display: none; background: var(--white); border-radius: var(--radius); padding: 2rem;
-            box-shadow: var(--shadow); margin-top: 2rem; border-left: 5px solid var(--primary); animation: fadeIn 0.4s ease;
-        }
-
-        .dashboard-title { text-align: center; margin-bottom: 2rem; }
-        .dashboard-title h2 { color: var(--primary); font-size: 2rem; }
-
+        .btn-secretary { background: var(--primary); color: var(--white); border: none; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
+        .admin-section { display: none; background: var(--white); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow); margin-top: 2rem; border-left: 5px solid var(--primary); }
+        .dashboard-title { text-align: center; margin-bottom: 2rem; } .dashboard-title h2 { color: var(--primary); font-size: 2rem; }
         .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
-
-        .class-card {
-            background: var(--white); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow);
-            display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #e2e8f0; transition: 0.3s;
-        }
-        .class-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); }
+        .class-card { background: var(--white); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #e2e8f0; }
         .class-name { font-size: 1.4rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
-        .form-master { font-size: 0.9rem; color: var(--gray); margin-bottom: 1.5rem; }
-        .form-master span { font-weight: 600; color: var(--dark); }
-
-        .btn-attendance {
-            background: var(--primary); color: var(--white); border: none; padding: 0.7rem;
-            border-radius: 8px; font-weight: 600; cursor: pointer; text-align: center; transition: 0.3s;
-        }
-        .btn-attendance:hover { background: var(--primary-light); }
-
-        .attendance-header {
-            background: var(--white); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow);
-            margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
-        }
-
+        .form-master { font-size: 0.9rem; color: var(--gray); margin-bottom: 1.5rem; } .form-master span { font-weight: 600; color: var(--dark); }
+        .btn-attendance { background: var(--primary); color: var(--white); border: none; padding: 0.7rem; border-radius: 8px; font-weight: 600; cursor: pointer; text-align: center; }
+        .attendance-header { background: var(--white); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
         .date-badge { background: #f1f5f9; padding: 6px 12px; border-radius: 20px; font-weight: 600; color: var(--primary); font-size: 0.9rem; }
-
         .attendance-table-container { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 1.5rem; }
-
-        table { width: 100%; border-collapse: collapse; text-align: left; }
-        th, td { padding: 1rem; border-bottom: 1px solid #e2e8f0; }
-        th { background-color: #f1f5f9; color: var(--primary); font-weight: 600; }
-        tr:hover { background-color: #f8fafc; }
-
-        .status-group { display: flex; gap: 1rem; }
-        .status-label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
-        .status-present { color: #10b981; }
-        .status-absent { color: #ef4444; }
-
-        .badge-absent-id {
-            background: #ffeede; color: #d97706; padding: 3px 8px; border-radius: 4px;
-            font-size: 0.8rem; font-weight: 600; display: inline-block; margin: 2px;
-        }
-
-        .btn-save {
-            background: var(--secondary); color: var(--white); border: none; padding: 0.8rem 2rem;
-            border-radius: 8px; font-weight: 600; cursor: pointer; float: right; box-shadow: var(--shadow); transition: 0.3s;
-        }
-        .btn-save:hover { opacity: 0.9; transform: translateY(-1px); }
-
+        table { width: 100%; border-collapse: collapse; text-align: left; } th, td { padding: 1rem; border-bottom: 1px solid #e2e8f0; } th { background-color: #f1f5f9; color: var(--primary); }
+        .status-group { display: flex; gap: 1rem; } .status-label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
+        .status-present { color: #10b981; } .status-absent { color: #ef4444; }
+        .badge-absent-id { background: #ffeede; color: #d97706; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; display: inline-block; margin: 2px; }
+        .btn-save { background: var(--secondary); color: var(--white); border: none; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer; float: right; box-shadow: var(--shadow); }
         footer { text-align: center; padding: 2rem; color: var(--gray); font-size: 0.9rem; margin-top: 4rem; border-top: 1px solid #e2e8f0; clear: both; }
     </style>
 </head>
 <body>
-
-    <!-- HEADER / NAVIGATION -->
     <header>
-        <div class="logo-area" onclick="showPage('home')">
-            <div class="logo-icon">Y</div>
-            <div class="logo-text">
-                <h1>DUGSIGA YAKA</h1>
-                <p>Primary & Secondary Portal</p>
-            </div>
-        </div>
-        <nav>
-            <button id="nav-btn" onclick="showPage('dashboard')">Fasallada ☰</button>
-        </nav>
+        <div class="logo-area" onclick="showPage('home')"><div class="logo-icon">logo.jpeg</div><div class="logo-text"><h1>DUGSIGA YAKA</h1><p>Primary & Secondary Portal</p></div></div>
+        <nav><button id="nav-btn" onclick="showPage('dashboard')">Fasallada ☰</button></nav>
     </header>
-
     <div class="container">
-
-        <!-- BOGGA HORE -->
         <div id="home" class="page active">
             <div class="hero">
                 <h2>Ku soo Dhawaada Dugsiga YAKA</h2>
                 <p>Xarunta Horumarinta, Tacliinta Sare iyo Tarbiyada Toosan. Waxaan dhisaynaa mustaqbalka ubadkaaga annagoo adeegsanayna tignoolajiyada ugu casrisan.</p>
                 <button class="btn-start" onclick="showPage('dashboard')">Gat galka Xaadirinta</button>
             </div>
-
             <div class="school-info">
-                <div class="info-card">
-                    <h3>Sifada & Guudmarka</h3>
-                    <p>Dugsiga Hoose, Dhexe iyo Sare ee YAKA waa mid ka mid ah xarumaha waxbarasho ee ugu horreeya dalka. Iskuulku wuxuu caan ku yahay soo saarista arday tayo sare leh iyo anshax wanaagsan.</p>
-                </div>
-                <div class="info-card">
-                    <h3>Hiigsiga (Vision)</h3>
-                    <p>Inaan noqonno dugsi hormuud u ah waxbarashada casriga ah ee dalka, iyo inaan soo saarno jiil aqoon iyo hibo leh oo wax ka badali kara mustaqbalka bulshada.</p>
-                </div>
-                <div class="info-card">
-                    <h3>Hadafka (Mission)</h3>
-                    <p>Inaan siino ardayda waxbarasho tayo leh oo ku dhisan tignoolajiyad, anshax iyo waddaniyad, si aan u diyaarinno hoggaamiyeyaashii berrito.</p>
-                </div>
+                <div class="info-card"><h3>Sifada & Guudmarka</h3><p>Dugsiga Hoose, Dhexe iyo Sare ee YAKA waa mid ka mid ah xarumaha waxbarasho ee ugu horreeya dalka. Iskuulku wuxuu caan ku yahay soo saarista arday tayo sare leh iyo anshax wanaagsan.</p></div>
+                <div class="info-card"><h3>Hiigsiga (Vision)</h3><p>Inaan noqonno dugsi hormuud u ah waxbarashada casriga ah ee dalka, iyo inaan soo saarno jiil aqoon iyo hibo leh oo wax ka badali kara mustaqbalka bulshada.</p></div>
+                <div class="info-card"><h3>Hadafka (Mission)</h3><p>Inaan siino ardayda waxbarasho tayo leh oo ku dhisan tignoolajiyad, anshax iyo waddaniyad, si aan u diyaarinno hoggaamiyeyaashii berrito.</p></div>
             </div>
-            <div class="secretary-gate">
-                <button class="btn-secretary" onclick="checkSecretaryPassword()">💼 Gid galka Qaybta Xoghayaha</button>
-            </div>
-
-            <!-- BOGGA XOGTA XOGHAYEHA (WUU QARSOON YAHAY ILAA PASSWORD LA GELIYO) -->
+            <div class="secretary-gate"><button class="btn-secretary" onclick="checkSecretaryPassword()">💼 Gid galka Qaybta Xoghayaha</button></div>
             <div class="admin-section" id="secretary-panel">
                 <h3 style="color: var(--primary); margin-bottom: 0.5rem;">💼 Qaybta Xoghayaha (Eng. Ahmed Biile)</h3>
                 <p style="color: var(--gray); margin-bottom: 1rem;">Halkan waxaad ka helaysaa xogta dhabta ah ee maalin walba la kaydiyo iyo ID-yada ardayda maqan.</p>
                 <div class="attendance-table-container">
                     <table>
-                        <thead>
-                            <tr>
-                                <th>Maalinta / Taariikhda</th>
-                                <th>Fasalka</th>
-                                <th>Form Master</th>
-                                <th style="text-align: center; color:#10b981;">Joogay</th>
-                                <th style="text-align: center; color:#ef4444;">Ma Joogto</th>
-                                <th>ID-yada Ardayda Maqan</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Maalinta / Taariikhda</th><th>Fasalka</th><th>Form Master</th><th style="text-align: center; color:#10b981;">Joogay</th><th style="text-align: center; color:#ef4444;">Ma Joogto</th><th>ID-yada Ardayda Maqan</th></tr></thead>
                         <tbody id="secretary-report-body"></tbody>
                     </table>
                 </div>
             </div>
         </div>
-
-        <!-- BOGGA DASHBOARD-KA (FASALLADA) -->
-        <div id="dashboard" class="page">
-            <div class="dashboard-title">
-                <h2>Xariirka Xaadirinta Fasallada</h2>
-                <p>Dooro fasalka aad rabto inaad xaadiriso maanta</p>
-            </div>
-            <div class="class-grid" id="class-container"></div>
-        </div>
-
-        <!-- BOGGA XAADIRISTA ARDAYDA -->
+        <div id="dashboard" class="page"><div class="dashboard-title"><h2>Xariirka Xaadirinta Fasallada</h2><p>Dooro fasalka aad rabto inaad xaadiriso maanta</p></div><div class="class-grid" id="class-container"></div></div>
         <div id="attendance" class="page">
             <div class="attendance-header">
-                <div>
-                    <h2 id="active-class-title" style="color: var(--primary);">Fasalka: Form 4</h2>
-                    <p id="active-form-master">Form Master: Macalin ...</p>
-                </div>
-                <div>
-                    <span class="date-badge" id="current-date-badge">Taariikhda: --/--/----</span>
-                    <button onclick="showPage('dashboard')" style="background:#64748b; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; margin-left: 10px;">← Dib u noqo</button>
-                </div>
+                <div><h2 id="active-class-title" style="color: var(--primary);">Fasalka: Form 4</h2><p id="active-form-master">Form Master: Macalin ...</p></div>
+                <div><span class="date-badge" id="current-date-badge">Taariikhda: --/--/----</span><button onclick="showPage('dashboard')" style="background:#64748b; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; margin-left: 10px;">← Dib u noqo</button></div>
             </div>
             <div class="attendance-table-container">
                 <table>
-                    <thead>
-                        <tr><th style="width: 120px;">ID</th><th>Magaca Ardayga</th><th style="width: 250px; text-align: center;">Xaaladda Xaadirista</th></tr>
-                    </thead>
+                    <thead><tr><th style="width: 120px;">ID</th><th>Magaca Ardayga</th><th style="width: 250px; text-align: center;">Xaaladda Xaadirista</th></tr></thead>
                     <tbody id="students-list"></tbody>
                 </table>
             </div>
             <button class="btn-save" onclick="saveAttendance()">Kaydi Xaadirista ✓</button>
         </div>
     </div>
-
     <footer><p>&copy; 2026 Dugsiga Hoose Dhexe iyo Sare ee YAKA. All Rights Reserved.</p></footer>
-
-    <!-- JAVASCRIPT LOGIC -->
     <script>
         const classesData = [
-            { id: "f4", name: "Form 4", master: "Faarax ciise faarax" },
-            { id: "f3", name: "Form 3", master: "siciid" },
-            { id: "f2", name: "Form 2", master: "Eng Ahmed Abdulkadir Biile" },
-            { id: "f1", name: "Form 1", master: "Mohamed Ahmed Uurcad" },
-            { id: "g8", name: "Grade 8", master: "Mohamed Abdi Oog" },
-            { id: "g7", name: "Grade 7", master: "Iimaan Hasan Mohamed" },
-            { id: "g6", name: "Grade 6", master: "Mohamed Abdulrisak Suufi" },
-            { id: "g5", name: "Grade 5", master: "Mohamed Abdulrisak Suufi" }
+            { id: "f4", name: "Form 4", master: "Faarax ciise faarax" }, { id: "f3", name: "Form 3", master: "siciid" },
+            { id: "f2", name: "Form 2", master: "Eng Ahmed Abdulkadir Biile" }, { id: "f1", name: "Form 1", master: "Mohamed Ahmed Uurcad" },
+            { id: "g8", name: "Grade 8", master: "Mohamed Abdi Oog" }, { id: "g7", name: "Grade 7", master: "Iimaan Hasan Mohamed" },
+            { id: "g6", name: "Grade 6", master: "Mohamed Abdulrisak Suufi" }, { id: "g5", name: "Grade 5", master: "Mohamed Abdulrisak Suufi" }
         ];
-
         const studentsDb = {};
         classesData.forEach(c => {
             studentsDb[c.id] = [];
-            for (let i = 1; i <= 35; i++) {
-                studentsDb[c.id].push({
-                    id: c.id.toUpperCase() + "-" + i.toString().padStart(3, '0'),
-                    name: "Ardayga " + i + "aad ee " + c.name
-                });
-            }
+            for (let i = 1; i <= 35; i++) { studentsDb[c.id].push({ id: c.id.toUpperCase() + "-" + i.toString().padStart(3, '0'), name: "Ardayga " + i + "aad ee " + c.name }); }
         });
-
         let currentClassId = null;
-
         const getFormattedDate = () => new Date().toLocaleDateString('en-GB');
-        const getDayName = () => {
-            const days = ["Axad", "Isniin", "Talaado", "Arbaco", "Khamiis", "Jimco", "Sabti"];
-            return days[new Date().getDay()];
-        };
+        const getDayName = () => ["Axad", "Isniin", "Talaado", "Arbaco", "Khamiis", "Jimco", "Sabti"][new Date().getDay()];
         const isFriday = () => new Date().getDay() === 5;
-
         function showPage(pId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pId).classList.add('active');
-            
-            if (pId === 'home') {
-                document.getElementById('secretary-panel').style.display = 'none';
-            }
-
-            const navBtn = document.getElementById('nav-btn');
-            if (pId === 'home') {
-                navBtn.textContent = "Fasallada ☰";
-                navBtn.setAttribute('onclick', "showPage('dashboard')");
-            } else {
-                navBtn.textContent = "Bogga Hore ⌂";
-                navBtn.setAttribute('onclick', "showPage('home')");
-            }
+            if (pId === 'home') { document.getElementById('secretary-panel').style.display = 'none'; }
+            document.getElementById('nav-btn').textContent = pId === 'home' ? "Fasallada ☰" : "Bogga Hore ⌂";
+            document.getElementById('nav-btn').setAttribute('onclick', "showPage('" + (pId === 'home' ? 'dashboard' : 'home') + "')");
         }
-
         function checkSecretaryPassword() {
-            const password = prompt("Fadlan geli Furaha Sirta ah (Password) ee Xoghayaha:");
-            if (password === "yaka2026") {
-                document.getElementById('secretary-panel').style.display = 'block';
-                loadSecretaryReport();
+            if (prompt("Fadlan geli Furaha Sirta ah (Password) ee Xoghayaha:") === "yaka2026") {
+                document.getElementById('secretary-panel').style.display = 'block'; loadSecretaryReport();
                 document.getElementById('secretary-panel').scrollIntoView({ behavior: 'smooth' });
-            } else if (password !== null) {
-                alert("Furaha sirta ah waa khalad! Ma geli kartid qaybtan.");
-            }
+            } else { alert("Furaha sirta ah waa khalad!"); }
         }
-
         function initDashboard() {
-            let html = "";
-            classesData.forEach(c => {
-                html += '<div class="class-card">' +
-                        '<div><div class="class-name">' + c.name + '</div><div class="form-master">Form Master: <span>' + c.master + '</span></div></div>' +
-                        '<button class="btn-attendance" onclick="openAttendance(\'' + c.id + '\')">Xaandiri Fasalka</button>' +
-                        '</div>';
-            });
-            document.getElementById('class-container').innerHTML = html;
+            document.getElementById('class-container').innerHTML = classesData.map(c => 
+                '<div class="class-card"><div><div class="class-name">' + c.name + '</div><div class="form-master">Form Master: <span>' + c.master + '</span></div></div>' +
+                '<button class="btn-attendance" onclick="openAttendance(\'' + c.id + '\')">Xaandiri Fasalka</button></div>'
+            ).join('');
         }
-
         function openAttendance(cId) {
-            if (isFriday()) {
-                alert("Maanta waa maalin Jimco ah. Waa fasax iskuulku, lama xaadiri karo ubadka!");
-                return;
-            }
-
-            currentClassId = cId;
-            const c = classesData.find(x => x.id === cId);
+            if (isFriday()) { alert("Maanta waa maalin Jimco ah. Waa fasax iskuulku, lama xaadiri karo ubadka!"); return; }
+            currentClassId = cId; const c = classesData.find(x => x.id === cId);
             document.getElementById('active-class-title').textContent = "Fasalka: " + c.name;
             document.getElementById('active-form-master').textContent = "Form Master: " + c.master;
             document.getElementById('current-date-badge').textContent = "Maanta: " + getDayName() + " (" + getFormattedDate() + ")";
-            
-            let html = "";
-            studentsDb[cId].forEach(s => {
-                html += '<tr>' +
-                        '<td style="font-weight:600; color:var(--gray);">' + s.id + '</td><td style="font-weight:600; color:var(--dark);">' + s.name + '</td>' +
-                        '<td><div class="status-group" style="justify-content: center;">' +
-                        '<label class="status-label status-present"><input type="radio" name="status-' + s.id + '" value="Present" checked> Jooga</label>' +
-                        '<label class="status-label status-absent"><input type="radio" name="status-' + s.id + '" value="Absent"> Ma Joogo</label>' +
-                        '</div></td>' +
-                        '</tr>';
-            });
-            document.getElementById('students-list').innerHTML = html;
+            document.getElementById('students-list').innerHTML = studentsDb[cId].map(s => 
+                '<tr><td>' + s.id + '</td><td style="font-weight:600;">' + s.name + '</td><td><div class="status-group" style="justify-content: center;">' +
+                '<label class="status-label status-present"><input type="radio" name="status-' + s.id + '" value="Present" checked> Jooga</label>' +
+                '<label class="status-label status-absent"><input type="radio" name="status-' + s.id + '" value="Absent"> Ma Joogo</label></div></td></tr>'
+            ).join('');
             showPage('attendance');
         }
-
         function saveAttendance() {
-            let pCount = 0, aCount = 0;
-            let absentStudentsIds = [];
-
+            let pCount = 0, aCount = 0, absentIds = [];
             studentsDb[currentClassId].forEach(s => {
-                const r = document.querySelector('input[name="status-' + s.id + '"]:checked');
-                if (r && r.value === "Present") {
-                    pCount++;
-                } else {
-                    aCount++;
-                    absentStudentsIds.push(s.id);
-                }
+                if ((document.querySelector('input[name="status-' + s.id + '"]:checked')?.value || "Present") === "Present") { pCount++; } else { aCount++; absentIds.push(s.id); }
             });
-
-            const selectedClass = classesData.find(x => x.id === currentClassId);
-            const fullDateStr = getDayName() + " - " + getFormattedDate();
-
-            let allHistory = JSON.parse(localStorage.getItem('yaka_history_reports_v2')) || [];
-            allHistory = allHistory.filter(item => !(item.classId === currentClassId && item.date === fullDateStr));
-
-            allHistory.push({
-                classId: currentClassId,
-                className: selectedClass.name,
-                master: selectedClass.master,
-                date: fullDateStr,
-                present: pCount,
-                absent: aCount,
-                absentIds: absentStudentsIds,
-                timestamp: new Date().getTime()
-            });
-
-            localStorage.setItem('yaka_history_reports_v2', JSON.stringify(allHistory));
-
-            alert("Macalin waad mahadsantahay shaqada aad qabatay. Xaadirka waxaa loo gudbiyay xoghayaha dugsiga Eng.Ahmed Biile.");
-            showPage('home');
+            const c = classesData.find(x => x.id === currentClassId); const dateStr = getDayName() + " - " + getFormattedDate();
+            let hist = JSON.parse(localStorage.getItem('yaka_hist_v3')) || [];
+            hist = hist.filter(item => !(item.classId === currentClassId && item.date === dateStr));
+            hist.push({ classId: currentClassId, className: c.name, master: c.master, date: dateStr, present: pCount, absent: aCount, absentIds: absentIds, timestamp: new Date().getTime() });
+            localStorage.setItem('yaka_hist_v3', JSON.stringify(hist));
+            alert("Macalin waad mahadsantahay shaqada aad qabatay. Xaadirka waxaa loo gudbiyay xoghayaha dugsiga Eng.Ahmed Biile."); showPage('home');
         }
-
         function loadSecretaryReport() {
-            const savedHistory = JSON.parse(localStorage.getItem('yaka_history_reports_v2')) || [];
-            const reportBody = document.getElementById('secretary-report-body');
-            reportBody.innerHTML = '';
-            
-            if (savedHistory.length === 0) {
-                reportBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--gray); padding: 2rem;">Wali wax xaadiris ah lama kaydin!</td></tr>';
-                return;
-            }
-
-                const savedHistory = JSON.parse(localStorage.getItem('yaka_history_reports_v2')) || [];
-            const reportBody = document.getElementById('secretary-report-body');
-            reportBody.innerHTML = '';
-            
-            if (savedHistory.length === 0) {
-                reportBody.innerHTML = '<tr><td colspan="6" style="text-align:center; color:var(--gray); padding: 2rem;">Wali wax xaadiris ah lama kaydin!</td></tr>';
-                return;
-            }
-
-            savedHistory.sort((a, b) => b.timestamp - a.timestamp);
-
-            let html = "";
-            savedHistory.forEach(item => {
-                let absentBadges = "";
-                if (item.absentIds.length === 0) {
-                    absentBadges = "<span style='color:var(--secondary); font-weight:600;'>Dhamaan waa joogaan ✓</span>";
-                } else {
-                    item.absentIds.forEach(id => {
-                        absentBadges += '<span class="badge-absent-id">' + id + '</span>';
-                    });
-                }
-
-                html += '<tr>' +
-                        '<td style="font-weight:600; color:var(--dark);">' + item.date + '</td>' +
-                        '<td style="font-weight:700; color:var(--primary);">' + item.className + '</td>' +
-                        '<td>' + item.master + '</td>' +
-                        '<td style="text-align:center; color:#10b981; font-weight:700;">' + item.present + '</td>' +
-                        '<td style="text-align:center; color:#ef4444; font-weight:700;">' + item.absent + '</td>' +
-                        '<td style="max-width: 300px; word-wrap: break-word;">' + absentBadges + '</td>' +
-                        '</tr>';
-            });
-            reportBody.innerHTML = html;
+            const hist = JSON.parse(localStorage.getItem('yaka_hist_v3')) || [];
+            const body = document.getElementById('secretary-report-body'); body.innerHTML = '';
+            if (hist.length === 0) { body.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Wali wax xaadiris ah lama kaydin!</td></tr>'; return; }
+            hist.sort((a, b) => b.timestamp - a.timestamp);
+            body.innerHTML = hist.map(item => {
+                let badges = item.absentIds.length === 0 ? "<span style='color:var(--secondary); font-weight:600;'>Dhamaan waa joogaan ✓</span>" : item.absentIds.map(id => '<span class="badge-absent-id">' + id + '</span>').join('');
+                return '<tr><td>' + item.date + '</td><td style="font-weight:700; color:var(--primary);">' + item.className + '</td><td>' + item.master + '</td><td style="text-align:center; color:#10b981; font-weight:700;">' + item.present + '</td><td style="text-align:center; color:#ef4444; font-weight:700;">' + item.absent + '</td><td>' + badges + '</td></tr>';
+            }).join('');
         }
-
-        document.addEventListener('DOMContentLoaded', () => { 
-            initDashboard(); 
-        });
+        document.addEventListener('DOMContentLoaded', () => { initDashboard(); });
     </script>
 </body>
 </html>
-
