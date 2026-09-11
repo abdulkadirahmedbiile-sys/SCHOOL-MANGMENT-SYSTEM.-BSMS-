@@ -14,7 +14,6 @@
             --light: #f8fafc;
             --gray: #64748b;
             --white: #ffffff;
-            --danger: #ef4444;
             --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             --radius: 12px;
         }
@@ -66,21 +65,8 @@
             box-shadow: var(--shadow);
         }
 
-        .logo-text h1 {
-            font-size: 1.2rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-
-        .logo-text p {
-            font-size: 0.8rem;
-            opacity: 0.8;
-        }
-
-        nav {
-            display: flex;
-            gap: 10px;
-        }
+        .logo-text h1 { font-size: 1.2rem; font-weight: 700; letter-spacing: 1px; }
+        .logo-text p { font-size: 0.8rem; opacity: 0.8; }
 
         nav button {
             background: rgba(255, 255, 255, 0.1);
@@ -92,26 +78,12 @@
             font-weight: 600;
             transition: 0.3s;
         }
+        nav button:hover { background: var(--white); color: var(--primary); }
 
-        nav button:hover {
-            background: var(--white);
-            color: var(--primary);
-        }
+        .container { max-width: 1200px; margin: 2rem auto; padding: 0 1rem; }
 
-        .container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1rem;
-        }
-
-        .page {
-            display: none;
-            animation: fadeIn 0.5s ease-in-out forwards;
-        }
-
-        .page.active {
-            display: block;
-        }
+        .page { display: none; animation: fadeIn 0.5s ease-in-out forwards; }
+        .page.active { display: block; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -127,7 +99,6 @@
             margin-bottom: 2rem;
             box-shadow: var(--shadow);
         }
-
         .hero h2 { font-size: 2.5rem; margin-bottom: 1rem; }
         .hero p { font-size: 1.1rem; max-width: 800px; margin: 0 auto 2rem; opacity: 0.9; }
 
@@ -143,7 +114,6 @@
             box-shadow: var(--shadow);
             transition: 0.3s;
         }
-
         .btn-start:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(0,0,0,0.15); }
 
         .school-info {
@@ -160,35 +130,46 @@
             box-shadow: var(--shadow);
             border-top: 4px solid var(--primary-light);
         }
-
         .info-card h3 { color: var(--primary); margin-bottom: 1rem; font-size: 1.3rem; }
 
-        /* SECRETARY ADMIN SECTION */
+        /* SECRETARY AREA */
+        .secretary-gate {
+            text-align: center;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: #f1f5f9;
+            border-radius: var(--radius);
+        }
+
+        .btn-secretary {
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: var(--shadow);
+        }
+        .btn-secretary:hover { background: var(--primary-light); }
+
         .admin-section {
+            display: none;
             background: var(--white);
             border-radius: var(--radius);
             padding: 2rem;
             box-shadow: var(--shadow);
-            margin-top: 3rem;
+            margin-top: 2rem;
             border-left: 5px solid var(--primary);
-        }
-
-        .admin-section h3 {
-            color: var(--primary);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            animation: fadeIn 0.4s ease;
         }
 
         .dashboard-title { text-align: center; margin-bottom: 2rem; }
         .dashboard-title h2 { color: var(--primary); font-size: 2rem; }
 
-        .class-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
+        .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
 
         .class-card {
             background: var(--white);
@@ -201,7 +182,6 @@
             border: 1px solid #e2e8f0;
             transition: 0.3s;
         }
-
         .class-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1); }
         .class-name { font-size: 1.4rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
         .form-master { font-size: 0.9rem; color: var(--gray); margin-bottom: 1.5rem; }
@@ -220,7 +200,6 @@
         }
         .btn-attendance:hover { background: var(--primary-light); }
 
-        /* ATTENDANCE PAGE */
         .attendance-header {
             background: var(--white);
             padding: 1.5rem;
@@ -280,7 +259,7 @@
 </head>
 <body>
 
-    <!-- HEADER -->
+    <!-- HEADER / NAVIGATION -->
     <header>
         <div class="logo-area" onclick="showPage('home')">
             <div class="logo-icon">logo.jpeg</div>
@@ -296,29 +275,37 @@
 
     <div class="container">
 
-        <!-- BOGGA HORE: HOME PAGE -->
+        <!-- BOGGA HORE -->
         <div id="home" class="page active">
             <div class="hero">
                 <h2>Ku soo Dhawaada Dugsiga YAKA</h2>
                 <p>Xarunta Horumarinta, Tacliinta Sare iyo Tarbiyada Toosan. Waxaan dhisaynaa mustaqbalka ubadkaaga annagoo adeegsanayna tignoolajiyada ugu casrisan.</p>
-                <button class="btn-start" onclick="showPage('dashboard')">galka Xaadirinta</button>
+                <button class="btn-start" onclick="showPage('dashboard')">Gat galka Xaadirinta</button>
             </div>
+
             <div class="school-info">
                 <div class="info-card">
                     <h3>Sifada & Guudmarka</h3>
                     <p>Dugsiga Hoose, Dhexe iyo Sare ee YAKA waa mid ka mid ah xarumaha waxbarasho ee ugu horreeya dalka. Iskuulku wuxuu caan ku yahay soo saarista arday tayo sare leh iyo anshax wanaagsan.</p>
                 </div>
-                <div class="info-card">
+                            <div class="info-card">
                     <h3>Hiigsiga (Vision)</h3>
                     <p>Inaan noqonno dugsi hormuud u ah waxbarashada casriga ah ee dalka, iyo inaan soo saarno jiil aqoon iyo hibo leh oo wax ka badali kara mustaqbalka bulshada.</p>
-         <div class="info-card">
+                </div>
+                <div class="info-card">
                     <h3>Hadafka (Mission)</h3>
                     <p>Inaan siino ardayda waxbarasho tayo leh oo ku dhisan tignoolajiyad, anshax iyo waddaniyad, si aan u diyaarinno hoggaamiyeyaashii berrito.</p>
                 </div>
             </div>
 
-            <div class="admin-section">
-                <h3>💼 Qaybta Xoghayaha (Eng. Ahmed Biile)</h3>
+            <!-- BUTTON-KA PASSWORD-KA LEH EE XOGHAYE AHMED BIILE -->
+            <div class="secretary-gate">
+                <button class="btn-secretary" onclick="checkSecretaryPassword()">💼  galka Qaybta Xoghayaha</button>
+            </div>
+
+            <!-- BOGGA XOGTA XOGHAYEHA (WUU QARSOON YAHAY ILAA PASSWORD LA GELIYO) -->
+            <div class="admin-section" id="secretary-panel">
+                <h3 style="color: var(--primary); margin-bottom: 0.5rem;">💼 Qaybta Xoghayaha (Eng. Ahmed Biile)</h3>
                 <p style="color: var(--gray); margin-bottom: 1rem;">Halkan waxaad ka helaysaa xogta guud ee xaadirista fasal kasta iyo taariikhda la qaaday.</p>
                 <div class="attendance-table-container">
                     <table>
@@ -333,6 +320,7 @@
             </div>
         </div>
 
+        <!-- BOGGA DASHBOARD-KA (FASALLADA) -->
         <div id="dashboard" class="page">
             <div class="dashboard-title">
                 <h2>Xariirka Xaadirinta Fasallada</h2>
@@ -341,6 +329,7 @@
             <div class="class-grid" id="class-container"></div>
         </div>
 
+        <!-- BOGGA XAADIRISTA ARDAYDA -->
         <div id="attendance" class="page">
             <div class="attendance-header">
                 <div>
@@ -366,6 +355,7 @@
 
     <footer><p>&copy; 2026 Dugsiga Hoose Dhexe iyo Sare ee YAKA. All Rights Reserved.</p></footer>
 
+    <!-- JAVASCRIPT LOGIC -->
     <script>
         const classesData = [
             { id: "f4", name: "Form 4", master: "Faarax ciise faarax" },
@@ -396,14 +386,29 @@
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pId).classList.add('active');
             
+            if (pId === 'home') {
+                document.getElementById('secretary-panel').style.display = 'none';
+            }
+
             const navBtn = document.getElementById('nav-btn');
             if (pId === 'home') {
                 navBtn.textContent = "Fasallada ☰";
                 navBtn.setAttribute('onclick', "showPage('dashboard')");
-                loadSecretaryReport();
             } else {
                 navBtn.textContent = "Bogga Hore ⌂";
                 navBtn.setAttribute('onclick', "showPage('home')");
+            }
+        }
+
+        // MAAMULKA PASSWORD-KA XOGHAYE AHMED BIILE (PASSWORD: yaka2026)
+        function checkSecretaryPassword() {
+            const password = prompt("Fadlan geli Furaha Sirta ah (Password) ee Xoghayaha:");
+            if (password === "yaka2026") {
+                document.getElementById('secretary-panel').style.display = 'block';
+                loadSecretaryReport();
+                document.getElementById('secretary-panel').scrollIntoView({ behavior: 'smooth' });
+            } else if (password !== null) {
+                alert("Furaha sirta ah waa khalad! Ma geli kartid qaybtan.");
             }
         }
 
@@ -454,22 +459,22 @@
 
         function loadSecretaryReport() {
             const saved = JSON.parse(localStorage.getItem('yaka_reports')) || {};
-            let html = "";
+            let realHtml = "";
             classesData.forEach(c => {
                 const info = saved[c.id] || { date: 'Lama xaadirin', present: 0, absent: 0 };
-                html += '<tr>' +
+                realHtml += '<tr>' +
                         '<td style="font-weight:700; color:var(--primary);">' + c.name + '</td><td>' + c.master + '</td><td style="font-weight:600; color:var(--gray);">' + info.date + '</td>' +
                         '<td style="text-align:center; color:#10b981; font-weight:700;">' + info.present + '</td><td style="text-align:center; color:#ef4444; font-weight:700;">' + info.absent + '</td>' +
                         '</tr>';
             });
-            document.getElementById('secretary-report-body').innerHTML = html;
+            document.getElementById('secretary-report-body').innerHTML = realHtml;
         }
 
-        // Waxaa la hubiyay in labada function ay wada shaqeeyaan marka feylka la kiciyo
         document.addEventListener('DOMContentLoaded', () => { 
             initDashboard(); 
-            loadSecretaryReport(); 
         });
     </script>
 </body>
 </html>
+
+                    
