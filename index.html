@@ -311,11 +311,12 @@
                 <div class="info-card">
                     <h3>Hiigsiga (Vision)</h3>
                     <p>Inaan noqonno dugsi hormuud u ah waxbarashada casriga ah ee dalka, iyo inaan soo saarno jiil aqoon iyo hibo leh oo wax ka badali kara mustaqbalka bulshada.</p>
-                               <div class="info-card">
+         <div class="info-card">
                     <h3>Hadafka (Mission)</h3>
                     <p>Inaan siino ardayda waxbarasho tayo leh oo ku dhisan tignoolajiyad, anshax iyo waddaniyad, si aan u diyaarinno hoggaamiyeyaashii berrito.</p>
                 </div>
             </div>
+
             <div class="admin-section">
                 <h3>💼 Qaybta Xoghayaha (Eng. Ahmed Biile)</h3>
                 <p style="color: var(--gray); margin-bottom: 1rem;">Halkan waxaad ka helaysaa xogta guud ee xaadirista fasal kasta iyo taariikhda la qaaday.</p>
@@ -366,10 +367,9 @@
     <footer><p>&copy; 2026 Dugsiga Hoose Dhexe iyo Sare ee YAKA. All Rights Reserved.</p></footer>
 
     <script>
-        // XOGTA FASALLADA IYO MACALLI MIINTA EE AAD SOO DIRTY
         const classesData = [
             { id: "f4", name: "Form 4", master: "Faarax ciise faarax" },
-            { id: "f3", name: "Form 3", master: "siciid " },
+            { id: "f3", name: "Form 3", master: "siciid" },
             { id: "f2", name: "Form 2", master: "Eng Ahmed Abdulkadir Biile" },
             { id: "f1", name: "Form 1", master: "Mohamed Ahmed Uurcad" },
             { id: "g8", name: "Grade 8", master: "Mohamed Abdi Oog" },
@@ -395,10 +395,16 @@
         function showPage(pId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pId).classList.add('active');
-            document.getElementById('nav-btn').textContent = pId === 'home' ? "Fasallada ☰" : "Bogga Hore ⌂";
-            document.getElementById('nav-btn').setAttribute('onclick', "showPage('" + (pId === 'home' ? 'dashboard' : 'home') + "')");
-            if(pId === 'home') loadSecretaryReport();
-            if(pId === 'dashboard') initDashboard();
+            
+            const navBtn = document.getElementById('nav-btn');
+            if (pId === 'home') {
+                navBtn.textContent = "Fasallada ☰";
+                navBtn.setAttribute('onclick', "showPage('dashboard')");
+                loadSecretaryReport();
+            } else {
+                navBtn.textContent = "Bogga Hore ⌂";
+                navBtn.setAttribute('onclick', "showPage('home')");
+            }
         }
 
         function initDashboard() {
@@ -459,7 +465,11 @@
             document.getElementById('secretary-report-body').innerHTML = html;
         }
 
-        document.addEventListener('DOMContentLoaded', () => { initDashboard(); loadSecretaryReport(); });
+        // Waxaa la hubiyay in labada function ay wada shaqeeyaan marka feylka la kiciyo
+        document.addEventListener('DOMContentLoaded', () => { 
+            initDashboard(); 
+            loadSecretaryReport(); 
+        });
     </script>
 </body>
 </html>
