@@ -123,7 +123,7 @@
             ).join('');
         }
         function openAttendance(cId) {
-            if (isFriday()) { alert("Maanta waa maalin Jimco ah. Waa fasax iskuulku, lama xaadiri karo ubadka!"); return; }
+           // Shardigii Jimcaha waa laga saaray si uu mar walba u furmo
             currentClassId = cId; const c = classesData.find(x => x.id === cId);
             document.getElementById('active-class-title').textContent = "Fasalka: " + c.name;
             document.getElementById('active-form-master').textContent = "Form Master: " + c.master;
