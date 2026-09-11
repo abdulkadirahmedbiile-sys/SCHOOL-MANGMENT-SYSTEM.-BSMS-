@@ -301,7 +301,7 @@
             <div class="hero">
                 <h2>Ku soo Dhawaada Dugsiga YAKA</h2>
                 <p>Xarunta Horumarinta, Tacliinta Sare iyo Tarbiyada Toosan. Waxaan dhisaynaa mustaqbalka ubadkaaga annagoo adeegsanayna tignoolajiyada ugu casrisan.</p>
-                <button class="btn-start" onclick="showPage('dashboard')">Gat galka Xaadirinta</button>
+                <button class="btn-start" onclick="showPage('dashboard')">galka Xaadirinta</button>
             </div>
 
             <div class="school-info">
@@ -312,7 +312,7 @@
                 <div class="info-card">
                     <h3>Hiigsiga (Vision)</h3>
                     <p>Inaan noqonno dugsi hormuud u ah waxbarashada casriga ah ee dalka, iyo inaan soo saarno jiil aqoon iyo hibo leh oo wax ka badali kara mustaqbalka bulshada.</p>
-                <div class="info-card">
+                               <div class="info-card">
                     <h3>Hadafka (Mission)</h3>
                     <p>Inaan siino ardayda waxbarasho tayo leh oo ku dhisan tignoolajiyad, anshax iyo waddaniyad, si aan u diyaarinno hoggaamiyeyaashii berrito.</p>
                 </div>
@@ -368,88 +368,97 @@
     <footer><p>&copy; 2026 Dugsiga Hoose Dhexe iyo Sare ee YAKA. All Rights Reserved.</p></footer>
 
     <script>
+        // XOGTA FASALLADA IYO MACALLI MIINTA EE AAD SOO DIRTY
         const classesData = [
-            { id: "f4", name: "Form 4", master: "Maxamed Cali Jaamac" },
-            { id: "f3", name: "Form 3", master: "Faadumo Axmed Cilmi" },
-            { id: "f2", name: "Form 2", master: "Cumar Xasan Cabdi" },
-            { id: "f1", name: "Form 1", master: "Khadar Ciise Maxamuud" },
-            { id: "g8", name: "Grade 8", master: "Siciid Cusmaan Yuusuf" },
-            { id: "g7", name: "Grade 7", master: "Aamina Maxamed Nuur" },
-            { id: "g6", name: "Grade 6", master: "Cabdiweli Cali Daahir" },
-            { id: "g5", name: "Grade 5", master: "Nawaal Cabdillahi Xasan" }
+            { id: "f4", name: "Form 4", master: "Faarax ciise faarax" },
+            { id: "f3", name: "Form 3", master: "siciid " },
+            { id: "f2", name: "Form 2", master: "Eng Ahmed Abdulkadir Biile" },
+            { id: "f1", name: "Form 1", master: "Mohamed Ahmed Uurcad" },
+            { id: "g8", name: "Grade 8", master: "Mohamed Abdi Oog" },
+            { id: "g7", name: "Grade 7", master: "Iimaan Hasan Mohamed" },
+            { id: "g6", name: "Grade 6", master: "Mohamed Abdulrisak Suufi" },
+            { id: "g5", name: "Grade 5", master: "Mohamed Abdulrisak Suufi" }
         ];
 
         const studentsDb = {};
         classesData.forEach(c => {
-            studentsDb[c.id] = Array.from({length: 35}, (_, i) => ({
-                id: `${c.id.toUpperCase()}-${(i+1).toString().padStart(3, '0')}`,
-                name: `Ardayga ${i+1}aad ee ${c.name}`
-            }));
+            studentsDb[c.id] = [];
+            for (let i = 1; i <= 35; i++) {
+                studentsDb[c.id].push({
+                    id: c.id.toUpperCase() + "-" + i.toString().padStart(3, '0'),
+                    name: "Ardayga " + i + "aad ee " + c.name
+                });
+            }
         });
 
         let currentClassId = null;
         const getFormattedDate = () => new Date().toLocaleDateString('en-GB');
-        const isFriday = () => new Date().getDay() === 5;
 
         function showPage(pId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pId).classList.add('active');
             document.getElementById('nav-btn').textContent = pId === 'home' ? "Fasallada ☰" : "Bogga Hore ⌂";
-            document.getElementById('nav-btn').setAttribute('onclick', `showPage('${pId === 'home' ? 'dashboard' : 'home'}')`);
+            document.getElementById('nav-btn').setAttribute('onclick', "showPage('" + (pId === 'home' ? 'dashboard' : 'home') + "')");
             if(pId === 'home') loadSecretaryReport();
+            if(pId === 'dashboard') initDashboard();
         }
 
         function initDashboard() {
-            document.getElementById('class-container').innerHTML = classesData.map(c => `
-                <div class="class-card">
-                    <div><div class="class-name">${c.name}</div><div class="form-master">Form Master: <span>${c.master}</span></div></div>
-                    <button class="btn-attendance" onclick="openAttendance('${c.id}')">Xaandiri Fasalka</button>
-                </div>
-            `).join('');
+            let html = "";
+            classesData.forEach(c => {
+                html += '<div class="class-card">' +
+                        '<div><div class="class-name">' + c.name + '</div><div class="form-master">Form Master: <span>' + c.master + '</span></div></div>' +
+                        '<button class="btn-attendance" onclick="openAttendance(\'' + c.id + '\')">Xaandiri Fasalka</button>' +
+                        '</div>';
+            });
+            document.getElementById('class-container').innerHTML = html;
         }
 
         function openAttendance(cId) {
-            if (isFriday()) return alert("Maanta waa maalin Jimco ah. Waa fasax iskuulku, lama xaadiri karo ubadka!");
             currentClassId = cId;
             const c = classesData.find(x => x.id === cId);
-            document.getElementById('active-class-title').textContent = `Fasalka: ${c.name}`;
-            document.getElementById('active-form-master').textContent = `Form Master: ${c.master}`;
-            document.getElementById('current-date-badge').textContent = `Taariikhda: ${getFormattedDate()}`;
+            document.getElementById('active-class-title').textContent = "Fasalka: " + c.name;
+            document.getElementById('active-form-master').textContent = "Form Master: " + c.master;
+            document.getElementById('current-date-badge').textContent = "Taariikhda: " + getFormattedDate();
             
-            document.getElementById('students-list').innerHTML = studentsDb[cId].map(s => `
-                <tr>
-                    <td style="font-weight:600; color:var(--gray);">${s.id}</td><td style="font-weight:600; color:var(--dark);">${s.name}</td>
-                    <td><div class="status-group" style="justify-content: center;">
-                        <label class="status-label status-present"><input type="radio" name="status-${s.id}" value="Present" checked> Jooga</label>
-                        <label class="status-label status-absent"><input type="radio" name="status-${s.id}" value="Absent"> Ma Joogo</label>
-                    </div></td>
-                </tr>
-            `).join('');
+            let html = "";
+            studentsDb[cId].forEach(s => {
+                html += '<tr>' +
+                        '<td style="font-weight:600; color:var(--gray);">' + s.id + '</td><td style="font-weight:600; color:var(--dark);">' + s.name + '</td>' +
+                        '<td><div class="status-group" style="justify-content: center;">' +
+                        '<label class="status-label status-present"><input type="radio" name="status-' + s.id + '" value="Present" checked> Jooga</label>' +
+                        '<label class="status-label status-absent"><input type="radio" name="status-' + s.id + '" value="Absent"> Ma Joogo</label>' +
+                        '</div></td>' +
+                        '</tr>';
+            });
+            document.getElementById('students-list').innerHTML = html;
             showPage('attendance');
         }
 
         function saveAttendance() {
             let pCount = 0, aCount = 0;
             studentsDb[currentClassId].forEach(s => {
-                const r = document.querySelector(`input[name="status-${s.id}"]:checked`);
+                const r = document.querySelector('input[name="status-' + s.id + '"]:checked');
                 r && r.value === "Present" ? pCount++ : aCount++;
             });
             const rData = JSON.parse(localStorage.getItem('yaka_reports')) || {};
             rData[currentClassId] = { date: getFormattedDate(), present: pCount, absent: aCount };
             localStorage.setItem('yaka_reports', JSON.stringify(rData));
-            alert(`Macalin waad mahadsantahay shaqada aad qabatay. Xaadirka waxaa loo gudbiyay xoghayaha dugsiga Eng.Ahmed Biile.`);
+            alert("Macalin waad mahadsantahay shaqada aad qabatay. Xaadirka waxaa loo gudbiyay xoghayaha dugsiga Eng.Ahmed Biile.");
             showPage('home');
         }
 
         function loadSecretaryReport() {
             const saved = JSON.parse(localStorage.getItem('yaka_reports')) || {};
-            document.getElementById('secretary-report-body').innerHTML = classesData.map(c => {
+            let html = "";
+            classesData.forEach(c => {
                 const info = saved[c.id] || { date: 'Lama xaadirin', present: 0, absent: 0 };
-                return `<tr>
-                    <td style="font-weight:700; color:var(--primary);">${c.name}</td><td>${c.master}</td><td style="font-weight:600; color:var(--gray);">${info.date}</td>
-                    <td style="text-align:center; color:#10b981; font-weight:700;">${info.present}</td><td style="text-align:center; color:#ef4444; font-weight:700;">${info.absent}</td>
-                </tr>`;
-            }).join('');
+                html += '<tr>' +
+                        '<td style="font-weight:700; color:var(--primary);">' + c.name + '</td><td>' + c.master + '</td><td style="font-weight:600; color:var(--gray);">' + info.date + '</td>' +
+                        '<td style="text-align:center; color:#10b981; font-weight:700;">' + info.present + '</td><td style="text-align:center; color:#ef4444; font-weight:700;">' + info.absent + '</td>' +
+                        '</tr>';
+            });
+            document.getElementById('secretary-report-body').innerHTML = html;
         }
 
         document.addEventListener('DOMContentLoaded', () => { initDashboard(); loadSecretaryReport(); });
