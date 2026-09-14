@@ -86,9 +86,8 @@
     </div>
     <footer><p>&copy; 2026 Dugsiga Hoose Dhexe iyo Sare EE YAKA. All Rights Reserved.</p></footer>
     <script>
-                // --- ISKU-XIDHKA SERVER-KA SUPABASE ---
-        const SUPABASE_URL = "https://supabase.co";
-        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ5dmNsYXR2YmdvZm1jeXZqcm1kIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDk4NTYwMDAsImV4cCI6MjAyNTQxMjAwMH0.1x7_Your_Supabase_Secret_Key_Token_Here";
+                // --- ISKU-XIDHKA INTERNET-KA EE FUDUD (CORS FREE) ---
+const DATABASE_URL = "https://npoint.io"; 
 
         const classesData = [
             { id: "f4", name: "Form 4", master: "Faarax ciise faarax" }, { id: "f3", name: "Form 3", master: "siciid Cabdirashiid" }, { id: "f2", name: "Form 2", master: "Eng Ahmed Abdulkadir Biile" }, { id: "f1", name: "Form 1", master: "Mohamed Ahmed Uurcad" },
@@ -256,81 +255,83 @@
         function initDashboard() { document.getElementById('class-container').innerHTML = classesData.map(c => '<div class="class-card"><div><div class="class-name">' + c.name + '</div><div class="form-master">Form Master: <span>' + c.master + '</span></div></div><button class="btn-attendance" onclick="openAttendance(\'' + c.id + '\')">Xaandiri Fasalka</button></div>').join(''); document.getElementById('reg-class').innerHTML = classesData.map(c => '<option value="' + c.id + '">' + c.name + '</option>').join(''); }
         function openAttendance(cId) { currentClassId = cId; const c = classesData.find(x => x.id === cId); document.getElementById('active-class-title').textContent = "Fasalka: " + c.name; document.getElementById('active-form-master').textContent = "Form Master: " + c.master; document.getElementById('current-date-badge').textContent = "Maanta: " + getDayName() + " (" + getFormattedDate() + ")"; const list = studentsDb[cId] || []; if (list.length === 0) { document.getElementById('students-list').innerHTML = '<tr><td colspan="3" style="text-align:center;">Wali wax arday ah laguma darin!</td></tr>'; showPage('attendance'); return; } document.getElementById('students-list').innerHTML = list.map(s => '<tr><td>' + s.id + '</td><td style="font-weight:600;">' + s.name + '</td><td><div class="status-group" style="justify-content: center;"><label class="status-label status-present"><input type="radio" name="status-' + s.id + '" value="Present" checked> Jooga</label><label class="status-label status-absent"><input type="radio" name="status-' + s.id + '" value="Absent"> Ma Joogo</label></div></td></tr>').join(''); showPage('attendance'); }
         
-                // 1. SHAQADA KAYDINTA RASMIGA AH (SUPABASE)
-        async function saveAttendance() { 
-            let pCount = 0, aCount = 0, absentIds = []; 
-            const list = studentsDb[currentClassId] || []; 
-            list.forEach(s => { 
-                if ((document.querySelector('input[name="status-' + s.id + '"]:checked')?.value || "Present") === "Present") { pCount++; } else { aCount++; absentIds.push(s.id); } 
-            }); 
-            const c = classesData.find(x => x.id === currentClassId); 
-            const dateStr = getDayName() + " - " + getFormattedDate(); 
-            
-            const xogtaCusub = { 
-                class_id: currentClassId, 
-                class_name: c.name, 
-                master: c.master, 
-                date_str: dateStr, 
-                present_count: pCount, 
-                absent_count: aCount, 
-                absent_ids: absentIds, 
-                timestamp: new Date().getTime() 
-            };
+                async function saveAttendance() { 
+    let pCount = 0, aCount = 0, absentIds = []; 
+    const list = studentsDb[currentClassId] || []; 
+    list.forEach(s => { 
+        if ((document.querySelector('input[name="status-' + s.id + '"]:checked')?.value || "Present") === "Present") { pCount++; } else { aCount++; absentIds.push(s.id); } 
+    }); 
+    const c = classesData.find(x => x.id === currentClassId); 
+    const dateStr = getDayName() + " - " + getFormattedDate(); 
+    
+    const xogtaCusub = { 
+        class_id: currentClassId, 
+        class_name: c.name, 
+        master: c.master, 
+        date_str: dateStr, 
+        present_count: pCount, 
+        absent_count: aCount, 
+        absent_ids: absentIds, 
+        timestamp: new Date().getTime() 
+    };
 
-            try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/attendance_history`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'Prefer': 'return=minimal'
-                    },
-                    body: JSON.stringify(xogtaCusub)
-                });
-
-                if (response.ok) {
-                    alert("Macalin waad mahadsantahay shaqada aad qabatay. Xaadirka waxaa loo gudbiyay xoghayaha guud Eng. Ahmed Biile."); 
-                    showPage('home');
-                } else {
-                    alert("Cillad ayaa ka dhacday server-ka database-ka!");
-                }
-            } catch (err) {
-                console.error(err);
-                alert("Cillad ayaa dhacday! Hubi internet-kaaga mobilka.");
+    try {
+        // Ka soo akhri xogtii hore si loogu daro tan cusub (History is daba socda)
+        let hist = [];
+        try {
+            const res = await fetch(DATABASE_URL);
+            if(res.ok) {
+                const oldData = await res.json();
+                if(Array.isArray(oldData)) hist = oldData;
             }
-        }
+        } catch(e) { hist = []; }
 
-        // 2. SHAQADA AKHRISKA RASMIGA AH (SUPABASE)
+        hist.push(xogtaCusub);
+
+        // U dir internetka dhammaan xogtii hore iyo tan cusub oo wada jir ah
+        const response = await fetch(DATABASE_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(hist)
+        });
+
+        if (response.ok) {
+            alert("Macalin waad mahadsantahay shaqada aad qabatay. Xaadirka waxaa loo gudbiyay xoghayaha guud Eng. Ahmed Biile."); 
+            showPage('home');
+        } else {
+            alert("Cillad ayaa ka dhacday dhexda server-ka!");
+        }
+    } catch (err) {
+        console.error(err);
+        alert("Cillad farsamo ayaa dhacday! Fadlan dib u tijaabi.");
+    }
+}
+
+
         async function loadSecretaryReport() { 
-            const body = document.getElementById('secretary-report-body'); 
-            body.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Xogta hadda ayaa laga soo sakhiraayaa Server-ka Supabase...</td></tr>'; 
-            
-            try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/attendance_history?order=timestamp.desc`, {
-                    method: 'GET',
-                    headers: {
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`
-                    }
-                });
-                const hist = await response.json();
-                body.innerHTML = ''; 
-                
-                if (!hist || hist.length === 0) { 
-                    body.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Wali wax xaadiris ah lama kaydin!</td></tr>'; 
-                    return; 
-                } 
-                
-                body.innerHTML = hist.map(item => { 
-                    let absentList = item.absent_ids || [];
-                    let badges = absentList.length === 0 ? "<span style='color:var(--secondary); font-weight:600;'>Dhamaan waa joogaan ✓</span>" : absentList.map(id => '<span class="badge-absent-id">' + id + '</span>').join(''); 
-                    return '<tr><td>' + item.date_str + '</td><td style="font-weight:700; color:var(--primary);">' + item.class_name + '</td><td>' + item.master + '</td><td style="text-align:center; color:#10b981; font-weight:700;">' + item.present_count + '</td><td style="text-align:center; color:#ef4444; font-weight:700;">' + item.absent_count + '</td><td>' + badges + '</td></tr>'; 
-                }).join(''); 
-            } catch (err) {
-                body.innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">Waa lagu guuldareystay soo xirista xogta online-ka ah! Hubi isku-xidhka server-ka.</td></tr>';
-            }
-        }
+    const body = document.getElementById('secretary-report-body'); 
+    body.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Xogta hadda ayaa laga soo sakhiraayaa Server-ka...</td></tr>'; 
+    
+    try {
+        const response = await fetch(DATABASE_URL);
+        const hist = await response.json();
+        body.innerHTML = ''; 
+        
+        if (!hist || !Array.isArray(hist) || hist.length === 0) { 
+            body.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Wali wax xaadiris ah lama kaydin!</td></tr>'; 
+            return; 
+        } 
+        
+        hist.sort((a, b) => b.timestamp - a.timestamp); 
+        body.innerHTML = hist.map(item => { 
+            let absentList = item.absent_ids || [];
+            let badges = absentList.length === 0 ? "<span style='color:var(--secondary); font-weight:600;'>Dhamaan waa joogaan ✓</span>" : absentList.map(id => '<span class="badge-absent-id">' + id + '</span>').join(''); 
+            return '<tr><td>' + item.date_str + '</td><td style="font-weight:700; color:var(--primary);">' + item.class_name + '</td><td>' + item.master + '</td><td style="text-align:center; color:#10b981; font-weight:700;">' + item.present_count + '</td><td style="text-align:center; color:#ef4444; font-weight:700;">' + item.absent_count + '</td><td>' + badges + '</td></tr>'; 
+        }).join(''); 
+    } catch (err) {
+        body.innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">Waa lagu guuldareystay soo xirista xogta online-ka ah! Dib u tijaabi muddo yar ka dib.</td></tr>';
+    }
+}
 
         function loadAdminStudents() { let html = ""; classesData.forEach(c => { (studentsDb[c.id] || []).forEach(s => { html += '<tr><td>' + c.name + '</td><td>' + s.id + '</td><td>' + s.name + '</td><td><button style="background:var(--danger); color:white; border:none; padding:3px 8px; border-radius:4px; cursor:pointer;" onclick="deleteStudent(\'' + c.id + '\',\'' + s.id + '\')">Reeb ✕</button></td></tr>'; }); }); document.getElementById('admin-students-list').innerHTML = html || '<tr><td colspan="4" style="text-align:center;">Ma jiro wax arday ah oo diwaangashan!</td></tr>'; }
         function addNewStudent() { const cId = document.getElementById('reg-class').value; const sId = document.getElementById('reg-id').value.trim().toUpperCase(); const sName = document.getElementById('reg-name').value.trim(); if(!sId || !sName) return alert("Fadlan buuxi ID-ga iyo Magaca!"); if(studentsDb[cId].some(x => x.id === sId)) return alert("ID-gaan mar hore ayaa la isticmaalay!"); studentsDb[cId].push({ id: sId, name: sName }); localStorage.setItem('yaka_students_db_v2', JSON.stringify(studentsDb)); document.getElementById('reg-id').value = ''; document.getElementById('reg-name').value = ''; loadAdminStudents(); alert("Waa la diwaangeliyey!"); }
