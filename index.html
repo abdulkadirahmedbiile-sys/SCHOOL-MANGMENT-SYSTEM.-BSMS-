@@ -51,9 +51,9 @@
         <div id="home" class="page active">
             <div class="hero"><h2>Ku soo Dhawaada Dugsiga YAKA</h2><p>Xarunta Horumarinta, Tacliinta Sare iyo Tarbiyada Toosan. Waxaan dhisaynaa mustaqbalka ubadkaaga annagoo adeegsanayna tignoolajiyada ugu casrisan.</p><button class="btn-start" onclick="showPage('dashboard')">FASALLADA DUGSIGA</button></div>
             <div class="school-info">
-                <div class="info-card"><h3>PROFILE ka dugsiga</h3><p>Dugsiga Hoose, Dhexe iyo Sare ee YAKA waa mid ka mid ah xarumaha waxbarasho ee ugu horreeya dalka. Iskuulku wuxuu caan ku yahay soo saarista arday tayo sare leh iyo anshax wanaagsan.</p></div>
-                <div class="info-card"><h3>HIIGSIGA (Vision)</h3><p>Inaan noqonno dugsi hormuud u ah waxbarashada casriga ah ee dalka, iyo inaan soo saarno jiil aqoon iyo hibo leh oo wax ka badali kara mustaqbalka bulshada.</p></div>
-                <div class="info-card"><h3>HADAFKA (Mission)</h3><p>Inaan siino ardayda waxbarasho tayo leh oo ku dhisan tignoolajiyad, anshax iyo waddaniyad, si aan u diyaarinno hoggaamiyeyaashii berrito.</p></div>
+                <div class="info-card"><h3>profile ka dugsiga</h3><p>Dugsiga Hoose, Dhexe iyo Sare ee YAKA waa mid ka mid ah xarumaha waxbarasho ee ugu horreeya dalka. Iskuulku wuxuu caan ku yahay soo saarista arday tayo sare leh iyo anshax wanaagsan.</p></div>
+                <div class="info-card"><h3>Hiigsiga (Vision)</h3><p>Inaan noqonno dugsi hormuud u ah waxbarashada casriga ah ee dalka, iyo inaan soo saarno jiil aqoon iyo hibo leh oo wax ka badali kara mustaqbalka bulshada.</p></div>
+                <div class="info-card"><h3>Hadafka (Mission)</h3><p>Inaan siino ardayda waxbarasho tayo leh oo ku dhisan tignoolajiyad, anshax iyo waddaniyad, si aan u diyaarinno hoggaamiyeyaashii berrito.</p></div>
             </div>
             <div class="secretary-gate"><button class="btn-secretary" onclick="checkSecretaryPassword()">💼 galka Qaybta Xoghayaha Eng Ahmed Biile</button></div>
             <div class="admin-section" id="secretary-panel">
@@ -66,11 +66,9 @@
                 </div>
             </div>
         </div>
-        <div id="dashboard" class="page"><div class="dashboard-title"><h2>Xaadirinta Fasallada</h2><p>Dooro fasalka Aad utahay Formmasterka</p></div><div class="class-grid" id="class-container"></div></div>
+        <div id="dashboard" class="page"><div class="dashboard-title"><h2>Xaadirinta Fasallada</h2><p>Dooro fasalka aad utahay form masterka.</p></div><div class="class-grid" id="class-container"></div></div>
         <div id="attendance" class="page">
             <div class="attendance-header"><div><h2 id="active-class-title" style="color: var(--primary);">Fasalka: Form 4</h2><p id="active-form-master">Form Master: Macalin ...</p></div><div><span class="date-badge" id="current-date-badge">Taariikhda: --/--/----</span><button onclick="showPage('dashboard')" style="background:#64748b; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; margin-left: 10px;">← Dib u noqo</button></div></div>
-                        <div class="attendance-table-container">
-                <table>
                     <thead>
                         <tr>
                             <th style="width: 120px;">ID</th>
@@ -86,13 +84,13 @@
     </div>
     <footer><p>&copy; 2026 Dugsiga Hoose Dhexe iyo Sare EE YAKA. All Rights Reserved.</p></footer>
     <script>
-        const localStorage.setItem('yaka_hist_v3', JSON.stringify(hist));
-
         const classesData = [
             { id: "f4", name: "Form 4", master: "Faarax ciise faarax" }, { id: "f3", name: "Form 3", master: "siciid Cabdirashiid" }, { id: "f2", name: "Form 2", master: "Eng Ahmed Abdulkadir Biile" }, { id: "f1", name: "Form 1", master: "Mohamed Ahmed Uurcad" },
             { id: "g8", name: "Grade 8", master: "Mohamed Abdi Oog" }, { id: "g7", name: "Grade 7", master: "Iimaan Hasan Mohamed" }, { id: "g6", name: "Grade 6", master: "Mohamed Abdulrisak Suufi" }, { id: "g5", name: "Grade 5", master: "Mohamed Abdulrisak Suufi" }
         ];
-           const studentsDb = {
+
+        // HALKAN WAXAA AH BUKHAARKA MARAN EE XOGTA ARDAYDA (ADIGAA GOONI UGU DARAYA)
+                const studentsDb = {
             "f4": [
                 { id: "F4-001", name: "Ayaan Cabdi Axmed" },
                 { id: "F4-002", name: "Amino Cumar Cabdulaahi Faarax" },
@@ -151,7 +149,7 @@
                 { id: "F1-017", name: "Sam sam Cabdinuur Muuse" },
                 { id: "F1-018", name: "Muntaas Cabdikhaliif Mxamuud" }
             ],
-                       "g8": [
+            "g8": [
                 { id: "G8-001", name: "Amaal Cabdirasaaq siciid Maxamed" },
                 { id: "G8-002", name: "Asmaa Cabdulaahi Xirsi Axmed" },
                 { id: "G8-003", name: "Axmed Maxamed Jaamac Cismaan" },
@@ -178,8 +176,7 @@
                 { id: "G8-024", name: "Xaliimo Xasan Cisman Maxmad" },
                 { id: "G8-025", name: "Yuusuf Maxamed Siciid Maxamuud" }
             ],
-
-                    "g7": [
+            "g7": [
                 { id: "G7-001", name: "Abdulaahi Maxamed Yaxye Shabeel" },
                 { id: "G7-002", name: "Bishaaro Maxmud Cumar Barre" },
                 { id: "G7-003", name: "Faadumo Cali Aadan Jaamac" },
@@ -197,9 +194,7 @@
                 { id: "G7-015", name: "Maryan yasiin xirsi" },
                 { id: "G7-016", name: "Axmed bashiir cabdi" }
             ],
-
-
-                       "g6": [
+            "g6": [
                 { id: "G6-001", name: "Aamino saleebaan maxamed" },
                 { id: "G6-002", name: "C/laahi maxamuud maxamed" },
                 { id: "G6-003", name: "Cabdirisaaq maxamed siciid" },
@@ -224,8 +219,7 @@
                 { id: "G6-022", name: "Ikraan maxamed siciid" },
                 { id: "G6-023", name: "Maxamuud C.samed" }
             ],
-
-     "g5": [
+            "g5": [
                 { id: "G5-001", name: "Aasiyo c.risaaq" },
                 { id: "G5-002", name: "Bilaal C.risaaq" },
                 { id: "G5-003", name: "C.laahi C.risaaq muuse" },
@@ -245,10 +239,9 @@
                 { id: "G5-017", name: "Xaawo maxamed" },
                 { id: "G5-018", name: "Yaasmiin axmed" }
             ]
-
         };
 
-        let currentClassId = null; const getFormattedDate = () => new Date().toLocaleDateString('en-GB'); const getDayName = () => ["Axad", "Isniin", "Talaado", "Arbaco", "Khamiis", "Jimco", "Sabti"][new Date().getDay()];
+
         let currentClassId = null; const getFormattedDate = () => new Date().toLocaleDateString('en-GB'); const getDayName = () => ["Axad", "Isniin", "Talaado", "Arbaco", "Khamiis", "Jimco", "Sabti"][new Date().getDay()];
         function showPage(pId) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById(pId).classList.add('active'); if (pId === 'home') { document.getElementById('secretary-panel').style.display = 'none'; } document.getElementById('nav-btn').textContent = pId === 'home' ? "Fasallada ☰" : "Bogga Hore ⌂"; document.getElementById('nav-btn').setAttribute('onclick', "showPage('" + (pId === 'home' ? 'dashboard' : 'home') + "')"); }
         function checkSecretaryPassword() { if (prompt("Fadlan geli Furaha Sirta ah (Password) ee Xoghayaha:") === "yaka2026") { document.getElementById('secretary-panel').style.display = 'block'; loadSecretaryReport(); loadAdminStudents(); document.getElementById('secretary-panel').scrollIntoView({ behavior: 'smooth' }); } else { alert("Furaha sirta ah waa khalad!"); } }
@@ -257,8 +250,8 @@
         function saveAttendance() { let pCount = 0, aCount = 0, absentIds = []; const list = studentsDb[currentClassId] || []; list.forEach(s => { if ((document.querySelector('input[name="status-' + s.id + '"]:checked')?.value || "Present") === "Present") { pCount++; } else { aCount++; absentIds.push(s.id); } }); const c = classesData.find(x => x.id === currentClassId); const dateStr = getDayName() + " - " + getFormattedDate(); let hist = JSON.parse(localStorage.getItem('yaka_hist_v3')) || []; hist = hist.filter(item => !(item.classId === currentClassId && item.date === dateStr)); hist.push({ classId: currentClassId, className: c.name, master: c.master, date: dateStr, present: pCount, absent: aCount, absentIds: absentIds, timestamp: new Date().getTime() }); localStorage.setItem('yaka_hist_v3', JSON.stringify(hist)); alert("Macalin waad mahadsantahay shaqada aad qabatay. Xaadirka waxaa loo gudbiyay xoghayaha dugsiga Eng.Ahmed Biile."); showPage('home'); }
         function loadSecretaryReport() { const hist = JSON.parse(localStorage.getItem('yaka_hist_v3')) || []; const body = document.getElementById('secretary-report-body'); body.innerHTML = ''; if (hist.length === 0) { body.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Wali wax xaadiris ah lama kaydin!</td></tr>'; return; } hist.sort((a, b) => b.timestamp - a.timestamp); body.innerHTML = hist.map(item => { let badges = item.absentIds.length === 0 ? "<span style='color:var(--secondary); font-weight:600;'>Dhamaan waa joogaan ✓</span>" : item.absentIds.map(id => '<span class="badge-absent-id">' + id + '</span>').join(''); return '<tr><td>' + item.date + '</td><td style="font-weight:700; color:var(--primary);">' + item.className + '</td><td>' + item.master + '</td><td style="text-align:center; color:#10b981; font-weight:700;">' + item.present + '</td><td style="text-align:center; color:#ef4444; font-weight:700;">' + item.absent + '</td><td>' + badges + '</td></tr>'; }).join(''); }
         function loadAdminStudents() { let html = ""; classesData.forEach(c => { (studentsDb[c.id] || []).forEach(s => { html += '<tr><td>' + c.name + '</td><td>' + s.id + '</td><td>' + s.name + '</td><td><button style="background:var(--danger); color:white; border:none; padding:3px 8px; border-radius:4px; cursor:pointer;" onclick="deleteStudent(\'' + c.id + '\',\'' + s.id + '\')">Reeb ✕</button></td></tr>'; }); }); document.getElementById('admin-students-list').innerHTML = html || '<tr><td colspan="4" style="text-align:center;">Ma jiro wax arday ah oo diwaangashan!</td></tr>'; }
-        function addNewStudent() { const cId = document.getElementById('reg-class').value; const sId = document.getElementById('reg-id').value.trim().toUpperCase(); const sName = document.getElementById('reg-name').value.trim(); if(!sId || !sName) return alert("Fadlan buuxi ID-ga iyo Magaca!"); if(studentsDb[cId].some(x => x.id === sId)) return alert("ID-gaan mar hore ayaa la isticmaalay!"); studentsDb[cId].push({ id: sId, name: sName }); localStorage.setItem('yaka_students_db_v2', JSON.stringify(studentsDb)); document.getElementById('reg-id').value = ''; document.getElementById('reg-name').value = ''; loadAdminStudents(); alert("Waa la diwaangeliyey!"); }
-        function deleteStudent(cId, sId) { if(confirm("Ma hubtaa inaad rabto inaad reebto ardaygan?")) { studentsDb[cId] = studentsDb[cId].filter(x => x.id !== sId); localStorage.setItem('yaka_students_db_v2', JSON.stringify(studentsDb)); loadAdminStudents(); } }
+        function addNewStudent() { const cId = document.getElementById('reg-class').value; const sId = document.getElementById('reg-id').value.trim().toUpperCase(); const sName = document.getElementById('reg-name').value.trim(); if(!sId || !sName) return alert("Fadlan buuxi ID-ga iyo Magaca!"); if(studentsDb[cId] && studentsDb[cId].some(x => x.id === sId)) return alert("ID-gaan mar hore ayaa la isticmaalay!"); if(!studentsDb[cId]) studentsDb[cId] = []; studentsDb[cId].push({ id: sId, name: sName }); localStorage.setItem('yaka_students_db_v2', JSON.stringify(studentsDb)); document.getElementById('reg-id').value = ''; document.getElementById('reg-name').value = ''; loadAdminStudents(); alert("Waa la diwaangeliyey!"); }
+        function deleteStudent(cId, sId) { if(confirm("Ma hubtaa inaad rabto inaad reebto ardaygan?")) { if(studentsDb[cId]) studentsDb[cId] = studentsDb[cId].filter(x => x.id !== sId); localStorage.setItem('yaka_students_db_v2', JSON.stringify(studentsDb)); loadAdminStudents(); } }
         document.addEventListener('DOMContentLoaded', () => { initDashboard(); });
     </script>
 </body>
