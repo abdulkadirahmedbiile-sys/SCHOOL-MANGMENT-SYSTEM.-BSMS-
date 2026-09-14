@@ -86,8 +86,7 @@
     </div>
     <footer><p>&copy; 2026 Dugsiga Hoose Dhexe iyo Sare EE YAKA. All Rights Reserved.</p></footer>
     <script>
-                // --- ISKU-XIDHKA INTERNET-KA EE FUDUD (CORS FREE) ---
-const DATABASE_URL = "https://npoint.io"; 
+                const DATABASE_URL = "https://mockapi.io";
 
         const classesData = [
             { id: "f4", name: "Form 4", master: "Faarax ciise faarax" }, { id: "f3", name: "Form 3", master: "siciid Cabdirashiid" }, { id: "f2", name: "Form 2", master: "Eng Ahmed Abdulkadir Biile" }, { id: "f1", name: "Form 1", master: "Mohamed Ahmed Uurcad" },
@@ -276,38 +275,24 @@ const DATABASE_URL = "https://npoint.io";
     };
 
     try {
-        // Ka soo akhri xogtii hore si loogu daro tan cusub (History is daba socda)
-        let hist = [];
-        try {
-            const res = await fetch(DATABASE_URL);
-            if(res.ok) {
-                const oldData = await res.json();
-                if(Array.isArray(oldData)) hist = oldData;
-            }
-        } catch(e) { hist = []; }
-
-        hist.push(xogtaCusub);
-
-        // U dir internetka dhammaan xogtii hore iyo tan cusub oo wada jir ah
+        // Toos ugu dir nidaamka furan ee MockAPI (Ma jiro CORS error)
         const response = await fetch(DATABASE_URL, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(hist)
+            body: JSON.stringify(xogtaCusub)
         });
 
         if (response.ok) {
             alert("Macalin waad mahadsantahay shaqada aad qabatay. Xaadirka waxaa loo gudbiyay xoghayaha guud Eng. Ahmed Biile."); 
             showPage('home');
         } else {
-            alert("Cillad ayaa ka dhacday dhexda server-ka!");
+            alert("Cillad ayaa ka dhacday server-ka database-ka!");
         }
     } catch (err) {
         console.error(err);
         alert("Cillad farsamo ayaa dhacday! Fadlan dib u tijaabi.");
     }
 }
-
-
         async function loadSecretaryReport() { 
     const body = document.getElementById('secretary-report-body'); 
     body.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Xogta hadda ayaa laga soo sakhiraayaa Server-ka...</td></tr>'; 
@@ -322,6 +307,7 @@ const DATABASE_URL = "https://npoint.io";
             return; 
         } 
         
+        // Kala nidaami xogta si kii u dambeeyey u soo hor baxo
         hist.sort((a, b) => b.timestamp - a.timestamp); 
         body.innerHTML = hist.map(item => { 
             let absentList = item.absent_ids || [];
@@ -332,6 +318,7 @@ const DATABASE_URL = "https://npoint.io";
         body.innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">Waa lagu guuldareystay soo xirista xogta online-ka ah! Dib u tijaabi muddo yar ka dib.</td></tr>';
     }
 }
+
 
         function loadAdminStudents() { let html = ""; classesData.forEach(c => { (studentsDb[c.id] || []).forEach(s => { html += '<tr><td>' + c.name + '</td><td>' + s.id + '</td><td>' + s.name + '</td><td><button style="background:var(--danger); color:white; border:none; padding:3px 8px; border-radius:4px; cursor:pointer;" onclick="deleteStudent(\'' + c.id + '\',\'' + s.id + '\')">Reeb ✕</button></td></tr>'; }); }); document.getElementById('admin-students-list').innerHTML = html || '<tr><td colspan="4" style="text-align:center;">Ma jiro wax arday ah oo diwaangashan!</td></tr>'; }
         function addNewStudent() { const cId = document.getElementById('reg-class').value; const sId = document.getElementById('reg-id').value.trim().toUpperCase(); const sName = document.getElementById('reg-name').value.trim(); if(!sId || !sName) return alert("Fadlan buuxi ID-ga iyo Magaca!"); if(studentsDb[cId].some(x => x.id === sId)) return alert("ID-gaan mar hore ayaa la isticmaalay!"); studentsDb[cId].push({ id: sId, name: sName }); localStorage.setItem('yaka_students_db_v2', JSON.stringify(studentsDb)); document.getElementById('reg-id').value = ''; document.getElementById('reg-name').value = ''; loadAdminStudents(); alert("Waa la diwaangeliyey!"); }
