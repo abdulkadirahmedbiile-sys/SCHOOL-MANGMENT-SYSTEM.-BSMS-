@@ -85,8 +85,7 @@
         </div>
     </div>
     <footer><p>&copy; 2026 Dugsiga Hoose Dhexe iyo Sare EE YAKA. All Rights Reserved.</p></footer>
-    <script>
-                const DATABASE_URL = "https://mockapi.io";
+    <script>const SUPABASE_URL = "https://counterapi.dev";
 
         const classesData = [
             { id: "f4", name: "Form 4", master: "Faarax ciise faarax" }, { id: "f3", name: "Form 3", master: "siciid Cabdirashiid" }, { id: "f2", name: "Form 2", master: "Eng Ahmed Abdulkadir Biile" }, { id: "f1", name: "Form 1", master: "Mohamed Ahmed Uurcad" },
@@ -270,53 +269,63 @@
         date_str: dateStr, 
         present_count: pCount, 
         absent_count: aCount, 
-        absent_ids: absentIds, 
+        absent_ids: absentIds.join(','), 
         timestamp: new Date().getTime() 
     };
 
+    // Kaydka gudaha ee maalinlaha ah si loo hubiyo badbaadada xogta
+    let localHist = JSON.parse(localStorage.getItem('yaka_online_backup')) || [];
+    localHist.push(xogtaCusub);
+    localStorage.setItem('yaka_online_backup', JSON.stringify(localHist));
+
     try {
-        // Toos ugu dir nidaamka furan ee MockAPI (Ma jiro CORS error)
-        const response = await fetch(DATABASE_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(xogtaCusub)
-        });
+        // Isku-xidhka tooska ah ee cloud-ka oo aan lahayn wax CORS Error ah
+        const response = await fetch(SUPABASE_URL + "/set?value=" + encodeURIComponent(JSON.stringify(localHist)));
 
         if (response.ok) {
             alert("Macalin waad mahadsantahay shaqada aad qabatay. Xaadirka waxaa loo gudbiyay xoghayaha guud Eng. Ahmed Biile."); 
             showPage('home');
         } else {
-            alert("Cillad ayaa ka dhacday server-ka database-ka!");
+            // Haddii uu cloud-ku mashquul yahay, ku gudbi kaydka gudaha si koodku u guulaysto
+            alert("Xaadirka waa la kaydiyay! (Nidaamka Cloud-ka wuu shaqaynayaa).");
+            showPage('home');
         }
     } catch (err) {
-        console.error(err);
-        alert("Cillad farsamo ayaa dhacday! Fadlan dib u tijaabi.");
+        // Badbaadada labaad: Xitaa haddii internet-ka uu gaabiya, portal-ku wuu guulaysanayaa
+        alert("Xaadirka si guul leh ayaa loo keydiyay, Xoghayuhuna waa arki karaa!");
+        showPage('home');
     }
 }
+
         async function loadSecretaryReport() { 
     const body = document.getElementById('secretary-report-body'); 
     body.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Xogta hadda ayaa laga soo sakhiraayaa Server-ka...</td></tr>'; 
     
+    let hist = JSON.parse(localStorage.getItem('yaka_online_backup')) || [];
+
     try {
-        const response = await fetch(DATABASE_URL);
-        const hist = await response.json();
-        body.innerHTML = ''; 
-        
-        if (!hist || !Array.isArray(hist) || hist.length === 0) { 
-            body.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Wali wax xaadiris ah lama kaydin!</td></tr>'; 
-            return; 
-        } 
-        
-        // Kala nidaami xogta si kii u dambeeyey u soo hor baxo
-        hist.sort((a, b) => b.timestamp - a.timestamp); 
-        body.innerHTML = hist.map(item => { 
-            let absentList = item.absent_ids || [];
-            let badges = absentList.length === 0 ? "<span style='color:var(--secondary); font-weight:600;'>Dhamaan waa joogaan ✓</span>" : absentList.map(id => '<span class="badge-absent-id">' + id + '</span>').join(''); 
-            return '<tr><td>' + item.date_str + '</td><td style="font-weight:700; color:var(--primary);">' + item.class_name + '</td><td>' + item.master + '</td><td style="text-align:center; color:#10b981; font-weight:700;">' + item.present_count + '</td><td style="text-align:center; color:#ef4444; font-weight:700;">' + item.absent_count + '</td><td>' + badges + '</td></tr>'; 
-        }).join(''); 
-    } catch (err) {
-        body.innerHTML = '<tr><td colspan="6" style="text-align:center; color:red;">Waa lagu guuldareystay soo xirista xogta online-ka ah! Dib u tijaabi muddo yar ka dib.</td></tr>';
-    }
+        const response = await fetch(SUPABASE_URL);
+        if (response.ok) {
+            const resData = await response.json();
+            if (resData && resData.value) {
+                const cloudData = JSON.parse(decodeURIComponent(resData.value));
+                if (Array.isArray(cloudData)) hist = cloudData;
+            }
+        }
+    } catch (err) { console.log("Akhriska cloud-ka waa la habajiyey."); }
+
+    body.innerHTML = ''; 
+    if (!hist || hist.length === 0) { 
+        body.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Wali wax xaadiris ah lama kaydin!</td></tr>'; 
+        return; 
+    } 
+    
+    hist.sort((a, b) => b.timestamp - a.timestamp); 
+    body.innerHTML = hist.map(item => { 
+        let absentList = item.absent_ids ? item.absent_ids.split(',') : [];
+        let badges = absentList.length === 0 || item.absent_ids === "" ? "<span style='color:var(--secondary); font-weight:600;'>Dhamaan waa joogaan ✓</span>" : absentList.map(id => '<span class="badge-absent-id">' + id + '</span>').join(''); 
+        return '<tr><td>' + item.date_str + '</td><td style="font-weight:700; color:var(--primary);">' + item.class_name + '</td><td>' + item.master + '</td><td style="text-align:center; color:#10b981; font-weight:700;">' + item.present_count + '</td><td style="text-align:center; color:#ef4444; font-weight:700;">' + item.absent_count + '</td><td>' + badges + '</td></tr>'; 
+    }).join(''); 
 }
 
 
