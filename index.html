@@ -1,85 +1,44 @@
 <!DOCTYPE html>
 <html lang="so">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YAKA School Attendance Portal</title>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YAKA Attendance Portal</title>
     <style>
-        :root { 
-            --primary: #1e3a8a; 
-            --primary-light: #3b82f6; 
-            --secondary: #10b981; 
-            --dark: #0f172a; 
-            --light: #f8fafc; 
-            --gray: #64748b; 
-            --white: #ffffff; 
-            --danger: #ef4444; 
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); 
-            --radius: 12px; 
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--light); color: var(--dark); line-height: 1.6; }
-        header { background-color: var(--primary); color: var(--white); padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100; }
-        .logo-area { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-        .logo-icon { background: var(--white); color: var(--primary); width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.3rem; }
-        .logo-text h1 { font-size: 1.2rem; font-weight: 700; } .logo-text p { font-size: 0.8rem; opacity: 0.8; }
-        nav button { background: rgba(255, 255, 255, 0.1); color: var(--white); border: 1px solid rgba(255, 255, 255, 0.2); padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
-        .container { max-width: 1250px; margin: 2rem auto; padding: 0 1rem; }
-        .page { display: none; animation: fadeIn 0.5s ease-in-out forwards; } .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .hero { background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: var(--white); border-radius: var(--radius); padding: 4rem 2rem; text-align: center; margin-bottom: 2rem; }
-        .hero h2 { font-size: 2.5rem; margin-bottom: 1rem; } .hero p { font-size: 1.1rem; max-width: 800px; margin: 0 auto 2rem; opacity: 0.9; }
-        .btn-start { background: var(--secondary); color: var(--white); padding: 0.8rem 2rem; border: none; border-radius: 30px; font-size: 1.1rem; font-weight: 600; cursor: pointer; }
-        .school-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem; }
-        .info-card { background: var(--white); padding: 2rem; border-radius: var(--radius); box-shadow: var(--shadow); border-top: 4px solid var(--primary-light); }
-        .info-card h3 { color: var(--primary); margin-bottom: 1rem; }
-        
-        .gates-container { display: flex; gap: 1.5rem; justify-content: center; margin-top: 3rem; flex-wrap: wrap; }
-        .secretary-gate { text-align: center; padding: 2rem; background: #e2e8f0; border-radius: var(--radius); flex: 1; min-width: 280px; }
-        .admin-gate { text-align: center; padding: 2rem; background: #ffe4e6; border-radius: var(--radius); flex: 1; min-width: 280px; border: 2px solid #f43f5e; }
-        .btn-secretary { background: var(--primary); color: var(--white); border: none; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
-        .btn-admin-panel { background: #e11d48; color: var(--white); border: none; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer; }
-        
-        .admin-section { display: none; background: var(--white); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow); margin-top: 2rem; border-left: 5px solid var(--primary); }
-        .owner-section { display: none; background: var(--white); border-radius: var(--radius); padding: 2rem; box-shadow: var(--shadow); margin-top: 2rem; border-left: 5px solid #e11d48; }
-        
-        .dashboard-title { text-align: center; margin-bottom: 2rem; } .dashboard-title h2 { color: var(--primary); font-size: 2rem; }
-        .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
-        .class-card { background: var(--white); border-radius: var(--radius); padding: 1.5rem; box-shadow: var(--shadow); display: flex; flex-direction: column; justify-content: space-between; border: 1px solid #e2e8f0; }
-        .class-name { font-size: 1.4rem; font-weight: 700; color: var(--primary); margin-bottom: 0.5rem; }
-        .form-master { font-size: 0.9rem; color: var(--gray); margin-bottom: 1.5rem; } .form-master span { font-weight: 600; color: var(--dark); }
-        .btn-attendance { background: var(--primary); color: var(--white); border: none; padding: 0.7rem; border-radius: 8px; font-weight: 600; cursor: pointer; text-align: center; text-decoration: none; }
-        
-        .attendance-header { background: var(--white); padding: 1.5rem; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
-        .date-badge { background: #f1f5f9; padding: 6px 12px; border-radius: 20px; font-weight: 600; color: var(--primary); font-size: 0.9rem; }
-        .attendance-table-container { background: var(--white); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 1.5rem; }
-        table { width: 100%; border-collapse: collapse; text-align: left; } th, td { padding: 1rem; border-bottom: 1px solid #e2e8f0; } th { background-color: #f1f5f9; color: var(--primary); }
-        
-        .status-group { display: flex; gap: 1rem; } .status-label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-weight: 600; font-size: 0.9rem; }
-        .status-present { color: #10b981; } .status-absent { color: #ef4444; }
-        .badge-absent-id { background: #ffeede; color: #d97706; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; display: inline-block; margin: 2px; }
-        .btn-save { background: var(--secondary); color: var(--white); border: none; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer; float: right; box-shadow: var(--shadow); }
-        .btn-delete { background: var(--danger); color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
-        footer { text-align: center; padding: 2rem; color: var(--gray); font-size: 0.9rem; margin-top: 4rem; border-top: 1px solid #e2e8f0; clear: both; }
+        :root { --primary: #1e3a8a; --secondary: #10b981; --dark: #0f172a; --light: #f8fafc; --white: #ffffff; --danger: #ef4444; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+        body { background: var(--light); color: var(--dark); padding: 1rem; }
+        header { background: var(--primary); color: var(--white); padding: 1rem; display: flex; justify-content: space-between; align-items: center; border-radius: 8px; margin-bottom: 1rem; }
+        .page { display: none; } .page.active { display: block; }
+        .hero { text-align: center; padding: 2rem 1rem; background: linear-gradient(135deg, var(--primary), #3b82f6); color: var(--white); border-radius: 8px; margin-bottom: 1rem; }
+        .gates-container { display: flex; gap: 1rem; margin-top: 1rem; }
+        .gate-box { flex: 1; padding: 1.5rem; background: #e2e8f0; border-radius: 8px; text-align: center; }
+        .owner-gate { background: #ffe4e6; border: 1px solid #f43f5e; }
+        button { background: var(--primary); color: var(--white); border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
+        .btn-start { background: var(--secondary); font-size: 1.1rem; padding: 0.8rem 2rem; border-radius: 20px; }
+        .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
+        .class-card { background: var(--white); border: 1px solid #e2e8f0; padding: 1.2rem; border-radius: 8px; display: flex; flex-direction: column; justify-content: space-between; }
+        .class-name { font-size: 1.2rem; font-weight: 700; color: var(--primary); }
+        .form-master { font-size: 0.85rem; color: #64748b; margin-bottom: 1rem; }
+        .attendance-header { background: var(--white); padding: 1rem; border-radius: 8px; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e2e8f0; }
+        .table-box { background: var(--white); border-radius: 8px; border: 1px solid #e2e8f0; overflow-x: auto; margin-bottom: 1rem; }
+        table { width: 100%; border-collapse: collapse; text-align: left; } th, td { padding: 0.8rem; border-bottom: 1px solid #e2e8f0; } th { background: #f1f5f9; color: var(--primary); }
+        .status-group { display: flex; gap: 0.8rem; justify-content: center; } .status-label { display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 0.85rem; }
+        .btn-save { background: var(--secondary); float: right; padding: 0.8rem 2rem; }
+        .badge-absent { background: #ffeede; color: #d97706; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin: 2px; }
     </style>
-    
-    <!-- Firebase SDK Dhexe -->
+    <!-- Firebase SDK -->
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
     <script>
-      const firebaseConfig = {
-        databaseURL: "https://firebaseio.com"
-      };
+      const firebaseConfig = { databaseURL: "https://firebaseio.com" };
       firebase.initializeApp(firebaseConfig);
       const database = firebase.database();
     </script>
 </head>
 <body>
-
     <header>
-        <div class="logo-area" onclick="showPage('home')"><div class="logo-icon">Y</div><div class="logo-text"><h1>DUGSIGA YAKA</h1><p>Primary & Secondary Portal</p></div></div>
-        <nav><button id="nav-btn" onclick="showPage('dashboard')">Fasallada ☰</button></nav>
+        <div onclick="showPage('home')" style="cursor:pointer;"><h3>DUGSIGA YAKA</h3></div>
+        <button onclick="showPage('dashboard')">Fasallada ☰</button>
     </header>
 
     <div class="container">
@@ -87,191 +46,92 @@
         <div id="home" class="page active">
             <div class="hero">
                 <h2>Ku soo Dhawaada Dugsiga YAKA</h2>
-                <p>Xarunta Horumarinta, Tacliinta Sare iyo Tarbiyada Toosan. Waxaan dhisaynaa mustaqbalka ubadkaaga annagoo adeegsanayna tignoolajiyada ugu casrisan.</p>
+                <p style="margin: 0.5rem 0 1.5rem; opacity: 0.9;">Nidaamka Xaadirinta Dhijitaalka ah ee Online-ka ah.</p>
                 <button class="btn-start" onclick="showPage('dashboard')">FASALLADA DUGSIGA</button>
             </div>
-            <div class="school-info">
-                <div class="info-card"><h3>Profile-ka Dugsiga</h3><p>Dugsiga Hoose, Dhexe iyo Sare ee YAKA waa mid ka mid ah xarumaha waxbarasho ee ugu horreeya dalka.</p></div>
-                <div class="info-card"><h3>Hiigsiga (Vision)</h3><p>Inaan noqonno dugsi hormuud u ah waxbarashada casriga ah ee dalka.</p></div>
-                <div class="info-card"><h3>Hadafka (Mission)</h3><p>Inaan siino ardayda waxbarasho tayo leh oo ku dhisan tignoolajiyad iyo anshax.</p></div>
-            </div>
-            
             <div class="gates-container">
-                <div class="secretary-gate">
-                    <button class="btn-secretary" onclick="checkSecretaryPassword()">💼 Galka Qaybta Xoghayaha Eng Ahmed Biile</button>
-                </div>
-                <div class="admin-gate">
-                    <button class="btn-admin-panel" onclick="checkOwnerPassword()">🔒 Galka Maamulaha Khaaska ah</button>
-                </div>
+                <div class="gate-box"><button onclick="checkSecretaryPassword()">💼 Qaybta Xoghayaha (Eng Ahmed Biile)</button></div>
+                <div class="gate-box owner-gate"><button style="background:#e11d48;" onclick="checkOwnerPassword()">🔒 Galka Maamulaha Khaaska ah</button></div>
             </div>
-
             <!-- APPNEL-KA XOGHAYEYNTA -->
-            <div class="admin-section" id="secretary-panel">
-                <h3 style="color: var(--primary); margin-bottom: 0.5rem;">💼 Qaybta Xoghayaha Guud (Eng. Ahmed Biile)</h3>
-                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 2px dashed #e2e8f0;">
-                    <h3 style="color: var(--primary); margin-bottom: 1rem;">👤 Maamulka & Qorista Ardayda Cusub</h3>
-                    <div style="display: flex; gap: 10px; margin-bottom: 1rem; flex-wrap: wrap;">
-                        <select id="reg-class" style="padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px; min-width: 150px;"></select>
-                        <input type="text" id="reg-id" placeholder="ID-ga (F4-001)" style="padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px; flex: 1;">
-                        <input type="text" id="reg-name" placeholder="Magaca Ardayga" style="padding: 0.6rem; border: 1px solid #cbd5e1; border-radius: 6px; flex: 2;">
-                        <button onclick="addNewStudent()" style="background: var(--secondary); color: white; border: none; padding: 0.6rem 1.5rem; border-radius: 6px; cursor: pointer; font-weight: 600;">Diri +</button>
-                    </div>
-                    <div class="attendance-table-container">
-                        <table>
-                            <thead>
-                                <tr><th>Fasalka</th><th>ID-ga</th><th>Magaca Ardayga</th><th>Action</th></tr>
-                            </thead>
-                            <tbody id="admin-students-list"></tbody>
-                        </table>
-                    </div>
+            <div class="gate-box" id="secretary-panel" style="display:none; text-align:left; margin-top:1rem; background:#fff;">
+                <h3 style="color:var(--primary); margin-bottom:1rem;">👤 Qorista Ardayda Cusub</h3>
+                <div style="display:flex; gap:10px; margin-bottom:1rem; flex-wrap:wrap;">
+                    <select id="reg-class" style="padding:0.5rem; border:1px solid #cbd5e1; border-radius:6px;"></select>
+                    <input type="text" id="reg-id" placeholder="ID (F4-001)" style="padding:0.5rem; border:1px solid #cbd5e1; border-radius:6px; flex:1;">
+                    <input type="text" id="reg-name" placeholder="Magaca" style="padding:0.5rem; border:1px solid #cbd5e1; border-radius:6px; flex:2;">
+                    <button style="background:var(--secondary);" onclick="addNewStudent()">Diri +</button>
                 </div>
+                <div class="table-box"><table><thead><tr><th>Fasalka</th><th>ID</th><th>Magaca</th><th>Action</th></tr></thead><tbody id="admin-students-list"></tbody></table></div>
             </div>
-
-            <!-- GALKA MAAMULAHA KHAASKA AH EE KUGU XIRAN FIREBASE -->
-            <div class="owner-section" id="owner-panel">
-                <h3 style="color: #e11d48; margin-bottom: 0.5rem;">🔒 Kaydka Dhabta ah ee Maamulaha Sare</h3>
-                <p style="color: var(--gray); margin-bottom: 1rem;">Halkan waxaa si toos ah ugu soo dhacaya xogta ay kaydiyaan macalimiintu ee dhanka Firebase (Online).</p>
-                <div class="attendance-table-container">
-                    <table>
-                        <thead>
-                            <tr style="background-color: #ffe4e6;">
-                                <th>Maalinta / Taariikhda</th>
-                                <th>Fasalka</th>
-                                <th>Form Master</th>
-                                <th style="text-align: center; color:#10b981;">Joogay</th>
-                                <th style="text-align: center; color:#ef4444;">Ma Joogto</th>
-                                <th>ID-yada Ardayda Maqan</th>
-                            </tr>
-                        </thead>
-                        <tbody id="owner-report-body">
-                            <tr><td colspan="6" style="text-align: center; color: var(--gray);">Weli wax xog ah oo macalimiintu soo direen ma jiraan.</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+            <!-- APPNEL-KA MAAMULAHA CUSUB -->
+            <div class="gate-box" id="owner-panel" style="display:none; text-align:left; margin-top:1rem; background:#fff; border-left:5px solid #e11d48;">
+                <h3 style="color:#e11d48; margin-bottom:1rem;">🔒 Kaydka Dhabta ah ee Firebase (Online)</h3>
+                <div class="table-box"><table><thead><tr style="background:#ffe4e6;"><th>Taariikhda</th><th>Fasalka</th><th>Form Master</th><th style="color:#10b981;">Joogay</th><th style="color:#ef4444;">Ma Joogto</th><th>ID Maqan</th></tr></thead><tbody id="owner-report-body"><tr><td colspan="6" style="text-align:center; color:#64748b;">Weli wax xog ah lama soo dirin.</td></tr></tbody></table></div>
             </div>
         </div>
 
-        <div id="dashboard" class="page">
-            <div class="dashboard-title"><h2>Xariirka Xaadirinta Fasallada</h2><p>Dooro fasalka aad rabto inaad xaadiriso maanta</p></div>
-            <div class="class-grid" id="class-container"></div>
-        </div>
+        <!-- DASHBOARD FASALLADA -->
+        <div id="dashboard" class="page"><h2 style="margin-bottom:1rem; color:var(--primary);">Xaadirinta Fasallada</h2><div class="class-grid" id="class-container"></div></div>
 
+        <!-- BOGA XAADIRINTA -->
         <div id="attendance" class="page">
-            <div class="attendance-header">
-                <div>
-                    <h2 id="active-class-title" style="color: var(--primary);">Fasalka: Form 4</h2>
-                    <p id="active-form-master">Form Master: Macalin ...</p>
-                </div>
-                <div>
-                    <span class="date-badge" id="current-date-badge">Taariikhda: --/--/----</span>
-                    <button onclick="showPage('dashboard')" style="background:#64748b; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; margin-left: 10px;">← Dib u noqo</button>
-                </div>
-            </div>
-            <div class="attendance-table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 120px;">ID</th>
-                            <th>Magaca Ardayga</th>
-                            <th style="width: 250px; text-align: center;">Xaaladda Xaadirista</th>
-                        </tr>
-                    </thead>
-                    <tbody id="students-list"></tbody>
-                </table>
-            </div>
+            <div class="attendance-header"><div><h3 id="active-class-title">Fasalka: --</h3><p id="active-form-master" class="form-master" style="margin:0;">Master: --</p></div><div><span id="current-date-badge" style="font-weight:600; color:var(--primary);">Taariikhda: --</span><button onclick="showPage('dashboard')" style="background:#64748b; margin-left:10px;">← Dib</button></div></div>
+            <div class="table-box"><table><thead><tr><th>ID</th><th>Magaca</th><th style="text-align:center;">Xaadirista</th></tr></thead><tbody id="students-list"></tbody></table></div>
             <button class="btn-save" onclick="saveAttendance()">Kaydi Xaadirista ✓</button>
         </div>
     </div>
 
-    <footer><p>&copy; 2026 Dugsiga Hoose Dhexe iyo Sare EE YAKA. All Rights Reserved.</p></footer>
-
     <script>
         const classesData = [
-            { id: "f4", name: "Form 4", master: "Faarax ciise faarax" }, 
-            { id: "f3", name: "Form 3", master: "siciid Cabdirashiid" }, 
-            { id: "f2", name: "Form 2", master: "Eng Ahmed Abdulkadir Biile" }, 
-            { id: "f1", name: "Form 1", master: "Mohamed Ahmed Uurcad" },
-            { id: "g8", name: "Grade 8", master: "Mohamed Abdi Oog" }, 
-            { id: "g7", name: "Grade 7", master: "Iimaan Hasan Mohamed" }, 
-            { id: "g6", name: "Grade 6", master: "Mohamed Abdulrisak Suufi" }, 
-            { id: "g5", name: "Grade 5", master: "Mohamed Abdulrisak Suufi" }
+            { id: "f4", name: "Form 4", master: "Faarax ciise faarax" }, { id: "f3", name: "Form 3", master: "siciid Cabdirashiid" }, { id: "f2", name: "Form 2", master: "Eng Ahmed Abdulkadir Biile" }, { id: "f1", name: "Form 1", master: "Mohamed Ahmed Uurcad" },
+            { id: "g8", name: "Grade 8", master: "Mohamed Abdi Oog" }, { id: "g7", name: "Grade 7", master: "Iimaan Hasan Mohamed" }, { id: "g6", name: "Grade 6", master: "Mohamed Abdulrisak Suufi" }, { id: "g5", name: "Grade 5", master: "Mohamed Abdulrisak Suufi" }
         ];
-
         const currentVersion = "yaka_students_db_final_v5";
-        let studentsDb = JSON.parse(localStorage.getItem(currentVersion));
+        let studentsDb = JSON.parse(localStorage.getItem(currentVersion)) || {};
         let activeClassId = "";
         
-        if (!studentsDb) {
-            localStorage.clear();
-            studentsDb = {};
-            
-            studentsDb["f4"] = [{ id: "F4-001", name: "Ayaan Cabdi Axmed" },{ id: "F4-002", name: "Amino Cumar Cabdulaahi Faarax" },{ id: "F4-003", name: "Asiyo Maxmed Barre Maxamed" },{ id: "F4-004", name: "Asmaa Siciid Maxmed Faarax" },{ id: "F4-005", name: "Asmaa Yaasiin Axmed Maxamed" },{ id: "F4-006", name: "Cabdimalik Cisman Cabdulaahi Cisman" },{ id: "F4-007", name: "Deeqo Cabdirashiid Maxamed Axmed" },{ id: "F4-008", name: "Maxamud Abshir Siciid Maxamuud" },{ id: "F4-009", name: "Maxamud Cismaan Maxamed Guuleed" },{ id: "F4-010", name: "Muxiidiin Axmed Maxmed Muuse" },{ id: "F4-011", name: "Xafso Xasan Cisman Maxamed" }];
-            studentsDb["f3"] = [{ id: "F3-001", name: "Abdulahi Mahamed Abdulahi" },{ id: "F3-002", name: "Ayuub Cabdicasiis Xasan cali" },{ id: "F3-003", name: "Faadumo Cusman Cabdulaahi Cusmaan" },{ id: "F3-004", name: "Maxamed Cabdimalik khaliif Maxamed" },{ id: "F3-005", name: "Mukhtaar Axmed Maxamed Muuse" }];
-            studentsDb["f2"] = [{ id: "F2-001", name: "Axmed Maxamed Axmed Maxamed" },{ id: "F2-002", name: "Axmed Maxamed Bare Maxmad" },{ id: "F2-003", name: "Cabdiladiif Cabdulaahi Maxamed muuse" },{ id: "F2-004", name: "Cabdishakur Cabdikhaliif Maxmud Axmed" },{ id: "F2-005", name: "Cabdiwasiic Cabdirasaaq Axmed Maxud" },{ id: "F2-006", name: "Cabdulaahi abshir Siciid Maxamuud" },{ id: "F2-007", name: "Cumar Maxamud xirsi Ibraahim" },{ id: "F2-008", name: "Faadumo Xirsi Maxamud Ciise" },{ id: "F2-009", name: "Maxamed Cabdirashiid khaliif gamaadiid" },{ id: "F2-010", name: "Maxamed Xusein Cabduqadir Maxamud" },{ id: "F2-011", name: "Maxamud Maxamed Cumar Maxamed" },{ id: "F2-012", name: "Maxmed Cabdiqani Cali siciid" },{ id: "F2-013", name: "Nuur Cismaan Maxamed Guuleed" },{ id: "F2-014", name: "Sakariye Maxamed Barre Maxamed" },{ id: "F2-015", name: "Sakeriye Jaamac Cabdi Maxamed" },{ id: "F2-016", name: "Xubbi Axmed Jaamac Cabdulaahi" }];
-            studentsDb["f1"] = [{ id: "F1-001", name: "Ardayga 1aad ee Form 1" },{ id: "F1-002", name: "Ardayga 2aad ee Form 1" }];
-            studentsDb["g8"] = [{ id: "G8-001", name: "Amaal Cabdirasaaq siciid Maxamed" },{ id: "G8-002", name: "Asmaa Cabdulaahi Xirsi Axmed" },{ id: "G8-003", name: "Axmed Maxamed Jaamac Cismaan" },{ id: "G8-004", name: "Cabdikariim Cabdiraxmaan Ciise" },{ id: "G8-005", name: "Cabdikhaalaq Axmed Maxamed Ciise" },{ id: "G8-006", name: "Cabdixakiim Cabdikhaliif Maxm'd" },{ id: "G8-007", name: "Cabdulaahi Cismaan Siciid Maxamud" },{ id: "G8-008", name: "Isro Ibraahim Maxamed Cabdi" },{ id: "G8-009", name: "Khaliif Cabdi Axmed Maxamed" },{ id: "G8-010", name: "Maaida Abshir Siciid Maxmuud" },{ id: "G8-011", name: "Maaida Xusain Cabdulqadir Maxmuud" },{ id: "G8-012", name: "Mawliid Maxamed Cumar Maxamud" },{ id: "G8-013", name: "Maxamed Cabdulaahi xirsi Axmed" },{ id: "G8-014", name: "Maxamed Faarax Cabdiraxmaan Max'd" },{ id: "G8-015", name: "Maxamed Yaasiin Axmed Maxamud" },{ id: "G8-016", name: "Maxmed Aadan cumar Cisman" },{ id: "G8-017", name: "Maxmud Abshir Faarax Maxmud" },{ id: "G8-018", name: "Muntaas Maxamed yaxye Axmed" },{ id: "G8-019", name: "Saabiriin Bashiir Cabdi Maxamuud" },{ id: "G8-020", name: "Xaawo Cabdicasiis Aadan Maxamed" },{ id: "G8-021", name: "Xaawo Cabdinuur Faarax xusein" },{ id: "G8-022", name: "Xaawo Maxamud Cumar Barre" },{ id: "G8-023", name: "Xaawo Saleebaan Maxamed Raage" },{ id: "G8-024", name: "Xaliimo Xasan Cisman Maxmad" },{ id: "G8-025", name: "Yuusuf Maxamed Siciid Maxamuud" }];
-            studentsDb["g7"] = [{ id: "G7-001", name: "Abdulaahi Maxamed Yaxye Shabeel" },{ id: "G7-002", name: "Bishaaro Maxmud Cumar Barre" },{ id: "G7-003", name: "Faadumo Cali Aadan Jaamac" },{ id: "G7-004", name: "Fardowso Maxmud Maxamed Cali" },{ id: "G7-005", name: "Mahado Axmed Maxmed muuse" },{ id: "G7-006", name: "Maryam Saleebaan Maxmed Raage" },{ id: "G7-007", name: "Maxamed Siciid Aadan Siciid" },{ id: "G7-008", name: "Maxamud Axmed Siciid Maxamud" },{ id: "G7-009", name: "Mukhtaar Maxamuud Maxamed Siciid" },{ id: "G7-010", name: "Mumtaas Saleebaan Maxmaed Raage" },{ id: "G7-011", name: "Xubbi Xasan Cismaan Maxamed" },{ id: "G7-012", name: "Xaliimo Cabdirashiid Muumin" },{ id: "G7-013", name: "Asad Siciid Cali" },{ id: "G7-014", name: "Saabiriin Maxamuud Cumar" },{ id: "G7-015", name: "Maryan yasiin xirsi" },{ id: "G7-016", name: "Axmed bashiir cabdi" }];
+        if (Object.keys(studentsDb).length === 0) {
+            studentsDb["f4"] = [{ id: "F4-001", name: "Ayaan Cabdi Axmed" }];
+            studentsDb["f3"] = [{ id: "F3-001", name: "Abdulahi Mahamed" }];
+            studentsDb["f2"] = [{ id: "F2-001", name: "Axmed Maxamed Axmed" }];
+            studentsDb["f1"] = [{ id: "F1-001", name: "Ardayga Form 1" }];
+            studentsDb["g8"] = [{ id: "G8-001", name: "Amaal Cabdirasaaq" }];
+            studentsDb["g7"] = [{ id: "G7-001", name: "Abdulaahi Maxamed" }];
             studentsDb["g6"] = [{ id: "G6-001", name: "Maxamed Cali Xasan" }];
             studentsDb["g5"] = [{ id: "G5-001", name: "Faadumo Cumar Cabdi" }];
-            
             localStorage.setItem(currentVersion, JSON.stringify(studentsDb));
         }
 
         window.onload = function() {
-            initClassSelect();
-            renderClassDashboard();
-            renderAdminStudentsTable();
-            updateOwnerTable();
-            
-            const options = { weekday: 'long', year: 'numeric', month: 'numeric', day: 'numeric' };
-            document.getElementById('current-date-badge').innerText = `Maalinta: ${new Date().toLocaleDateString('so-SO', options)}`;
+            initClassSelect(); renderClassDashboard(); renderAdminStudentsTable(); updateOwnerTable();
+            const maalmaha = ["Axad", "Isniin", "Talaado", "Arbaco", "Khamiis", "Jimco", "Sabti"];
+            const maanta = new Date();
+            document.getElementById('current-date-badge').innerText = `${maalmaha[maanta.getDay()]}, ${String(maanta.getDate()).padStart(2, '0')}/${String(maanta.getMonth() + 1).padStart(2, '0')}/${maanta.getFullYear()}`;
         };
 
         function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(pageId).classList.add('active');
         }
-        function checkSecretaryPassword() {
-            const password = prompt("Fadlan geli ereyga sirta ah ee Xoghayaha:");
-            if(password === "yaka2026") {
-                document.getElementById('secretary-panel').style.display = "block";
-                document.getElementById('secretary-panel').scrollIntoView({ behavior: 'smooth' });
-            } else { alert("Ereyga sirta ah waa khalad!"); }
-        }
 
+        function checkSecretaryPassword() {
+            if(prompt("Geli sirta Xoghayaha:") === "yaka2026") { document.getElementById('secretary-panel').style.display = "block"; document.getElementById('secretary-panel').scrollIntoView({ behavior: 'smooth' }); }
+            else { alert("Ereyga sirta ah waa khalad!"); }
+        }
         function checkOwnerPassword() {
-            const password = prompt("Geli Password-kaaga Khaaska ah ee Maamulaha:");
-            if(password === "admin2026") {
-                document.getElementById('owner-panel').style.display = "block";
-                document.getElementById('owner-panel').scrollIntoView({ behavior: 'smooth' });
-                updateOwnerTable();
-            } else { alert("Password-ku waa khalad! Hubi nambarkaaga gaarka ah."); }
+            if(prompt("Geli sirta Maamulaha:") === "admin2026") { document.getElementById('owner-panel').style.display = "block"; document.getElementById('owner-panel').scrollIntoView({ behavior: 'smooth' }); updateOwnerTable(); }
+            else { alert("Password waa khalad!"); }
         }
 
         function initClassSelect() {
             const select = document.getElementById('reg-class');
-            if(!select) return;
-            select.innerHTML = "";
-            classesData.forEach(c => {
-                select.innerHTML += `<option value="${c.id}">${c.name}</option>`;
-            });
+            if(select) select.innerHTML = classesData.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
         }
 
         function renderClassDashboard() {
             const container = document.getElementById('class-container');
-            if(!container) return;
-            container.innerHTML = "";
-            classesData.forEach(c => {
-                container.innerHTML += `
-                    <div class="class-card">
-                        <div>
-                            <div class="class-name">${c.name}</div>
-                            <div class="form-master">Form Master: <span>${c.master}</span></div>
-                        </div>
-                        <button class="btn-attendance" onclick="openAttendance('${c.id}')">Xaadiri Fasalka</button>
-                    </div>
-                `;
-            });
+            if(container) container.innerHTML = classesData.map(c => `<div class="class-card"><div><div class="class-name">${c.name}</div><div class="form-master">Master: ${c.master}</div></div><button onclick="openAttendance('${c.id}')">Xaadiri</button></div>`).join('');
         }
 
         function openAttendance(classId) {
@@ -282,128 +142,62 @@
             
             const listContainer = document.getElementById('students-list');
             listContainer.innerHTML = "";
-            
             const students = studentsDb[classId] || [];
-            if(students.length === 0) {
-                listContainer.innerHTML = `<tr><td colspan="3" style="text-align:center;">Ma jiraan arday ku qoran fasalkan.</td></tr>`;
-            } else {
-                students.forEach(student => {
-                    listContainer.innerHTML += `
-                        <tr>
-                            <td><b>${student.id}</b></td>
-                            <td>${student.name}</td>
-                            <td style="text-align: center;">
-                                <div class="status-group" style="justify-content: center;">
-                                    <label class="status-label status-present">
-                                        <input type="radio" name="status-${student.id}" value="Joogay" checked> Jooga
-                                    </label>
-                                    <label class="status-label status-absent">
-                                        <input type="radio" name="status-${student.id}" value="Ma Joogto"> Ma Joogo
-                                    </label>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
+            
+            if(students.length === 0) { listContainer.innerHTML = `<tr><td colspan="3" style="text-align:center;">Ma jiraan arday.</td></tr>`; }
+            else {
+                students.forEach(s => {
+                    listContainer.innerHTML += `<tr><td><b>${s.id}</b></td><td>${s.name}</td><td style="text-align:center;"><div class="status-group"><label class="status-label" style="color:#10b981;"><input type="radio" name="status-${s.id}" value="Joogay" checked> Jooga</label><label class="status-label" style="color:#ef4444;"><input type="radio" name="status-${s.id}" value="Ma Joogto"> Maqan</label></div></td></tr>`;
                 });
             }
             showPage('attendance');
         }
 
-                function saveAttendance() {
+        function saveAttendance() {
             const c = classesData.find(cl => cl.id === activeClassId);
-            if (!c) { alert("Khalad: Fasalka lama helin!"); return; }
-            
             const students = studentsDb[activeClassId] || [];
-            let pCount = 0;
-            let aCount = 0;
-            let absentIds = [];
+            let pCount = 0, aCount = 0, absentIds = [];
 
-            students.forEach(student => {
-                const radio = document.querySelector(`input[name="status-${student.id}"]:checked`);
-                if(radio && radio.value === "Joogay") { pCount++; } 
-                else { aCount++; absentIds.push(student.id); }
+            students.forEach(s => {
+                const radio = document.querySelector(`input[name="status-${s.id}"]:checked`);
+                if(radio && radio.value === "Joogay") { pCount++; } else { aCount++; absentIds.push(s.id); }
             });
 
-            // Habka saxda ah ee taariikhda iyo maalinta
             const maalmaha = ["Axad", "Isniin", "Talaado", "Arbaco", "Khamiis", "Jimco", "Sabti"];
             const maanta = new Date();
-            const magacaMaalinta = maalmaha[maanta.getDay()];
-            const maalin = String(maanta.getDate()).padStart(2, '0');
-            const bil = String(maanta.getMonth() + 1).padStart(2, '0');
-            const sanad = maanta.getFullYear();
-            const dateStr = `${magacaMaalinta}, ${maalin}/${bil}/${sanad}`;
+            const dateStr = `${maalmaha[maanta.getDay()]}, ${String(maanta.getDate()).padStart(2, '0')}/${String(maanta.getMonth() + 1).padStart(2, '0')}/${maanta.getFullYear()}`;
             
-            const reportData = {
-                date: dateStr,
-                className: c.name,
-                master: c.master,
-                present: pCount,
-                absent: aCount,
-                absentIds: absentIds,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-            };
+            database.ref('owner_reports').push({
+                date: dateStr, className: c.name, master: c.master, present: pCount, absent: aCount, absentIds: absentIds, timestamp: firebase.database.ServerValue.TIMESTAMP
+            });
 
-            // Toos ugu tuur Firebase database-ka dhexe (Online)
-            database.ref('owner_reports').push(reportData);
-
-            alert(`Xaadirinta ${c.name} waa la kaydiyey, waxaana si toos ah loogu diray Firebase!`);
+            alert(`Xaadirinta ${c.name} waa la kaydiyey online!`);
             showPage('home');
         }
 
         function updateOwnerTable() {
             const tbody = document.getElementById('owner-report-body');
             if (!tbody) return;
-            
             database.ref('owner_reports').orderByChild('timestamp').on('value', (snapshot) => {
                 tbody.innerHTML = "";
                 const data = snapshot.val();
+                if (!data) { tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#64748b;">Weli wax xog ah ma jiraan.</td></tr>`; return; }
                 
-                if (!data) {
-                    tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--gray);">Weli wax xog ah oo macalimiintu soo direen ma jiraan.</td></tr>`;
-                    return;
-                }
-                
-                const reportsArray = [];
-                for (let key in data) { reportsArray.push(data[key]); }
-                reportsArray.reverse();
-                
-                reportsArray.forEach(r => {
-                    let badges = (r.absentIds || []).map(id => `<span style="background: #ffeede; color: #d97706; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; display: inline-block; margin: 2px;">${id}</span>`).join(' ');
-                    if(!r.absentIds || r.absentIds.length === 0) badges = "<span style='color:#10b981; font-weight:600;'>Dhamaan waa joogaan</span>";
-                    
-                    tbody.innerHTML += `
-                        <tr>
-                            <td style="padding:1rem; border-bottom:1px solid #e2e8f0;">${r.date}</td>
-                            <td style="padding:1rem; border-bottom:1px solid #e2e8f0;"><b>${r.className}</b></td>
-                            <td style="padding:1rem; border-bottom:1px solid #e2e8f0;">${r.master}</td>
-                            <td style="padding:1rem; border-bottom:1px solid #e2e8f0; text-align:center; font-weight:bold; color:#10b981;">${r.present}</td>
-                            <td style="padding:1rem; border-bottom:1px solid #e2e8f0; text-align:center; font-weight:bold; color:#ef4444;">${r.absent}</td>
-                            <td style="padding:1rem; border-bottom:1px solid #e2e8f0;">${badges}</td>
-                        </tr>
-                    `;
+                Object.keys(data).map(key => data[key]).reverse().forEach(r => {
+                    let badges = (r.absentIds || []).map(id => `<span class="badge-absent">${id}</span>`).join(' ');
+                    if(!r.absentIds || r.absentIds.length === 0) badges = "<span style='color:#10b981; font-weight:600;'>Dhamaan jooga</span>";
+                    tbody.innerHTML += `<tr><td>${r.date}</td><td><b>${r.className}</b></td><td>${r.master}</td><td style="text-align:center; font-weight:bold; color:#10b981;">${r.present}</td><td style="text-align:center; font-weight:bold; color:#ef4444;">${r.absent}</td><td>${badges}</td></tr>`;
                 });
             });
         }
 
-
         function renderAdminStudentsTable() {
             const tbody = document.getElementById('admin-students-list');
-            if(!tbody) return;
-            tbody.innerHTML = "";
-            
+            if(!tbody) return; tbody.innerHTML = "";
             for (let classId in studentsDb) {
                 const currentClass = classesData.find(c => c.id === classId);
-                const className = currentClass ? currentClass.name : classId;
-                
-                studentsDb[classId].forEach((student, index) => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td><b>${className}</b></td>
-                            <td>${student.id}</td>
-                            <td>${student.name}</td>
-                            <td><button class="btn-delete" onclick="deleteStudent('${classId}', ${index})">Tirtir ❌</button></td>
-                        </tr>
-                    `;
+                studentsDb[classId].forEach((s, idx) => {
+                    tbody.innerHTML += `<tr><td><b>${currentClass ? currentClass.name : classId}</b></td><td>${s.id}</td><td>${s.name}</td><td><button style="background:var(--danger); padding:2px 6px;" onclick="deleteStudent('${classId}', ${idx})">❌</button></td></tr>`;
                 });
             }
         }
@@ -412,28 +206,20 @@
             const classId = document.getElementById('reg-class').value;
             const id = document.getElementById('reg-id').value.trim();
             const name = document.getElementById('reg-name').value.trim();
-
-            if(!id || !name) { alert("Fadlan buuxi ID-ga iyo Magaca!"); return; }
-
+            if(!id || !name) { alert("Buuxi ID iyo Magaca!"); return; }
             if(!studentsDb[classId]) { studentsDb[classId] = []; }
             studentsDb[classId].push({ id: id, name: name });
-            
             localStorage.setItem(currentVersion, JSON.stringify(studentsDb));
             renderAdminStudentsTable();
-            
-            document.getElementById('reg-id').value = "";
-            document.getElementById('reg-name').value = "";
-            alert("Ardayga cusub si guul leh ayaa loo qoray!");
+            document.getElementById('reg-id').value = ""; document.getElementById('reg-name').value = "";
+            alert("Waa la qoray!");
         }
 
-        function deleteStudent(classId, index) {
-            if(confirm("Ma hubtaa inaad tirtirayso ardaygan?")) {
-                studentsDb[classId].splice(index, 1);
-                localStorage.setItem(currentVersion, JSON.stringify(studentsDb));
-                renderAdminStudentsTable();
-            }
+        function deleteStudent(classId, idx) {
+            if(confirm("Ma hubtaa?")) { studentsDb[classId].splice(idx, 1); localStorage.setItem(currentVersion, JSON.stringify(studentsDb)); renderAdminStudentsTable(); }
         }
     </script>
 </body>
 </html>
 
+       
