@@ -26,11 +26,13 @@
         .btn-save { background: var(--secondary); float: right; padding: 0.8rem 2rem; }
         .badge-absent { background: #ffeede; color: #d97706; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin: 2px; }
     </style>
-    <!-- Firebase SDK -->
+        <!-- Firebase SDK Scripts -->
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
+
     <script>
-      const firebaseConfig = { databaseURL: "https://firebaseio.com" };
+           const firebaseConfig = { databaseURL: "https://firebaseio.com" };
+
       firebase.initializeApp(firebaseConfig);
       const database = firebase.database();
     </script>
@@ -64,7 +66,7 @@
                 </div>
                 <div class="table-box"><table><thead><tr><th>Fasalka</th><th>ID</th><th>Magaca</th><th>Action</th></tr></thead><tbody id="admin-students-list"></tbody></table></div>
             </div>
-            <!-- APPNEL-KA MAAMULAHA CUSUB -->
+            <!-- APPNEL-KA MAAMULAHA -->
             <div class="gate-box" id="owner-panel" style="display:none; text-align:left; margin-top:1rem; background:#fff; border-left:5px solid #e11d48;">
                 <h3 style="color:#e11d48; margin-bottom:1rem;">🔒 Kaydka Dhabta ah ee Firebase (Online)</h3>
                 <div class="table-box"><table><thead><tr style="background:#ffe4e6;"><th>Taariikhda</th><th>Fasalka</th><th>Form Master</th><th style="color:#10b981;">Joogay</th><th style="color:#ef4444;">Ma Joogto</th><th>ID Maqan</th></tr></thead><tbody id="owner-report-body"><tr><td colspan="6" style="text-align:center; color:#64748b;">Weli wax xog ah lama soo dirin.</td></tr></tbody></table></div>
@@ -105,9 +107,12 @@
 
         window.onload = function() {
             initClassSelect(); renderClassDashboard(); renderAdminStudentsTable(); updateOwnerTable();
-            const maalmaha = ["Axad", "Isniin", "Talaado", "Arbaco", "Khamiis", "Jimco", "Sabti"];
+            // Xallinta rasmiga ah ee taariikhda browser-ka
             const maanta = new Date();
-            document.getElementById('current-date-badge').innerText = `${maalmaha[maanta.getDay()]}, ${String(maanta.getDate()).padStart(2, '0')}/${String(maanta.getMonth() + 1).padStart(2, '0')}/${maanta.getFullYear()}`;
+            const maalin = String(maanta.getDate()).padStart(2, '0');
+            const bil = String(maanta.getMonth() + 1).padStart(2, '0');
+            const sanad = maanta.getFullYear();
+            document.getElementById('current-date-badge').innerText = `Taariikhda: ${maalin}/${bil}/${sanad}`;
         };
 
         function showPage(pageId) {
@@ -155,6 +160,7 @@
 
         function saveAttendance() {
             const c = classesData.find(cl => cl.id === activeClassId);
+            if (!c) { alert("Khalad: Fasalka lama helin!"); return; }
             const students = studentsDb[activeClassId] || [];
             let pCount = 0, aCount = 0, absentIds = [];
 
@@ -163,9 +169,12 @@
                 if(radio && radio.value === "Joogay") { pCount++; } else { aCount++; absentIds.push(s.id); }
             });
 
-            const maalmaha = ["Axad", "Isniin", "Talaado", "Arbaco", "Khamiis", "Jimco", "Sabti"];
+            // Habka saxda ah ee Taariikhda Kaydka
             const maanta = new Date();
-            const dateStr = `${maalmaha[maanta.getDay()]}, ${String(maanta.getDate()).padStart(2, '0')}/${String(maanta.getMonth() + 1).padStart(2, '0')}/${maanta.getFullYear()}`;
+            const maalin = String(maanta.getDate()).padStart(2, '0');
+            const bil = String(maanta.getMonth() + 1).padStart(2, '0');
+            const sanad = maanta.getFullYear();
+            const dateStr = `${maalin}/${bil}/${sanad}`;
             
             database.ref('owner_reports').push({
                 date: dateStr, className: c.name, master: c.master, present: pCount, absent: aCount, absentIds: absentIds, timestamp: firebase.database.ServerValue.TIMESTAMP
@@ -221,5 +230,4 @@
     </script>
 </body>
 </html>
-
-       
+        
