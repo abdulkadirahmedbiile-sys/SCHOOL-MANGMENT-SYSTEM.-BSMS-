@@ -309,52 +309,46 @@
             showPage('attendance');
         }
 
-        function saveAttendance() {
-    const c = classesData.find(cl => cl.id === activeClassId);
-    if (!c) { alert("Khalad ayaa dhacay: Fasalka lama helin!"); return; }
+                function saveAttendance() {
+            const c = classesData.find(cl => cl.id === activeClassId);
+            if (!c) { alert("Khalad: Fasalka lama helin!"); return; }
+            
+            const students = studentsDb[activeClassId] || [];
+            let pCount = 0;
+            let aCount = 0;
+            let absentIds = [];
 
-    const students = studentsDb[activeClassId] || [];
-    let pCount = 0;
-    let aCount = 0;
-    let absentIds = [];
+            students.forEach(student => {
+                const radio = document.querySelector(`input[name="status-${student.id}"]:checked`);
+                if(radio && radio.value === "Joogay") { pCount++; } 
+                else { aCount++; absentIds.push(student.id); }
+            });
 
-    students.forEach(student => {
-        const radio = document.querySelector(`input[name="status-${student.id}"]:checked`);
-        if (radio && radio.value === "Joogay") { 
-            pCount++; 
-        } else { 
-            aCount++; 
-            absentIds.push(student.id); 
+            // Habka saxda ah ee taariikhda iyo maalinta
+            const maalmaha = ["Axad", "Isniin", "Talaado", "Arbaco", "Khamiis", "Jimco", "Sabti"];
+            const maanta = new Date();
+            const magacaMaalinta = maalmaha[maanta.getDay()];
+            const maalin = String(maanta.getDate()).padStart(2, '0');
+            const bil = String(maanta.getMonth() + 1).padStart(2, '0');
+            const sanad = maanta.getFullYear();
+            const dateStr = `${magacaMaalinta}, ${maalin}/${bil}/${sanad}`;
+            
+            const reportData = {
+                date: dateStr,
+                className: c.name,
+                master: c.master,
+                present: pCount,
+                absent: aCount,
+                absentIds: absentIds,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            };
+
+            // Toos ugu tuur Firebase database-ka dhexe (Online)
+            database.ref('owner_reports').push(reportData);
+
+            alert(`Xaadirinta ${c.name} waa la kaydiyey, waxaana si toos ah loogu diray Firebase!`);
+            showPage('home');
         }
-    });
-
-    // Habka cusub ee maalin walba taariikhda iyo maalinta u qoraya si sax ah
-    const maalmaha = ["Axad", "Isniin", "Talaado", "Arbaco", "Khamiis", "Jimco", "Sabti"];
-    const maanta = new Date();
-    const magacaMaalinta = maalmaha[maanta.getDay()];
-    const maalin = String(maanta.getDate()).padStart(2, '0');
-    const bil = String(maanta.getMonth() + 1).padStart(2, '0');
-    const sanad = maanta.getFullYear();
-    
-    // Waxay u qormaysaa tusaale ahaan: Sabti, 19/09/2026
-    const dateStr = `${magacaMaalinta}, ${maalin}/${bil}/${sanad}`;
-    
-    const reportData = {
-        date: dateStr,
-        className: c.name,
-        master: c.master,
-        present: pCount,
-        absent: aCount,
-        absentIds: absentIds,
-        timestamp: firebase.database.ServerValue.TIMESTAMP
-    };
-
-    // Toos ugu tuur Firebase database-ka dhexe (Online)
-    database.ref('owner_reports').push(reportData);
-
-    alert(`Xaadirinta ${c.name} waa la kaydiyey, waxaana si toos ah loogu diray Firebase!`);
-    showPage('home');
-}
 
         function updateOwnerTable() {
             const tbody = document.getElementById('owner-report-body');
@@ -390,6 +384,7 @@
                 });
             });
         }
+
 
         function renderAdminStudentsTable() {
             const tbody = document.getElementById('admin-students-list');
