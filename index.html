@@ -10,9 +10,8 @@
         header { background: var(--primary); color: var(--white); padding: 1rem; display: flex; justify-content: space-between; align-items: center; border-radius: 8px; margin-bottom: 1rem; }
         .page { display: none; } .page.active { display: block; }
         .hero { text-align: center; padding: 2rem 1rem; background: linear-gradient(135deg, var(--primary), #3b82f6); color: var(--white); border-radius: 8px; margin-bottom: 1rem; }
-        .gates-container { display: flex; gap: 1rem; margin-top: 1rem; }
-        .gate-box { flex: 1; padding: 1.5rem; background: #e2e8f0; border-radius: 8px; text-align: center; }
-        .owner-gate { background: #ffe4e6; border: 1px solid #f43f5e; }
+        .gates-container { display: flex; gap: 1rem; margin-top: 1rem; justify-content: center; }
+        .gate-box { flex: 1; max-width: 400px; padding: 1.5rem; background: #e2e8f0; border-radius: 8px; text-align: center; }
         button { background: var(--primary); color: var(--white); border: none; padding: 0.6rem 1.2rem; border-radius: 6px; cursor: pointer; font-weight: 600; }
         .btn-start { background: var(--secondary); font-size: 1.1rem; padding: 0.8rem 2rem; border-radius: 20px; }
         .class-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 1rem; }
@@ -26,20 +25,19 @@
         .btn-save { background: var(--secondary); float: right; padding: 0.8rem 2rem; }
         .badge-absent { background: #ffeede; color: #d97706; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin: 2px; }
     </style>
-    
-    <!-- 1. LABADA SCRIPT EE FIREBASE OO SAXAN -->
+     <!-- Kani waa script-yada rasmiga ah ee Firebase ee xallinaya cilladda badhanka iyo taariikhda -->
+        <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
-    <script src="https://gstatic.com"></script>
-
     <script>
-      // 2. HALKAN LINK-GAAGA RASMIGA AH AYAA LAGU XIRAY
       const firebaseConfig = { 
           databaseURL: "https://firebaseio.com" 
       };
-
       firebase.initializeApp(firebaseConfig);
       const database = firebase.database();
     </script>
+
+
+
 </head>
 <body>
     <header>
@@ -56,22 +54,9 @@
                 <button class="btn-start" onclick="showPage('dashboard')">FASALLADA DUGSIGA</button>
             </div>
             <div class="gates-container">
-                <div class="gate-box"><button onclick="checkSecretaryPassword()">💼 Qaybta Xoghayaha (Eng Ahmed Biile)</button></div>
-                <div class="gate-box owner-gate"><button style="background:#e11d48;" onclick="checkOwnerPassword()">🔒 Galka Maamulaha Khaaska ah</button></div>
+                <div class="gate-box" style="background:#ffe4e6; border: 1px solid #f43f5e;"><button style="background:#e11d48; width: 100%;" onclick="checkOwnerPassword()">🔒 Galka Maamulaha Khaaska ah</button></div>
             </div>
-            <!-- APPNEL-KA XOGHAYEYNTA -->
-            <div class="gate-box" id="secretary-panel" style="display:none; text-align:left; margin-top:1rem; background:#fff;">
-                <h3 style="color:var(--primary); margin-bottom:1rem;">👤 Qorista Ardayda Cusub</h3>
-                <div style="display:flex; gap:10px; margin-bottom:1rem; flex-wrap:wrap;">
-                    <select id="reg-class" style="padding:0.5rem; border:1px solid #cbd5e1; border-radius:6px;"></select>
-                    <input type="text" id="reg-id" placeholder="ID (F4-001)" style="padding:0.5rem; border:1px solid #cbd5e1; border-radius:6px; flex:1;">
-                    <input type="text" id="reg-name" placeholder="Magaca" style="padding:0.5rem; border:1px solid #cbd5e1; border-radius:6px; flex:2;">
-                    <button style="background:var(--secondary);" onclick="addNewStudent()">Diri +</button>
-                </div>
-                <div class="table-box"><table><thead><tr><th>Fasalka</th><th>ID</th><th>Magaca</th><th>Action</th></tr></thead><tbody id="admin-students-list"></tbody></table></div>
-            </div>
-            <!-- APPNEL-KA MAAMULAHA -->
-            <div class="gate-box" id="owner-panel" style="display:none; text-align:left; margin-top:1rem; background:#fff; border-left:5px solid #e11d48;">
+            <div class="gate-box" id="owner-panel" style="display:none; text-align:left; margin-top:1rem; background:#fff; max-width: 100%; border-left:5px solid #e11d48;">
                 <h3 style="color:#e11d48; margin-bottom:1rem;">🔒 Kaydka Dhabta ah ee Firebase (Online)</h3>
                 <div class="table-box"><table><thead><tr style="background:#ffe4e6;"><th>Taariikhda</th><th>Fasalka</th><th>Form Master</th><th style="color:#10b981;">Joogay</th><th style="color:#ef4444;">Ma Joogto</th><th>ID Maqan</th></tr></thead><tbody id="owner-report-body"><tr><td colspan="6" style="text-align:center; color:#64748b;">Weli wax xog ah lama soo dirin.</td></tr></tbody></table></div>
             </div>
@@ -93,37 +78,23 @@
             { id: "f4", name: "Form 4", master: "Faarax ciise faarax" }, { id: "f3", name: "Form 3", master: "siciid Cabdirashiid" }, { id: "f2", name: "Form 2", master: "Eng Ahmed Abdulkadir Biile" }, { id: "f1", name: "Form 1", master: "Mohamed Ahmed Uurcad" },
             { id: "g8", name: "Grade 8", master: "Mohamed Abdi Oog" }, { id: "g7", name: "Grade 7", master: "Iimaan Hasan Mohamed" }, { id: "g6", name: "Grade 6", master: "Mohamed Abdulrisak Suufi" }, { id: "g5", name: "Grade 5", master: "Mohamed Abdulrisak Suufi" }
         ];
-        const currentVersion = "yaka_students_db_final_v5";
-        let studentsDb = JSON.parse(localStorage.getItem(currentVersion)) || {};
+        let studentsDb = JSON.parse(localStorage.getItem("yaka_students_db_final_v5")) || {};
         let activeClassId = "";
         
-        if (Object.keys(studentsDb).length === 0) {
-            studentsDb["f4"] = [{ id: "F4-001", name: "Ayaan Cabdi Axmed" }];
-            studentsDb["f3"] = [{ id: "F3-001", name: "Abdulahi Mahamed" }];
-            studentsDb["f2"] = [{ id: "F2-001", name: "Axmed Maxamed Axmed" }];
-            studentsDb["f1"] = [{ id: "F1-001", name: "Ardayga Form 1" }];
-            studentsDb["g8"] = [{ id: "G8-001", name: "Amaal Cabdirasaaq" }];
-            studentsDb["g7"] = [{ id: "G7-001", name: "Abdulaahi Maxamed" }];
-            studentsDb["g6"] = [{ id: "G6-001", name: "Maxamed Cali Xasan" }];
-            studentsDb["g5"] = [{ id: "G5-001", name: "Faadumo Cumar Cabdi" }];
-            localStorage.setItem(currentVersion, JSON.stringify(studentsDb));
+        if (!Object.keys(studentsDb).length) {
+            studentsDb = { f4: [{id:"F4-001",name:"Ayaan Cabdi Axmed"}], f3: [{id:"F3-001",name:"Abdulahi Mahamed"}], f2: [{id:"F2-001",name:"Axmed Maxamed Axmed"}], f1: [{id:"F1-001",name:"Ardayga Form 1"}], g8: [{id:"G8-001",name:"Amaal Cabdirasaaq"}], g7: [{id:"G7-001",name:"Abdulaahi Maxamed"}], g6: [{id:"G6-001",name:"Maxamed Cali Xasan"}], g5: [{id:"G5-001",name:"Faadumo Cumar Cabdi"}] };
+            localStorage.setItem("yaka_students_db_final_v5", JSON.stringify(studentsDb));
         }
 
-        // 3. XALKA TAARIIKHDA IYO MAALINTA AUTOMATIC-GA AH (AF-SOOMAALI)
         function getFormattedDateString() {
-            const maanta = new Date();
-            const maalin = String(maanta.getDate()).padStart(2, '0');
-            const bil = String(maanta.getMonth() + 1).padStart(2, '0');
-            const sanad = maanta.getFullYear();
-            
+            const m = new Date();
             const maalmaha = ['Axad', 'Isniin', 'Talaado', 'Arbaco', 'Khamiis', 'Jimco', 'Sabti'];
-            const maalinMagac = maalmaha[maanta.getDay()];
-            
-            return `${maalinMagac}, ${maalin}/${bil}/${sanad}`;
+            return `${maalmaha[m.getDay()]}, ${String(m.getDate()).padStart(2,'0')}/${String(m.getMonth()+1).padStart(2,'0')}/${m.getFullYear()}`;
         }
 
         window.onload = function() {
-            initClassSelect(); renderClassDashboard(); renderAdminStudentsTable(); updateOwnerTable();
+            if(document.getElementById('class-container')) document.getElementById('class-container').innerHTML = classesData.map(c => `<div class="class-card"><div><div class="class-name">${c.name}</div><div class="form-master">Master: ${c.master}</div></div><button onclick="openAttendance('${c.id}')">Xaadiri</button></div>`).join('');
+            updateOwnerTable();
             document.getElementById('current-date-badge').innerText = `Taariikhda: ${getFormattedDateString()}`;
         };
 
@@ -132,114 +103,55 @@
             document.getElementById(pageId).classList.add('active');
         }
 
-                function checkSecretaryPassword() {
-            if(prompt("Geli sirta Xoghayaha:") === "yaka2026") { document.getElementById('secretary-panel').style.display = "block"; document.getElementById('secretary-panel').scrollIntoView({ behavior: 'smooth' }); }
-            else { alert("Ereyga sirta ah waa khalad!"); }
-        }
         function checkOwnerPassword() {
             if(prompt("Geli sirta Maamulaha:") === "admin2026") { document.getElementById('owner-panel').style.display = "block"; document.getElementById('owner-panel').scrollIntoView({ behavior: 'smooth' }); updateOwnerTable(); }
-            else { alert("Password waa khalad!"); }
-        }
-
-        function initClassSelect() {
-            const select = document.getElementById('reg-class');
-            if(select) select.innerHTML = classesData.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
-        }
-
-        function renderClassDashboard() {
-            const container = document.getElementById('class-container');
-            if(container) container.innerHTML = classesData.map(c => `<div class="class-card"><div><div class="class-name">${c.name}</div><div class="form-master">Master: ${c.master}</div></div><button onclick="openAttendance('${c.id}')">Xaadiri</button></div>`).join('');
+            else alert("Password waa khalad!");
         }
 
         function openAttendance(classId) {
             activeClassId = classId;
-            const currentClass = classesData.find(c => c.id === classId);
-            document.getElementById('active-class-title').innerText = `Fasalka: ${currentClass.name}`;
-            document.getElementById('active-form-master').innerText = `Form Master: ${currentClass.master}`;
+            const c = classesData.find(cl => cl.id === classId);
+            document.getElementById('active-class-title').innerText = `Fasalka: ${c.name}`;
+            document.getElementById('active-form-master').innerText = `Form Master: ${c.master}`;
             
-            const listContainer = document.getElementById('students-list');
-            listContainer.innerHTML = "";
+            const list = document.getElementById('students-list');
             const students = studentsDb[classId] || [];
-            
-            if(students.length === 0) { listContainer.innerHTML = `<tr><td colspan="3" style="text-align:center;">Ma jiraan arday.</td></tr>`; }
-            else {
-                students.forEach(s => {
-                    listContainer.innerHTML += `<tr><td><b>${s.id}</b></td><td>${s.name}</td><td style="text-align:center;"><div class="status-group"><label class="status-label" style="color:#10b981;"><input type="radio" name="status-${s.id}" value="Joogay" checked> Jooga</label><label class="status-label" style="color:#ef4444;"><input type="radio" name="status-${s.id}" value="Ma Joogto"> Maqan</label></div></td></tr>`;
-                });
-            }
+            list.innerHTML = students.length ? students.map(s => `<tr><td><b>${s.id}</b></td><td>${s.name}</td><td style="text-align:center;"><div class="status-group"><label class="status-label" style="color:#10b981;"><input type="radio" name="status-${s.id}" value="Joogay" checked> Jooga</label><label class="status-label" style="color:#ef4444;"><input type="radio" name="status-${s.id}" value="Maqan"> Maqan</label></div></td></tr>`).join('') : `<tr><td colspan="3" style="text-align:center;">Ma jiraan arday.</td></tr>`;
             showPage('attendance');
         }
 
-        function saveAttendance() {
+                function saveAttendance() {
             const c = classesData.find(cl => cl.id === activeClassId);
-            if (!c) { alert("Khalad: Fasalka lama helin!"); return; }
             const students = studentsDb[activeClassId] || [];
             let pCount = 0, aCount = 0, absentIds = [];
 
             students.forEach(s => {
-                const radio = document.querySelector(`input[name="status-${s.id}"]:checked`);
-                if(radio && radio.value === "Joogay") { pCount++; } else { aCount++; absentIds.push(s.id); }
+                const r = document.querySelector(`input[name="status-${s.id}"]:checked`);
+                if(r && r.value === "Joogay") pCount++; else { aCount++; absentIds.push(s.id); }
             });
 
-            const dateStr = getFormattedDateString();
-            
-            // Xogta hadda waxay u tegeysaa Firebase si toos ah oo online ah!
             database.ref('owner_reports').push({
-                date: dateStr, className: c.name, master: c.master, present: pCount, absent: aCount, absentIds: absentIds, timestamp: firebase.database.ServerValue.TIMESTAMP
-            }, function(error) {
-                if (error) {
-                    alert("Cillad: Xogta ma tegin, hubi rules-ka Firebase: " + error.message);
-                } else {
-                    alert(`Xaadirinta ${c.name} waa la kaydiyey online, maamulahana waa uu arki kalaa!`);
-                    showPage('home');
-                }
+                date: getFormattedDateString(), className: c.name, master: c.master, present: pCount, absent: aCount, absentIds: absentIds, timestamp: firebase.database.ServerValue.TIMESTAMP
+            }, function(err) {
+                if (err) alert("Cillad: Xogta ma tegin: " + err.message);
+                else { alert(`Xaadirinta ${c.name} waa la kaydiyey online!`); showPage('home'); }
             });
         }
 
         function updateOwnerTable() {
             const tbody = document.getElementById('owner-report-body');
             if (!tbody) return;
-            database.ref('owner_reports').orderByChild('timestamp').on('value', (snapshot) => {
+            database.ref('owner_reports').orderByChild('timestamp').on('value', (snap) => {
                 tbody.innerHTML = "";
-                const data = snapshot.val();
+                const data = snap.val();
                 if (!data) { tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#64748b;">Weli wax xog ah ma jiraan.</td></tr>`; return; }
-                
-                Object.keys(data).map(key => data[key]).reverse().forEach(r => {
-                    let badges = (r.absentIds || []).map(id => `<span class="badge-absent">${id}</span>`).join(' ');
-                    if(!r.absentIds || r.absentIds.length === 0) badges = "<span style='color:#10b981; font-weight:600;'>Dhamaan jooga</span>";
+                Object.keys(data).reverse().forEach(key => {
+                    const r = data[key];
+                    let badges = (r.absentIds || []).map(id => `<span class="badge-absent">${id}</span>`).join(' ') || "<span style='color:#10b981; font-weight:600;'>Dhamaan jooga</span>";
                     tbody.innerHTML += `<tr><td>${r.date}</td><td><b>${r.className}</b></td><td>${r.master}</td><td style="text-align:center; font-weight:bold; color:#10b981;">${r.present}</td><td style="text-align:center; font-weight:bold; color:#ef4444;">${r.absent}</td><td>${badges}</td></tr>`;
                 });
             });
         }
-
-        function renderAdminStudentsTable() {
-            const tbody = document.getElementById('admin-students-list');
-            if(!tbody) return; tbody.innerHTML = "";
-            for (let classId in studentsDb) {
-                const currentClass = classesData.find(c => c.id === classId);
-                studentsDb[classId].forEach((s, idx) => {
-                    tbody.innerHTML += `<tr><td><b>${currentClass ? currentClass.name : classId}</b></td><td>${s.id}</td><td>${s.name}</td><td><button style="background:var(--danger); padding:2px 6px;" onclick="deleteStudent('${classId}', ${idx})">❌</button></td></tr>`;
-                });
-            }
-        }
-
-        function addNewStudent() {
-            const classId = document.getElementById('reg-class').value;
-            const id = document.getElementById('reg-id').value.trim();
-            const name = document.getElementById('reg-name').value.trim();
-            if(!id || !name) { alert("Buuxi ID iyo Magaca!"); return; }
-            if(!studentsDb[classId]) { studentsDb[classId] = []; }
-            studentsDb[classId].push({ id: id, name: name });
-            localStorage.setItem(currentVersion, JSON.stringify(studentsDb));
-            renderAdminStudentsTable();
-            document.getElementById('reg-id').value = ""; document.getElementById('reg-name').value = "";
-            alert("Waa la qoray!");
-        }
-
-        function deleteStudent(classId, idx) {
-            if(confirm("Ma hubtaa?")) { studentsDb[classId].splice(idx, 1); localStorage.setItem(currentVersion, JSON.stringify(studentsDb)); renderAdminStudentsTable(); }
-        }
     </script>
 </body>
 </html>
-
