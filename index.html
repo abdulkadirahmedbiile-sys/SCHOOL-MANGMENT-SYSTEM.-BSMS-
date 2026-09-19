@@ -26,12 +26,16 @@
         .btn-save { background: var(--secondary); float: right; padding: 0.8rem 2rem; }
         .badge-absent { background: #ffeede; color: #d97706; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; display: inline-block; margin: 2px; }
     </style>
-        <!-- Firebase SDK Scripts -->
+    
+    <!-- 1. LABADA SCRIPT EE FIREBASE OO SAXAN -->
     <script src="https://gstatic.com"></script>
     <script src="https://gstatic.com"></script>
 
     <script>
-           const firebaseConfig = { databaseURL: "https://firebaseio.com" };
+      // 2. HALKAN LINK-GAAGA RASMIGA AH AYAA LAGU XIRAY
+      const firebaseConfig = { 
+          databaseURL: "https://firebaseio.com" 
+      };
 
       firebase.initializeApp(firebaseConfig);
       const database = firebase.database();
@@ -105,14 +109,22 @@
             localStorage.setItem(currentVersion, JSON.stringify(studentsDb));
         }
 
-        window.onload = function() {
-            initClassSelect(); renderClassDashboard(); renderAdminStudentsTable(); updateOwnerTable();
-            // Xallinta rasmiga ah ee taariikhda browser-ka
+        // 3. XALKA TAARIIKHDA IYO MAALINTA AUTOMATIC-GA AH (AF-SOOMAALI)
+        function getFormattedDateString() {
             const maanta = new Date();
             const maalin = String(maanta.getDate()).padStart(2, '0');
             const bil = String(maanta.getMonth() + 1).padStart(2, '0');
             const sanad = maanta.getFullYear();
-            document.getElementById('current-date-badge').innerText = `Taariikhda: ${maalin}/${bil}/${sanad}`;
+            
+            const maalmaha = ['Axad', 'Isniin', 'Talaado', 'Arbaco', 'Khamiis', 'Jimco', 'Sabti'];
+            const maalinMagac = maalmaha[maanta.getDay()];
+            
+            return `${maalinMagac}, ${maalin}/${bil}/${sanad}`;
+        }
+
+        window.onload = function() {
+            initClassSelect(); renderClassDashboard(); renderAdminStudentsTable(); updateOwnerTable();
+            document.getElementById('current-date-badge').innerText = `Taariikhda: ${getFormattedDateString()}`;
         };
 
         function showPage(pageId) {
@@ -120,7 +132,7 @@
             document.getElementById(pageId).classList.add('active');
         }
 
-        function checkSecretaryPassword() {
+                function checkSecretaryPassword() {
             if(prompt("Geli sirta Xoghayaha:") === "yaka2026") { document.getElementById('secretary-panel').style.display = "block"; document.getElementById('secretary-panel').scrollIntoView({ behavior: 'smooth' }); }
             else { alert("Ereyga sirta ah waa khalad!"); }
         }
@@ -169,19 +181,19 @@
                 if(radio && radio.value === "Joogay") { pCount++; } else { aCount++; absentIds.push(s.id); }
             });
 
-            // Habka saxda ah ee Taariikhda Kaydka
-            const maanta = new Date();
-            const maalin = String(maanta.getDate()).padStart(2, '0');
-            const bil = String(maanta.getMonth() + 1).padStart(2, '0');
-            const sanad = maanta.getFullYear();
-            const dateStr = `${maalin}/${bil}/${sanad}`;
+            const dateStr = getFormattedDateString();
             
+            // Xogta hadda waxay u tegeysaa Firebase si toos ah oo online ah!
             database.ref('owner_reports').push({
                 date: dateStr, className: c.name, master: c.master, present: pCount, absent: aCount, absentIds: absentIds, timestamp: firebase.database.ServerValue.TIMESTAMP
+            }, function(error) {
+                if (error) {
+                    alert("Cillad: Xogta ma tegin, hubi rules-ka Firebase: " + error.message);
+                } else {
+                    alert(`Xaadirinta ${c.name} waa la kaydiyey online, maamulahana waa uu arki kalaa!`);
+                    showPage('home');
+                }
             });
-
-            alert(`Xaadirinta ${c.name} waa la kaydiyey online!`);
-            showPage('home');
         }
 
         function updateOwnerTable() {
@@ -230,4 +242,4 @@
     </script>
 </body>
 </html>
-        
+
