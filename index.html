@@ -54,8 +54,37 @@
                 <div class="info-card"><h3>profile ka dugsiga</h3><p>Dugsiga Hoose, Dhexe iyo Sare ee YAKA waa mid ka mid ah xarumaha waxbarasho ee ugu horreeya dalka. Iskuulku wuxuu caan ku yahay soo saarista arday tayo sare leh iyo anshax wanaagsan.</p></div>
                 <div class="info-card"><h3>Hiigsiga (Vision)</h3><p>Inaan noqonno dugsi hormuud u ah waxbarashada casriga ah ee dalka, iyo inaan soo saarno jiil aqoon iyo hibo leh oo wax ka badali kara mustaqbalka bulshada.</p></div>
                 <div class="info-card"><h3>Hadafka (Mission)</h3><p>Inaan siino ardayda waxbarasho tayo leh oo ku dhisan tignoolajiyad, anshax iyo waddaniyad, si aan u diyaarinno hoggaamiyeyaashii berrito.</p></div>
+            </div>            <!-- QAYBTA KHAASKA AH EE MAAMULAHA SARE -->
+            <div class="owner-section" id="owner-panel" style="display: none; background: #ffffff; border-radius: 12px; padding: 2rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); margin-top: 2rem; border-left: 5px solid #e11d48;">
+                <h3 style="color: #e11d48; margin-bottom: 0.5rem;">🔒 Kaydka Dhabta ah ee Maamulaha Sare</h3>
+                <p style="color: #64748b; margin-bottom: 1rem;">Halkan waxaa si toos ah ugu soo dhacaya xogta ay kaydiyaan macalimiintu (Maalinta, Form Master, Joogay, Maqnaa iyo ID-yada).</p>
+                <div class="attendance-table-container">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <thead>
+                            <tr style="background-color: #ffe4e6;">
+                                <th style="padding: 1rem; border-bottom: 1px solid #e2e8f0; color: #1e3a8a;">Maalinta / Taariikhda</th>
+                                <th style="padding: 1rem; border-bottom: 1px solid #e2e8f0; color: #1e3a8a;">Fasalka</th>
+                                <th style="padding: 1rem; border-bottom: 1px solid #e2e8f0; color: #1e3a8a;">Form Master</th>
+                                <th style="padding: 1rem; border-bottom: 1px solid #e2e8f0; text-align: center; color:#10b981;">Joogay</th>
+                                <th style="padding: 1rem; border-bottom: 1px solid #e2e8f0; text-align: center; color:#ef4444;">Ma Joogto</th>
+                                <th style="padding: 1rem; border-bottom: 1px solid #e2e8f0; color: #1e3a8a;">ID-yada Ardayda Maqan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="owner-report-body">
+                            <tr><td colspan="6" style="text-align: center; color: #64748b; padding: 1rem;">Weli wax xog ah oo macalimiintu soo direen ma jiraan.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <div class="secretary-gate"><button class="btn-secretary" onclick="checkSecretaryPassword()">💼 galka Qaybta Xoghayaha Eng Ahmed Biile</button></div>
+
+           <div style="display: flex; gap: 1.5rem; justify-content: center; margin-top: 3rem; flex-wrap: wrap;">
+    <div style="text-align: center; padding: 2rem; background: #e2e8f0; border-radius: 12px; flex: 1; min-width: 280px;">
+        <button class="btn-secretary" onclick="checkSecretaryPassword()">💼 Galka Qaybta Xoghayaha Eng Ahmed Biile</button>
+    </div>
+    <div style="text-align: center; padding: 2rem; background: #ffe4e6; border-radius: 12px; flex: 1; min-width: 280px; border: 2px solid #f43f5e;">
+        <button style="background: #e11d48; color: white; border: none; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 600; cursor: pointer;" onclick="checkOwnerPassword()">🔒 Galka Maamulaha Khaaska ah</button>
+    </div>
+</div>
             <div class="admin-section" id="secretary-panel">
                 <h3 style="color: var(--primary); margin-bottom: 0.5rem;">💼 Qaybta Xoghayaha guud (Eng. Ahmed Biile)</h3><p style="color: var(--gray); margin-bottom: 1rem;">Halkan waxaad ka helaysaa xogta dhabta ah ee maalin walba la kaydiyo iyo ID-yada ardayda maqan.</p>
                 <div class="attendance-table-container"><table><thead><tr><th>Maalinta / Taariikhda</th><th>Fasalka</th><th>Form Master</th><th style="text-align: center; color:#10b981;">Joogay</th><th style="text-align: center; color:#ef4444;">Ma Joogto</th><th>ID-yada Ardayda Maqan</th></tr></thead><tbody id="secretary-report-body"></tbody></table></div>
@@ -181,6 +210,11 @@
             hist.push({ classId: currentClassId, className: c.name, master: c.master, date: dateStr, present: pCount, absent: aCount, absentIds: absentIds, timestamp: new Date().getTime() }); 
             localStorage.setItem('yaka_hist_v3', JSON.stringify(hist)); 
             alert("Macalin waad mahadsantahay shaqada aad qabatay. Xaadirka waxaa loo gudbiyay xoghayaha dugsiga Eng.Ahmed Biile."); 
+                    // U dir xogta galka khaaska ah ee maamulaha sare
+        let ownerReports = JSON.parse(localStorage.getItem('yaka_owner_reports_db')) || [];
+        ownerReports.push({ date: dateStr, className: c.name, master: c.master, present: pCount, absent: aCount, absentIds: absentIds });
+        localStorage.setItem('yaka_owner_reports_db', JSON.stringify(ownerReports));
+
             showPage('home'); 
         }
         
@@ -231,7 +265,39 @@
             } 
         }
         
-        document.addEventListener('DOMContentLoaded', () => { initDashboard(); });
+        document.addEventListener('DOMContentLoaded', () => { initDashboard(); });// Variable-ka gaarka ah ee maamulaha sare
+function checkOwnerPassword() {
+    const password = prompt("Geli Password-kaaga Khaaska ah ee Maamulaha:");
+    if(password === "admin2026") {
+        document.getElementById('owner-panel').style.display = "block";
+        document.getElementById('owner-panel').scrollIntoView({ behavior: 'smooth' });
+        updateOwnerTable();
+    } else { alert("Password-ku waa khalad! Hubi nambarkaaga gaarka ah."); }
+}
+
+function updateOwnerTable() {
+    const tbody = document.getElementById('owner-report-body');
+    if (!tbody) return;
+    let ownerReports = JSON.parse(localStorage.getItem('yaka_owner_reports_db')) || [];
+    if (ownerReports.length === 0) return;
+    
+    tbody.innerHTML = "";
+    ownerReports.forEach(r => {
+        let badges = r.absentIds.map(id => `<span style="background: #ffeede; color: #d97706; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; display: inline-block; margin: 2px;">${id}</span>`).join(' ');
+        if(r.absentIds.length === 0) badges = "<span style='color:#10b981; font-weight:600;'>Dhamaan waa joogaan</span>";
+        
+        tbody.innerHTML += `
+            <tr>
+                <td style="padding:1rem; border-bottom:1px solid #e2e8f0;">${r.date}</td>
+                <td style="padding:1rem; border-bottom:1px solid #e2e8f0;"><b>${r.className}</b></td>
+                <td style="padding:1rem; border-bottom:1px solid #e2e8f0;">${r.master}</td>
+                <td style="padding:1rem; border-bottom:1px solid #e2e8f0; text-align:center; font-weight:bold; color:#10b981;">${r.present}</td>
+                <td style="padding:1rem; border-bottom:1px solid #e2e8f0; text-align:center; font-weight:bold; color:#ef4444;">${r.absent}</td>
+                <td style="padding:1rem; border-bottom:1px solid #e2e8f0;">${badges}</td>
+            </tr>
+        `;
+    });
+}
     </script>
 </body>
 </html>
