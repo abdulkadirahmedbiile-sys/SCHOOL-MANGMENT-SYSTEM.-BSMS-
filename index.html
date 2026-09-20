@@ -255,59 +255,41 @@
             ]
         };
 
-        let currentClassId = null; const getFormattedDate = () => new Date().toLocaleDateString('en-GB'); const getDayName = () => ["Axad", "Isniin", "Talaado", "Arbaco", "Khamiis", "Jimco", "Sabti"][new Date().getDay()];
+                let currentClassId = null; const getFormattedDate = () => new Date().toLocaleDateString('en-GB'); const getDayName = () => ["Axad", "Isniin", "Talaado", "Arbaco", "Khamiis", "Jimco", "Sabti"][new Date().getDay()];
         function showPage(pId) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById(pId).classList.add('active'); if (pId === 'home') { document.getElementById('secretary-panel').style.display = 'none'; } document.getElementById('nav-btn').textContent = pId === 'home' ? "Fasallada ☰" : "Bogga Hore ⌂"; document.getElementById('nav-btn').setAttribute('onclick', "showPage('" + (pId === 'home' ? 'dashboard' : 'home') + "')"); }
         function checkSecretaryPassword() { if (prompt("Fadlan geli Furaha Sirta ah (Password) ee Xoghayaha:") === "yaka2026") { document.getElementById('secretary-panel').style.display = 'block'; loadSecretaryReport(); loadAdminStudents(); document.getElementById('secretary-panel').scrollIntoView({ behavior: 'smooth' }); } else { alert("Furaha sirta ah waa khalad!"); } }
         function initDashboard() { document.getElementById('class-container').innerHTML = classesData.map(c => '<div class="class-card"><div><div class="class-name">' + c.name + '</div><div class="form-master">Form Master: <span>' + c.master + '</span></div></div><button class="btn-attendance" onclick="openAttendance(\'' + c.id + '\')">Xaandiri Fasalka</button></div>').join(''); document.getElementById('reg-class').innerHTML = classesData.map(c => '<option value="' + c.id + '">' + c.name + '</option>').join(''); }
         function openAttendance(cId) { currentClassId = cId; const c = classesData.find(x => x.id === cId); document.getElementById('active-class-title').textContent = "Fasalka: " + c.name; document.getElementById('active-form-master').textContent = "Form Master: " + c.master; document.getElementById('current-date-badge').textContent = "Maanta: " + getDayName() + " (" + getFormattedDate() + ")"; const list = studentsDb[cId] || []; if (list.length === 0) { document.getElementById('students-list').innerHTML = '<tr><td colspan="3" style="text-align:center;">Wali wax arday ah laguma darin!</td></tr>'; showPage('attendance'); return; } document.getElementById('students-list').innerHTML = list.map(s => '<tr><td>' + s.id + '</td><td style="font-weight:600;">' + s.name + '</td><td><div class="status-group" style="justify-content: center;"><label class="status-label status-present"><input type="radio" name="status-' + s.id + '" value="Present" checked> Jooga</label><label class="status-label status-absent"><input type="radio" name="status-' + s.id + '" value="Absent"> Ma Joogo</label></div></td></tr>').join(''); showPage('attendance'); }
-        function saveAttendance() {
-    let pCount = 0, aCount = 0, absentIds = [];
-    const list = studentsDb[currentClassId] || [];
-    
-    list.forEach(s => {
-        if ((document.querySelector('input[name="status-' + s.id + '"]:checked')?.value || "Present") === "Present") {
-            pCount++;
-        } else {
-            aCount++;
-            absentIds.push(s.id + " (" + s.name + ")");
+        function saveAttendance() { 
+            let pCount = 0, aCount = 0, absentIds = []; 
+            const list = studentsDb[currentClassId] || []; 
+            list.forEach(s => { 
+                if ((document.querySelector('input[name="status-' + s.id + '"]:checked')?.value || "Present") === "Present") { 
+                    pCount++; 
+                } else { 
+                    aCount++; 
+                    absentIds.push(s.id); 
+                } 
+            }); 
+            const c = classesData.find(x => x.id === currentClassId); 
+            const dateStr = getDayName() + " - " + getFormattedDate(); 
+            let hist = JSON.parse(localStorage.getItem('yaka_hist_v3')) || []; 
+            hist = hist.filter(item => !(item.classId === currentClassId && item.date === dateStr)); 
+            hist.push({ 
+                classId: currentClassId, 
+                className: c.name, 
+                master: c.master, 
+                date: dateStr, 
+                present: pCount, 
+                absent: aCount, 
+                absentIds: absentIds, 
+                timestamp: new Date().getTime() 
+                }); 
+            localStorage.setItem('yaka_hist_v3', JSON.stringify(hist)); 
+            alert("Macalin waad mahadsantahay shaqada aad qabatay. Xaadirka waxaa loo gudbiyay xoghayaha dugsiga Eng.Ahmed Biile."); 
+            showPage('home'); 
         }
-    });
-
-    const c = classesData.find(x => x.id === currentClassId);
-    const dateStr = getDayName() + " - " + getFormattedDate();
-
-        // 1. Shaxda Quruxda badan ee loo diyaariyey WhatsApp
-    let maqaneText = absentIds.length === 0 ? "✅ Dhamaan waa joogaan" : absentIds.map(st => "❌ " + st).join("\n");
-
-    let whatsappMessage = `📊 *XUDUURKA DUGSIGA SARE EE YAKA* 📊\n`;
-    whatsappMessage += `───────────────────\n`;
-    whatsappMessage += `📅 *Maanta:* ${dateStr}\n`;
-    whatsappMessage += `🏫 *Fasalka:* ${c.name}\n`;
-    whatsappMessage += `👤 *Form Master:* ${c.master}\n`;
-    whatsappMessage += `───────────────────\n`;
-    whatsappMessage += `📈 *KOOBIDDA XAALADDA:*\n`;
-    whatsappMessage += `┌───────────────────┐\n`;
-    whatsappMessage += `│  🟢 JOOGAY:      ${pCount} ubad   │\n`;
-    whatsappMessage += `│  🔴 MA JOOGTO:    ${aCount} ubad   │\n`;
-    whatsappMessage += `└───────────────────┘\n`;
-    whatsappMessage += `───────────────────\n`;
-    whatsappMessage += `📝 *ID-YADA & MAGACYADA MAQAN:*\n`;
-    whatsappMessage += `${maqaneText}\n`;
-    whatsappMessage += `───────────────────\n`;
-    whatsappMessage += `_Fariintan waxaa si toos ah u soo dirtay barnaamijka xaadirinta._`;
-
-    // 2. Geli lambarkaaga Admin-ka ah halkan hoose (Ku bilow sirdada dalka tusaale: 252...)
-    const adminPhoneNumber = '25290785400';
-
-const whatsappUrl =
-  `https://wa.me/${adminPhoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
-
-if (confirm("Ma rabtaa inaad xogta xaadiriska u dirto Admin-ka WhatsApp?"))
-    window.open(whatsappUrl, '_blank');
-    showPage('home');
-}
-
-function loadSecretaryReport() { const hist = JSON.parse(localStorage.getItem('yaka_hist_v3')) || []; const body = document.getElementById('secretary-report-body'); body.innerHTML = ''; if (hist.length === 0) { body.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Wali wax xaadiris ah lama kaydin!</td></tr>'; return; } hist.sort((a, b) => b.timestamp - a.timestamp); body.innerHTML = hist.map(item => { let badges = item.absentIds.length === 0 ? "<span style='color:var(--secondary); font-weight:600;'>Dhamaan waa joogaan ✓</span>" : item.absentIds.map(id => '<span class="badge-absent-id">' + id + '</span>').join(''); return '<tr><td>' + item.date + '</td><td style="font-weight:700; color:var(--primary);">' + item.className + '</td><td>' + item.master + '</td><td style="text-align:center; color:#10b981; font-weight:700;">' + item.present + '</td><td style="text-align:center; color:#ef4444; font-weight:700;">' + item.absent + '</td><td>' + badges + '</td></tr>'; }).join(''); }
+        function loadSecretaryReport() { const hist = JSON.parse(localStorage.getItem('yaka_hist_v3')) || []; const body = document.getElementById('secretary-report-body'); body.innerHTML = ''; if (hist.length === 0) { body.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 2rem;">Wali wax xaadiris ah lama kaydin!</td></tr>'; return; } hist.sort((a, b) => b.timestamp - a.timestamp); body.innerHTML = hist.map(item => { let badges = item.absentIds.length === 0 ? "<span style='color:var(--secondary); font-weight:600;'>Dhamaan waa joogaan ✓</span>" : item.absentIds.map(id => '<span class="badge-absent-id">' + id + '</span>').join(''); return '<tr><td>' + item.date + '</td><td style="font-weight:700; color:var(--primary);">' + item.className + '</td><td>' + item.master + '</td><td style="text-align:center; color:#10b981; font-weight:700;">' + item.present + '</td><td style="text-align:center; color:#ef4444; font-weight:700;">' + item.absent + '</td><td>' + badges + '</td></tr>'; }).join(''); }
         function loadAdminStudents() { let html = ""; classesData.forEach(c => { (studentsDb[c.id] || []).forEach(s => { html += '<tr><td>' + c.name + '</td><td>' + s.id + '</td><td>' + s.name + '</td><td><button style="background:var(--danger); color:white; border:none; padding:3px 8px; border-radius:4px; cursor:pointer;" onclick="deleteStudent(\'' + c.id + '\',\'' + s.id + '\')">Reeb ✕</button></td></tr>'; }); }); document.getElementById('admin-students-list').innerHTML = html || '<tr><td colspan="4" style="text-align:center;">Ma jiro wax arday ah oo diwaangashan!</td></tr>'; }
         function addNewStudent() { const cId = document.getElementById('reg-class').value; const sId = document.getElementById('reg-id').value.trim().toUpperCase(); const sName = document.getElementById('reg-name').value.trim(); if(!sId || !sName) return alert("Fadlan buuxi ID-ga iyo Magaca!"); if(studentsDb[cId].some(x => x.id === sId)) return alert("ID-gaan mar hore ayaa la isticmaalay!"); studentsDb[cId].push({ id: sId, name: sName }); localStorage.setItem('yaka_students_db_v2', JSON.stringify(studentsDb)); document.getElementById('reg-id').value = ''; document.getElementById('reg-name').value = ''; loadAdminStudents(); alert("Waa la diwaangeliyey!"); }
         function deleteStudent(cId, sId) { if(confirm("Ma hubtaa inaad rabto inaad reebto ardaygan?")) { studentsDb[cId] = studentsDb[cId].filter(x => x.id !== sId); localStorage.setItem('yaka_students_db_v2', JSON.stringify(studentsDb)); loadAdminStudents(); } }
