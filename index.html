@@ -297,12 +297,12 @@
     whatsappMessage += `_Fariintan waxaa si toos ah u soo dirtay barnaamijka xaadirinta._`;
 
     // 2. Geli lambarkaaga Admin-ka ah halkan hoose (Ku bilow sirdada dalka tusaale: 252...)
-    const adminPhoneNumber = "252666192576"; 
-    
-    // WAA LA SAXAY: Waxaa lagu daray / iyo \$ oo ka dhimanaa link-gaaga
-    const whatsappUrl = `https://wa.me{adminPhoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+    const adminPhoneNumber = '25290785400';
 
-    // 3. WAA LA SAXAY: Waa laga saaray alert() si aan loo xannibin (block) daaqadda
+const whatsappUrl =
+  `https://wa.me/${adminPhoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+
+if (confirm("Ma rabtaa inaad xogta xaadiriska u dirto Admin-ka WhatsApp?"))
     window.open(whatsappUrl, '_blank');
     showPage('home');
 }
