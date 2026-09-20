@@ -67,8 +67,19 @@
             </div>
         </div>
         <div id="dashboard" class="page"><div class="dashboard-title"><h2>Xaadirinta Fasallada</h2><p>Dooro fasalka aad rabto inaad xaadiriso maanta</p></div><div class="class-grid" id="class-container"></div></div>
-        <div id="attendance" class="page">
-            <div class="attendance-header"><div><h2 id="active-class-title" style="color: var(--primary);">Fasalka: Form 4</h2><p id="active-form-master">Form Master: Macalin ...</p></div><div><span class="date-badge" id="current-date-badge">Taariikhda: --/--/----</span><button onclick="showPage('dashboard')" style="background:#64748b; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; margin-left: 10px;">← Dib u noqo</button></div></div>
+                <div id="attendance" class="page">
+            <div class="attendance-header">
+                <div>
+                    <h2 id="active-class-title" style="color: var(--primary);">Fasalka: Form 4</h2>
+                    <p id="active-form-master">Form Master: Macalin ...</p>
+                </div>
+                <div>
+                    <span class="date-badge" id="current-date-badge">Taariikhda: --/--/----</span>
+                    <button onclick="showPage('dashboard')" style="background:#64748b; color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; margin-left: 10px;">← Dib u noqo</button>
+                </div>
+            </div>
+            <div class="attendance-table-container">
+                <table>
                     <thead>
                         <tr>
                             <th style="width: 120px;">ID</th>
@@ -81,7 +92,7 @@
             </div>
             <button class="btn-save" onclick="saveAttendance()">Kaydi Xaadirista ✓</button>
         </div>
-    </div>
+
     <footer><p>&copy; 2026 Dugsiga Hoose Dhexe iyo Sare EE YAKA. All Rights Reserved.</p></footer>
     <script>
         const classesData = [
